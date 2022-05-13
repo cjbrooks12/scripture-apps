@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_home"
+    app:startDestination="@id/placeholder">
+    <dialog
+        android:id="@+id/logOut"
+        android:name="com.directenergy.app.ui.home.logout.LogoutHomeFragment"
+        android:label="Log Out" />
+    <dialog
+        android:id="@+id/selectServiceAddress"
+        android:name="com.directenergy.app.ui.home.selectaddress.SelectServiceAddressFragment"
+        android:label="Select Service Address" />
+    <dialog
+        android:id="@+id/selectAccount"
+        android:name="com.directenergy.app.ui.home.selectaccount.SelectAccountFragment"
+        android:label="Select Account" />
+    <dialog
+        android:id="@+id/viewBillFragment"
+        android:name="com.directenergy.app.ui.billing.viewbill.ViewBillFragment"
+        android:label="ViewBillFragment" />
+
+    <!-- Global Actions -->
+    <action
+        android:id="@+id/action_global_logOut"
+        app:destination="@id/logOut" />
+    <action
+        android:id="@+id/action_global_selectServiceAddress"
+        app:destination="@id/selectServiceAddress" />
+    <action
+        android:id="@+id/action_global_selectAccount"
+        app:destination="@id/selectAccount" />
+    <fragment android:id="@+id/placeholder" />
+
+</navigation>

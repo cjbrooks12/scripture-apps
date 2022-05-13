@@ -1,0 +1,8 @@
+CREATE TABLE verses(
+    text       TEXT    NOT NULL PRIMARY KEY,
+    updated_on INTEGER DEFAULT NULL
+);
+
+selectAll:
+SELECT *
+FROM verses;
