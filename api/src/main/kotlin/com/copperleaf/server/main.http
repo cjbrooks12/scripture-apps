@@ -1,0 +1,145 @@
+#### Access a public resource
+GET http://0.0.0.0:8080/public
+Content-Type: application/json
+
+### Login with incorrect username
+POST http://0.0.0.0:8080/login
+Content-Type: application/json
+
+{
+    "username": "testUser1",
+    "password": "password1"
+}
+
+### Login with incorrect password
+POST http://0.0.0.0:8080/login
+Content-Type: application/json
+
+{
+    "username": "testUser",
+    "password": "password"
+}
+
+### Login with correct username and password
+POST http://0.0.0.0:8080/login
+Content-Type: application/json
+
+{
+    "username": "testUser",
+    "password": "password1"
+}
+
+> {%
+client.global.set("auth_token", response.headers.valueOf("X-AuthToken"));
+client.global.set("refresh_token", response.headers.valueOf("X-RefreshToken"));
+%}
+
+### Fail to validate a PIN - none set yet
+POST http://0.0.0.0:8080/refresh/pin
+Content-Type: application/json
+X-RefreshToken: Bearer {{refresh_token}}
+
+{
+    "pin": "1234"
+}
+
+### Fail to register a PIN
+POST http://0.0.0.0:8080/authorized/pin
+Content-Type: application/json
+
+{
+    "pin": "1234"
+}
+
+### Register a PIN
+POST http://0.0.0.0:8080/authorized/pin
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+    "pin": "1234"
+}
+
+### Get info on the auth token
+GET http://0.0.0.0:8080/authorized/tokenInfo
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+### Get info on the refresh token
+GET http://0.0.0.0:8080/refresh/tokenInfo
+Content-Type: application/json
+X-RefreshToken: Bearer {{refresh_token}}
+
+### Fail to validate a PIN
+POST http://0.0.0.0:8080/refresh/pin
+Content-Type: application/json
+X-RefreshToken: Bearer {{refresh_token}}
+
+{
+    "pin": "1111"
+}
+
+### Validate a PIN
+POST http://0.0.0.0:8080/refresh/pin
+Content-Type: application/json
+X-RefreshToken: Bearer {{refresh_token}}
+
+{
+    "pin": "1234"
+}
+
+> {%
+client.global.set("auth_token", response.headers.valueOf("X-AuthToken"));
+client.global.set("refresh_token", response.headers.valueOf("X-RefreshToken"));
+%}
+
+### Get info on the auth token - 2
+GET http://0.0.0.0:8080/authorized/tokenInfo
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+### Get info on the refresh token - 2
+GET http://0.0.0.0:8080/refresh/tokenInfo
+Content-Type: application/json
+X-RefreshToken: Bearer {{refresh_token}}
+
+### Manually refresh the tokens
+POST http://0.0.0.0:8080/authorized/refresh
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+> {%
+client.global.set("auth_token", response.headers.valueOf("X-AuthToken"));
+client.global.set("refresh_token", response.headers.valueOf("X-RefreshToken"));
+%}
+
+### Get info on the auth token - 3
+GET http://0.0.0.0:8080/authorized/tokenInfo
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+### Get info on the refresh token - 3
+GET http://0.0.0.0:8080/refresh/tokenInfo
+Content-Type: application/json
+X-RefreshToken: Bearer {{refresh_token}}
+
+### logout
+POST http://0.0.0.0:8080/authorized/logout
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{}
+
+### Get info on the auth token - 4
+GET http://0.0.0.0:8080/authorized/tokenInfo
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+### Get info on the refresh token - 4
+GET http://0.0.0.0:8080/refresh/tokenInfo
+Content-Type: application/json
+X-RefreshToken: Bearer {{refresh_token}}
+
+#### Access a public resource
+GET http://0.0.0.0:8080/public
+Content-Type: application/json

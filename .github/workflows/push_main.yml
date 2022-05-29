@@ -36,4 +36,3 @@ jobs:
         run: './gradlew :androidApp:assembleScriptureNowDevRelease :androidApp:bundleScriptureNowProdRelease :androidApp:assembleTopicalBibleDevRelease :androidApp:bundleTopicalBibleProdRelease'
       - name: 'Upload Artifacts to Firebase'
         run: './gradlew :androidApp:appDistributionUploadScriptureNowDevRelease :androidApp:appDistributionUploadScriptureNowProdRelease :androidApp:appDistributionUploadTopicalBibleDevRelease :androidApp:appDistributionUploadTopicalBibleProdRelease'
-

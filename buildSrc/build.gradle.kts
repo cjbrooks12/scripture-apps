@@ -25,4 +25,7 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics-gradle:2.8.1")
     implementation("com.google.firebase:perf-plugin:1.4.1")
 //    implementation("androidx.navigation:navigation-safe-args-gradle-plugin:2.5.0-beta01")
+
+    // Compose
+    implementation("org.jetbrains.compose:compose-gradle-plugin:1.1.0")
 }

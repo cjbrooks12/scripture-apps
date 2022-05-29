@@ -7,14 +7,14 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".MainApplication"
+        android:name=".app.MainApplication"
         android:allowBackup="true"
         android:fullBackupOnly="true"
         android:icon="@mipmap/ic_launcher"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:label="@string/app_name">
         <activity
-            android:name="com.caseyjbrooks.MainActivity"
+            android:name="com.caseyjbrooks.app.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
@@ -24,7 +24,7 @@
         </activity>
 
         <service
-            android:name=".firebase.FirebaseNotificationService"
+            android:name=".app.firebase.FirebaseNotificationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

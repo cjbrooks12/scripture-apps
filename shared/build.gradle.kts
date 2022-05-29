@@ -1,8 +1,11 @@
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.serialization")
     `copper-leaf-base`
     `copper-leaf-version`
     `copper-leaf-lint`
+    id("com.google.devtools.ksp")
+    id("com.squareup.sqldelight")
     id("com.github.gmazzo.buildconfig")
 }
 
@@ -37,6 +40,9 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":modules:common"))
+                api(project(":modules:router"))
+                api(project(":modules:sync"))
+
                 api(project(":modules:votd:api"))
                 api(project(":modules:votd:impl"))
 
@@ -89,3 +95,37 @@ buildConfig {
 
     buildConfigField("String", "BASE_URL_OURMANNA", "\"https://beta.ourmanna.com/api/v1/\"")
 }
+
+
+// SqlDelight
+// ---------------------------------------------------------------------------------------------------------------------
+
+sqldelight {
+    database("ScriptureNowDatabase") {
+        packageName = "com.copperleaf.scripturenow"
+    }
+}
+
+
+// KSP
+// ---------------------------------------------------------------------------------------------------------------------
+
+dependencies {
+    val kspTargets = listOf(
+        "kspMetadata",
+        "kspJvm",
+        "kspJs",
+        "kspIosArm64",
+        "kspIosX64",
+    )
+    val kspLibs = listOf(
+        libs.ksp.ktorfit.compiler,
+    )
+
+    kspLibs.forEach { kspLib ->
+        kspTargets.forEach { kspTarget ->
+            add(kspTarget, kspLib)
+        }
+    }
+}
+

@@ -162,9 +162,6 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.compose.activity)
-    implementation(libs.androidx.navigation)
-    implementation(libs.androidx.navigation.ui)
-    implementation(libs.androidx.navigation.compose)
 
     implementation(libs.ktor.client.okhttp)
 
@@ -174,7 +171,7 @@ dependencies {
     implementation(libs.sqldelight.driver.android)
 
     // Desugaring
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+    coreLibraryDesugaring(libs.android.desugaring)
 
     // Firebase
     implementation(platform(libs.firebase.bom))

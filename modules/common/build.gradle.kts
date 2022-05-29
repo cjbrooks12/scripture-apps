@@ -42,7 +42,6 @@ kotlin {
         }
 
         val jvmMain by getting {
-            kotlin.srcDir("build/generated/ksp/jvm/jvmMain/kotlin")
             dependencies {
             }
         }

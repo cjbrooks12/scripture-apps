@@ -40,6 +40,7 @@ kotlin {
                 api(libs.ballast.core)
                 api(libs.ballast.savedState)
                 api(libs.ballast.repository)
+                api(libs.ballast.debugger)
             }
         }
 

@@ -50,6 +50,7 @@ kotlin {
         val jvmMain by getting {
             kotlin.srcDir("build/generated/ksp/jvm/jvmMain/kotlin")
             dependencies {
+                api("de.brudaswen.kotlinx.serialization:kotlinx-serialization-csv:1.1.0")
             }
         }
 
@@ -72,36 +73,5 @@ tasks.withType<JavaCompile> {
 tasks.withType<Test> {
     testLogging {
         showStandardStreams = true
-    }
-}
-
-// KSP
-// ---------------------------------------------------------------------------------------------------------------------
-
-dependencies {
-    val kspTargets = listOf(
-        "kspMetadata",
-        "kspJvm",
-        "kspJs",
-        "kspIosArm64",
-        "kspIosX64",
-    )
-    val kspLibs = listOf(
-        libs.ksp.ktorfit.compiler,
-    )
-
-    kspLibs.forEach { kspLib ->
-        kspTargets.forEach { kspTarget ->
-            add(kspTarget, kspLib)
-        }
-    }
-}
-
-// SqlDelight
-// ---------------------------------------------------------------------------------------------------------------------
-
-sqldelight {
-    database("ScriptureNowDatabase") {
-        packageName = "com.copperleaf.scripturenow"
     }
 }

@@ -1,0 +1,37 @@
+import kotlinx.datetime.LocalDate;
+import kotlinx.datetime.LocalDateTime;
+
+CREATE TABLE verseOfTheDay (
+  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  text TEXT NOT NULL,
+  reference TEXT NOT NULL,
+  version TEXT NOT NULL,
+  verse_url TEXT NOT NULL,
+  notice TEXT NOT NULL,
+  date TEXT AS LocalDate NOT NULL,
+  created_at TEXT AS LocalDateTime NOT NULL,
+  updated_at TEXT AS LocalDateTime NOT NULL
+);
+
+insert:
+INSERT INTO verseOfTheDay (text, reference, version, verse_url, notice, date, created_at, updated_at)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+
+update:
+UPDATE verseOfTheDay
+SET
+    text = ?,
+    reference = ?,
+    version = ?,
+    verse_url = ?,
+    notice = ?,
+    updated_at = ?
+;
+
+getByDay:
+SELECT
+    *
+FROM verseOfTheDay
+WHERE
+    date = ?
+LIMIT 1;
