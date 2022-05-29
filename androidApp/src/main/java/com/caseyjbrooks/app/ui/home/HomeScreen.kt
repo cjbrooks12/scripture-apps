@@ -7,10 +7,6 @@ fun HomeScreen() {
 }
 
 @Composable
-fun VerseOfTheDayScreen() {
-}
-
-@Composable
 fun VerseListScreen() {
 }
 

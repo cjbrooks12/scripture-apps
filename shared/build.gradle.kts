@@ -43,8 +43,10 @@ kotlin {
                 api(project(":modules:router"))
                 api(project(":modules:sync"))
 
-                api(project(":modules:votd:api"))
-                api(project(":modules:votd:impl"))
+                api(libs.kotlinx.serialization.json)
+
+                api(libs.ksp.ktorfit.runtime)
+                api(libs.sqldelight.coroutines)
 
                 implementation(libs.ktor.client.core)
                 implementation(libs.ktor.client.logging)

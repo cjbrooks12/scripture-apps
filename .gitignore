@@ -82,3 +82,6 @@ build/
 .DS_Store
 
 release.keystore
+
+
+*.private.env.json
