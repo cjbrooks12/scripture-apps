@@ -11,11 +11,12 @@
         android:allowBackup="true"
         android:fullBackupOnly="true"
         android:icon="@mipmap/ic_launcher"
-        android:theme="@style/Theme.AppCompat.NoActionBar"
+        android:theme="@style/Theme.App.Starting"
         android:label="@string/app_name">
         <activity
             android:name="com.caseyjbrooks.app.MainActivity"
             android:exported="true"
+            android:theme="@style/Theme.App.Starting"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

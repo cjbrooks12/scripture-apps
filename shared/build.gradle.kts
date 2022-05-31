@@ -72,7 +72,7 @@ kotlin {
                 implementation(libs.ktor.client.serialization)
                 implementation(libs.ktor.client.serialization.json)
 
-                implementation(libs.benasher44.uuid)
+                api(libs.benasher44.uuid)
                 api(libs.kermit.core)
             }
         }

@@ -160,6 +160,7 @@ dependencies {
     implementation(project(":shared"))
 
     implementation(libs.androidx.core)
+    implementation(libs.androidx.splashscreen)
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.compose.activity)
 
