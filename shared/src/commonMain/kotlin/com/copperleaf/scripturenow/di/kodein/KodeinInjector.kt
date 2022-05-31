@@ -6,6 +6,7 @@ import com.copperleaf.scripturenow.db.mainDbModule
 import com.copperleaf.scripturenow.db.votd.votdDbModule
 import com.copperleaf.scripturenow.di.Injector
 import com.copperleaf.scripturenow.repositories.mainRepositoryModule
+import com.copperleaf.scripturenow.repositories.votd.VotdInterceptor
 import com.copperleaf.scripturenow.repositories.votd.votdRepositoryModule
 import com.copperleaf.scripturenow.ui.mainUiModule
 import com.copperleaf.scripturenow.ui.router.MainRouterViewModel
@@ -15,6 +16,7 @@ import com.copperleaf.scripturenow.ui.votd.votdVmModule
 import kotlinx.coroutines.CoroutineScope
 import org.kodein.di.DI
 import org.kodein.di.DirectDI
+import org.kodein.di.bindSet
 import org.kodein.di.instance
 
 class KodeinInjector(
@@ -26,16 +28,16 @@ class KodeinInjector(
     companion object {
         fun create(
             onBackstackEmptied: () -> Unit = { },
-            additionalModule: DI.Module? = null
-        ): Injector  {
+            additionalConfig: (DI.MainBuilder.() -> Unit)? = null
+        ): Injector {
             return KodeinInjector(
                 DI.direct {
+                    bindSet<VotdInterceptor>()
+
                     // Application
                     import(mainApplicationModule())
                     import(platformApplicationModule())
-                    if(additionalModule != null) {
-                        import(additionalModule)
-                    }
+                    additionalConfig?.invoke(this)
 
                     // API
                     import(mainApiModule())

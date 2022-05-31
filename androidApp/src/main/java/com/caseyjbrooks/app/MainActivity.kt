@@ -1,6 +1,6 @@
 package com.caseyjbrooks.app
 
-import android.content.Context
+import android.os.Bundle
 import androidx.activity.compose.BackHandler
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -12,35 +12,25 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.caseyjbrooks.app.ui.RouterContent
 import com.caseyjbrooks.app.utils.ComposeActivity
+import com.caseyjbrooks.app.utils.theme.LocalInjector
 import com.copperleaf.ballast.router.RouterContract
-import com.copperleaf.scripturenow.di.Injector
-import com.copperleaf.scripturenow.di.kodein.ApplicationContext
-import com.copperleaf.scripturenow.di.kodein.KodeinInjector
 import com.copperleaf.scripturenow.ui.Destinations
 import com.copperleaf.scripturenow.ui.currentDestination
 import com.copperleaf.scripturenow.ui.currentRoute
-import org.kodein.di.DI
-import org.kodein.di.bind
-import org.kodein.di.singleton
 
 class MainActivity : ComposeActivity() {
 
-    private val injector: Injector = KodeinInjector.create(
-        onBackstackEmptied = {
-            this@MainActivity.finish()
-        },
-        additionalModule = DI.Module("Android Context") {
-            bind<Context>(tag = ApplicationContext) {
-                singleton { this@MainActivity.applicationContext }
-            }
-        }
-    )
+    override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
+        super.onCreate(savedInstanceState)
+    }
 
     @Composable
     override fun ScreenContent() {
-        val routerViewModel = injector.mainRouter
+        val routerViewModel = LocalInjector.current.mainRouter
 
         val routerState by routerViewModel.observeStates().collectAsState()
 
@@ -104,7 +94,7 @@ class MainActivity : ComposeActivity() {
             },
             content = {
                 routerState.currentDestination?.currentRoute?.let {
-                    RouterContent(it, injector)
+                    RouterContent(it)
                 }
             }
         )

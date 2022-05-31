@@ -6,13 +6,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import com.caseyjbrooks.app.ui.votd.VerseOfTheDayScreen
-import com.copperleaf.scripturenow.di.Injector
 import com.copperleaf.scripturenow.ui.Destinations
 import com.copperleaf.scripturenow.ui.Route
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun RouterContent(route: Route, injector: Injector) {
+fun RouterContent(route: Route) {
     AnimatedContent(route) {r ->
         when(r) {
             is Destinations.App.Home -> {
@@ -21,7 +20,7 @@ fun RouterContent(route: Route, injector: Injector) {
                 }
             }
             is Destinations.App.VerseOfTheDay -> {
-                VerseOfTheDayScreen(injector)
+                VerseOfTheDayScreen()
             }
             is Destinations.App.Verses -> {
                 Column {

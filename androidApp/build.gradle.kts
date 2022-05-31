@@ -166,6 +166,7 @@ dependencies {
 
     implementation(libs.android.compose.material)
     implementation(libs.android.compose.previews)
+    implementation(libs.android.compose.glance)
 
     // Desugaring
     coreLibraryDesugaring(libs.android.desugaring)

@@ -5,20 +5,32 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import com.caseyjbrooks.app.MainApplication
+import com.copperleaf.scripturenow.di.Injector
+
+val LocalInjector = staticCompositionLocalOf<Injector> { error("Injector not provided") }
 
 @Composable
 fun BrandTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
+    val applicationContext = LocalContext.current.applicationContext as MainApplication
+    val injector = applicationContext.injector
+
     MaterialTheme(
         colors = if (darkTheme) DarkColors else LightColors,
         typography = BrandTypography,
         shapes = BrandShapes,
         content = {
-            StatusBarColor()
-            content()
+            CompositionLocalProvider(LocalInjector providesDefault injector) {
+                StatusBarColor()
+                content()
+            }
         }
     )
 }

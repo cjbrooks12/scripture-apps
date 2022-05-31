@@ -37,6 +37,18 @@ public class BootstrapInterceptor<Inputs : Any, Events : Any, State : Any>(
     }
 }
 
+abstract class OnStateUpdatedInterceptor<Inputs : Any, Events : Any, State : Any>(
+) : BallastInterceptor<Inputs, Events, State> {
+
+    abstract suspend fun doOnStateChanged(state: State)
+
+    override suspend fun onNotify(logger: BallastLogger, notification: BallastNotification<Inputs, Events, State>) {
+        if(notification is BallastNotification.StateChanged<Inputs, Events, State>) {
+            doOnStateChanged(notification.state)
+        }
+    }
+}
+
 class KermitKtorLogger(val kermitLogger: KermitLogger) : KtorLogger {
     override fun log(message: String) {
         kermitLogger.d { message }

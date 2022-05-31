@@ -55,6 +55,7 @@ android-compose-icons = { module = "androidx.compose.material:material-icons-ext
 android-compose-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 android-compose-accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
 android-compose-swipeToReveal = { module = "de.charlex.compose:revealswipe", version = "1.0.0" }
+android-compose-glance = { module = "androidx.glance:glance-appwidget", version = "1.0.0-alpha03" }
 android-desugaring = { module = "com.android.tools:desugar_jdk_libs", version = "1.1.5" }
 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version = "29.0.0" }
