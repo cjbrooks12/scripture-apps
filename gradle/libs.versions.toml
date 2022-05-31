@@ -83,3 +83,5 @@ ballast-debugger = { module = "io.github.copper-leaf:ballast-debugger", version.
 sqldelight-core = { module = "com.squareup.sqldelight:core", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 sqldelight-driver-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
+
+kermit-core = { module = "co.touchlab:kermit", version = "1.1.2" }

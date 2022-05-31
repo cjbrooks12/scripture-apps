@@ -1,4 +1,5 @@
 plugins {
+    id("com.android.library")
     kotlin("multiplatform")
     kotlin("plugin.serialization")
     `copper-leaf-base`
@@ -12,20 +13,38 @@ plugins {
 var projectVersion: ProjectVersion by project.extra
 description = "Opinionated Application State Management framework for Kotlin Multiplatform"
 
+android {
+    compileSdk = 31
+    defaultConfig {
+        minSdk = 28
+        targetSdk = 31
+    }
+
+    sourceSets {
+        getByName("main") {
+            setRoot("src/androidMain")
+        }
+        getByName("androidTest") {
+            setRoot("src/androidTest")
+        }
+    }
+}
+
 // Kotlin config
 // ---------------------------------------------------------------------------------------------------------------------
 
 kotlin {
     // targets
-    jvm { }
-    js(IR) {
-        browser {
-            testTask {
-                enabled = false
-            }
-        }
-    }
-    ios { }
+    android {  }
+//    jvm { }
+//    js(IR) {
+//        browser {
+//            testTask {
+//                enabled = false
+//            }
+//        }
+//    }
+//    ios { }
 
     // sourcesets
     sourceSets {
@@ -52,27 +71,40 @@ kotlin {
                 implementation(libs.ktor.client.logging)
                 implementation(libs.ktor.client.serialization)
                 implementation(libs.ktor.client.serialization.json)
+
+                implementation(libs.benasher44.uuid)
+                api(libs.kermit.core)
             }
         }
 
-        val jvmMain by getting {
-            kotlin.srcDir("build/generated/ksp/jvm/jvmMain/kotlin")
+        val androidMain by getting {
+            kotlin.srcDir("build/generated/ksp/jvm/androidMain/kotlin")
             dependencies {
                 implementation(libs.ktor.client.okhttp)
+                implementation(libs.sqldelight.driver.android)
             }
         }
 
-        val jsMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.js)
-            }
-        }
-
-        val iosMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.ios)
-            }
-        }
+//        val jvmMain by getting {
+//            kotlin.srcDir("build/generated/ksp/jvm/jvmMain/kotlin")
+//            dependencies {
+//                implementation(libs.ktor.client.okhttp)
+//            }
+//        }
+//
+//        val jsMain by getting {
+//            kotlin.srcDir("build/generated/ksp/jvm/jsMain/kotlin")
+//            dependencies {
+//                implementation(libs.ktor.client.js)
+//            }
+//        }
+//
+//        val iosMain by getting {
+//            kotlin.srcDir("build/generated/ksp/jvm/iosMain/kotlin")
+//            dependencies {
+//                implementation(libs.ktor.client.ios)
+//            }
+//        }
     }
 }
 
@@ -98,7 +130,6 @@ buildConfig {
     buildConfigField("String", "BASE_URL_OURMANNA", "\"https://beta.ourmanna.com/api/v1/\"")
 }
 
-
 // SqlDelight
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -108,17 +139,17 @@ sqldelight {
     }
 }
 
-
 // KSP
 // ---------------------------------------------------------------------------------------------------------------------
 
 dependencies {
     val kspTargets = listOf(
         "kspMetadata",
-        "kspJvm",
-        "kspJs",
-        "kspIosArm64",
-        "kspIosX64",
+        "kspAndroid",
+//        "kspJvm",
+//        "kspJs",
+//        "kspIosArm64",
+//        "kspIosX64",
     )
     val kspLibs = listOf(
         libs.ksp.ktorfit.compiler,
@@ -130,4 +161,3 @@ dependencies {
         }
     }
 }
-

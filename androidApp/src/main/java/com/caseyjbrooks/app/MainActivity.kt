@@ -1,5 +1,6 @@
 package com.caseyjbrooks.app
 
+import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -14,22 +15,26 @@ import androidx.compose.runtime.getValue
 import com.caseyjbrooks.app.ui.RouterContent
 import com.caseyjbrooks.app.utils.ComposeActivity
 import com.copperleaf.ballast.router.RouterContract
-import com.copperleaf.scripturenow.ScriptureNowDatabase
 import com.copperleaf.scripturenow.di.Injector
+import com.copperleaf.scripturenow.di.kodein.ApplicationContext
 import com.copperleaf.scripturenow.di.kodein.KodeinInjector
 import com.copperleaf.scripturenow.ui.Destinations
 import com.copperleaf.scripturenow.ui.currentDestination
 import com.copperleaf.scripturenow.ui.currentRoute
-import com.squareup.sqldelight.android.AndroidSqliteDriver
-import io.ktor.client.engine.okhttp.OkHttp
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.singleton
 
 class MainActivity : ComposeActivity() {
 
     private val injector: Injector = KodeinInjector.create(
-        OkHttp,
-        AndroidSqliteDriver(ScriptureNowDatabase.Schema, this, "scripture_now.db"),
         onBackstackEmptied = {
             this@MainActivity.finish()
+        },
+        additionalModule = DI.Module("Android Context") {
+            bind<Context>(tag = ApplicationContext) {
+                singleton { this@MainActivity.applicationContext }
+            }
         }
     )
 

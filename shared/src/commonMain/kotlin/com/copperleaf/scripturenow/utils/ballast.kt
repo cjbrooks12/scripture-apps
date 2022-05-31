@@ -2,6 +2,7 @@ package com.copperleaf.scripturenow.utils
 
 import com.copperleaf.ballast.BallastInterceptor
 import com.copperleaf.ballast.BallastInterceptorScope
+import com.copperleaf.ballast.BallastLogger
 import com.copperleaf.ballast.BallastNotification
 import com.copperleaf.ballast.Queued
 import kotlinx.coroutines.CoroutineStart
@@ -9,6 +10,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import co.touchlab.kermit.Logger as KermitLogger
+import io.ktor.client.plugins.logging.Logger as KtorLogger
 
 public class BootstrapInterceptor<Inputs : Any, Events : Any, State : Any>(
     private val getInitialInput: suspend () -> Inputs,
@@ -31,5 +34,25 @@ public class BootstrapInterceptor<Inputs : Any, Events : Any, State : Any>(
                 Queued.HandleInput(null, initialInput)
             )
         }
+    }
+}
+
+class KermitKtorLogger(val kermitLogger: KermitLogger) : KtorLogger {
+    override fun log(message: String) {
+        kermitLogger.d { message }
+    }
+}
+
+class KermitBallastLogger(val kermitLogger: KermitLogger) : BallastLogger {
+    override fun debug(message: String) {
+        kermitLogger.d { message }
+    }
+
+    override fun error(throwable: Throwable) {
+        kermitLogger.e(throwable) { throwable.message ?: "" }
+    }
+
+    override fun info(message: String) {
+        kermitLogger.i { message }
     }
 }

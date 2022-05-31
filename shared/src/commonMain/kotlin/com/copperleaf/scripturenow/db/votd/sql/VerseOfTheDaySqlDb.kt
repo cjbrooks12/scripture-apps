@@ -1,5 +1,6 @@
 package com.copperleaf.scripturenow.db.votd.sql
 
+import com.benasher44.uuid.uuid4
 import com.copperleaf.scripturenow.Sn_verseOfTheDayQueries
 import com.copperleaf.scripturenow.common.atStartOfDay
 import com.copperleaf.scripturenow.db.votd.VerseOfTheDayDb
@@ -24,6 +25,7 @@ class VerseOfTheDaySqlDb(
 
     override suspend fun saveVerseOfTheDay(verse: VerseOfTheDay) {
         queries.insert(
+            uuid = uuid4(),
             text = verse.text,
             reference = verse.reference,
             version = verse.version,

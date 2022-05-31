@@ -2,26 +2,30 @@ import com.benasher44.uuid.Uuid;
 import kotlinx.datetime.LocalDate;
 import kotlinx.datetime.LocalDateTime;
 
-CREATE TABLE sn_verseOfTheDay (
+CREATE TABLE sn_memoryVerse (
   uuid TEXT AS Uuid NOT NULL PRIMARY KEY,
   text TEXT NOT NULL,
   reference TEXT NOT NULL,
   version TEXT NOT NULL,
   verse_url TEXT NOT NULL,
   notice TEXT NOT NULL,
-  date TEXT AS LocalDate NOT NULL,
   created_at TEXT AS LocalDateTime NOT NULL,
   updated_at TEXT AS LocalDateTime NOT NULL
 );
 
 insert:
-INSERT INTO sn_verseOfTheDay (uuid, text, reference, version, verse_url, notice, date, created_at, updated_at)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+INSERT INTO sn_memoryVerse (uuid, text, reference, version, verse_url, notice, created_at, updated_at)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?);
 
-getByDay:
-SELECT
-    *
-FROM sn_verseOfTheDay
+update:
+UPDATE sn_memoryVerse
+SET
+    text = ?,
+    reference = ?,
+    version = ?,
+    verse_url = ?,
+    notice = ?,
+    updated_at = ?
 WHERE
-    date = ?
-LIMIT 1;
+    uuid = ?
+;

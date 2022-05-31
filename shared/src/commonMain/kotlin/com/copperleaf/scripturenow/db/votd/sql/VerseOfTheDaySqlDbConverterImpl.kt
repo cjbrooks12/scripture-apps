@@ -9,6 +9,7 @@ class VerseOfTheDaySqlDbConverterImpl : VerseOfTheDaySqlDbConverter {
         dbModel: Sn_verseOfTheDay
     ): VerseOfTheDay = with(dbModel) {
         return VerseOfTheDay(
+            uuid = dbModel.uuid,
             date = dbModel.date,
             text = text,
             reference = reference,

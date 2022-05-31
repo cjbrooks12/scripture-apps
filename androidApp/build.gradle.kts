@@ -163,12 +163,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.compose.activity)
 
-    implementation(libs.ktor.client.okhttp)
-
     implementation(libs.android.compose.material)
     implementation(libs.android.compose.previews)
-
-    implementation(libs.sqldelight.driver.android)
 
     // Desugaring
     coreLibraryDesugaring(libs.android.desugaring)

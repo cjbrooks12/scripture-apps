@@ -10,10 +10,8 @@ import com.copperleaf.ballast.repository.cache.fetchWithCache
 import com.copperleaf.scripturenow.api.votd.VerseOfTheDayApi
 import com.copperleaf.scripturenow.common.now
 import com.copperleaf.scripturenow.db.votd.VerseOfTheDayDb
-import com.copperleaf.scripturenow.repositories.votd.models.VerseOfTheDay
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDate
 
 class VerseOfTheDayRepositoryInputHandler(
@@ -76,7 +74,6 @@ class VerseOfTheDayRepositoryInputHandler(
                     val cachedValue = db.getVerseOfTheDay(date).firstOrNull()
 
                     if (cachedValue == null || input.forceRefresh) {
-                        delay(5000)
                         val repositoryModel = api.getVerseOfTheDay(date)
                         db.saveVerseOfTheDay(repositoryModel)
                     }
@@ -85,7 +82,7 @@ class VerseOfTheDayRepositoryInputHandler(
                 },
                 observe = db
                     .getVerseOfTheDay(date)
-                    .map { it ?: VerseOfTheDay() }
+                    .filterNotNull()
             )
         }
     }
