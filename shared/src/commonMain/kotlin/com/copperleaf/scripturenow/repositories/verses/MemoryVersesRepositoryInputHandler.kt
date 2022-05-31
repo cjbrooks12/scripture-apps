@@ -7,9 +7,11 @@ import com.copperleaf.ballast.postInput
 import com.copperleaf.ballast.repository.bus.EventBus
 import com.copperleaf.ballast.repository.bus.observeInputsFromBus
 import com.copperleaf.ballast.repository.cache.fetchWithCache
+import com.copperleaf.scripturenow.db.verses.MemoryVersesDb
 
 class MemoryVersesRepositoryInputHandler(
     private val eventBus: EventBus,
+    private val db: MemoryVersesDb,
 ) : InputHandler<
     MemoryVersesRepositoryContract.Inputs,
     Any,
@@ -60,7 +62,8 @@ class MemoryVersesRepositoryInputHandler(
                 forceRefresh = input.forceRefresh,
                 getValue = { it.dataList },
                 updateState = { MemoryVersesRepositoryContract.Inputs.DataListUpdated(it) },
-                doFetch = { TODO() },
+                doFetch = { },
+                observe = db.getMemoryVerses()
             )
         }
     }

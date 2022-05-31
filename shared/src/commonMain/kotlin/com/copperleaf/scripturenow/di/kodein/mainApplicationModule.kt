@@ -8,6 +8,9 @@ import org.kodein.di.DI
 import org.kodein.di.bind
 import org.kodein.di.factory
 
+const val MainDispatcher = "MainDispatcher"
+const val BackgroundDispatcher = "BackgroundDispatcher"
+
 fun mainApplicationModule(): DI.Module = DI.Module(name = "Application >> Main") {
     bind<Logger> {
         factory {tag: String ->

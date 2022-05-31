@@ -26,9 +26,6 @@ class VerseOfTheDayRepositoryImpl(
             this.name = "VerseOfTheDay Repository"
         },
 ), VerseOfTheDayRepository {
-    override fun clearAllCaches() {
-        trySend(VerseOfTheDayRepositoryContract.Inputs.ClearCaches)
-    }
 
     override fun getVerseOfTheDay(refreshCache: Boolean): Flow<Cached<VerseOfTheDay>> {
         trySend(VerseOfTheDayRepositoryContract.Inputs.Initialize)

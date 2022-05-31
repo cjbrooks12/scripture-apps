@@ -8,4 +8,8 @@ interface VerseOfTheDaySqlDbConverter {
     fun convertDbModelToRepositoryModel(
         dbModel: Sn_verseOfTheDay
     ) : VerseOfTheDay
+
+    fun convertRepositoryModelToDbModel(
+        repositoryModel: VerseOfTheDay
+    ) : Sn_verseOfTheDay
 }

@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import co.touchlab.kermit.Logger as KermitLogger
 import io.ktor.client.plugins.logging.Logger as KtorLogger
@@ -43,7 +44,7 @@ abstract class OnStateUpdatedInterceptor<Inputs : Any, Events : Any, State : Any
     abstract suspend fun doOnStateChanged(state: State)
 
     override suspend fun onNotify(logger: BallastLogger, notification: BallastNotification<Inputs, Events, State>) {
-        if(notification is BallastNotification.StateChanged<Inputs, Events, State>) {
+        if (notification is BallastNotification.StateChanged<Inputs, Events, State>) {
             doOnStateChanged(notification.state)
         }
     }
@@ -67,4 +68,18 @@ class KermitBallastLogger(val kermitLogger: KermitLogger) : BallastLogger {
     override fun info(message: String) {
         kermitLogger.i { message }
     }
+}
+
+inline fun <T, U> Flow<List<T>>.mapEach(crossinline fn: (T) -> U): Flow<List<U>> {
+    return this
+        .map { list ->
+            list.map(fn)
+        }
+}
+
+inline fun <T, U> Flow<T?>.mapIfNotNull(crossinline fn: (T) -> U): Flow<U?> {
+    return this
+        .map { value ->
+            if (value != null) fn(value) else null
+        }
 }

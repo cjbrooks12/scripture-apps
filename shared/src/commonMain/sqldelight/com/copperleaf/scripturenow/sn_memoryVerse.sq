@@ -13,19 +13,14 @@ CREATE TABLE sn_memoryVerse (
   updated_at TEXT AS LocalDateTime NOT NULL
 );
 
-insert:
-INSERT INTO sn_memoryVerse (uuid, text, reference, version, verse_url, notice, created_at, updated_at)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+getAll:
+SELECT * FROM sn_memoryVerse;
 
-update:
-UPDATE sn_memoryVerse
-SET
-    text = ?,
-    reference = ?,
-    version = ?,
-    verse_url = ?,
-    notice = ?,
-    updated_at = ?
-WHERE
-    uuid = ?
-;
+getById:
+SELECT * FROM sn_memoryVerse
+WHERE uuid = ?
+LIMIT 1;
+
+insertOrReplace:
+INSERT OR REPLACE INTO sn_memoryVerse (uuid, text, reference, version, verse_url, notice, created_at, updated_at)
+VALUES ?;

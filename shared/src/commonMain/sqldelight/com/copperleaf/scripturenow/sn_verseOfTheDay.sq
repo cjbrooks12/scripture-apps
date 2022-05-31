@@ -14,9 +14,9 @@ CREATE TABLE sn_verseOfTheDay (
   updated_at TEXT AS LocalDateTime NOT NULL
 );
 
-insert:
-INSERT INTO sn_verseOfTheDay (uuid, text, reference, version, verse_url, notice, date, created_at, updated_at)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+insertOrReplace:
+INSERT OR REPLACE INTO sn_verseOfTheDay (uuid, text, reference, version, verse_url, notice, date, created_at, updated_at)
+VALUES ?;
 
 getByDay:
 SELECT

@@ -2,9 +2,11 @@ package com.copperleaf.scripturenow.repositories
 
 import com.copperleaf.ballast.BallastViewModelConfiguration
 import com.copperleaf.ballast.core.LoggingInterceptor
+import com.copperleaf.ballast.dispatchers
 import com.copperleaf.ballast.plusAssign
 import com.copperleaf.ballast.repository.bus.EventBus
 import com.copperleaf.ballast.repository.bus.EventBusImpl
+import com.copperleaf.scripturenow.di.kodein.BackgroundDispatcher
 import com.copperleaf.scripturenow.utils.KermitBallastLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +30,12 @@ fun mainRepositoryModule() = DI.Module(name = "Repository >> Main") {
     bind<BallastViewModelConfiguration.Builder>(tag = RepositoryConfigBuilder) {
         provider {
             BallastViewModelConfiguration.Builder()
+                .dispatchers(
+                    inputsDispatcher = instance(tag = BackgroundDispatcher),
+                    eventsDispatcher = instance(tag = BackgroundDispatcher),
+                    sideJobsDispatcher = instance(tag = BackgroundDispatcher),
+                    interceptorDispatcher = instance(tag = BackgroundDispatcher),
+                )
                 .apply {
                     this += LoggingInterceptor()
                     logger = { tag -> KermitBallastLogger(instance(arg = tag)) }

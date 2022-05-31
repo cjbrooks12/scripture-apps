@@ -3,9 +3,11 @@ package com.copperleaf.scripturenow.di.kodein
 import com.copperleaf.scripturenow.api.mainApiModule
 import com.copperleaf.scripturenow.api.votd.votdApiModule
 import com.copperleaf.scripturenow.db.mainDbModule
+import com.copperleaf.scripturenow.db.verses.memoryVersesDbModule
 import com.copperleaf.scripturenow.db.votd.votdDbModule
 import com.copperleaf.scripturenow.di.Injector
 import com.copperleaf.scripturenow.repositories.mainRepositoryModule
+import com.copperleaf.scripturenow.repositories.verses.memoryVersesRepositoryModule
 import com.copperleaf.scripturenow.repositories.votd.VotdInterceptor
 import com.copperleaf.scripturenow.repositories.votd.votdRepositoryModule
 import com.copperleaf.scripturenow.ui.mainUiModule
@@ -46,10 +48,12 @@ class KodeinInjector(
                     // DB
                     import(mainDbModule())
                     import(votdDbModule())
+                    import(memoryVersesDbModule())
 
                     // Repository
                     import(mainRepositoryModule())
                     import(votdRepositoryModule())
+                    import(memoryVersesRepositoryModule())
 
                     // UI
                     import(mainUiModule())

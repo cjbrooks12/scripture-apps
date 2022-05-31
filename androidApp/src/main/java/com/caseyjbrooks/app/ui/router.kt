@@ -27,6 +27,11 @@ fun RouterContent(route: Route) {
                     Text("Verse List")
                 }
             }
+            is Destinations.App.CreateVerse -> {
+                Column {
+                    Text("Verse List")
+                }
+            }
             is Destinations.App.ViewVerse -> {
                 Column {
                     Text("Verse: ${r.verseId}")
