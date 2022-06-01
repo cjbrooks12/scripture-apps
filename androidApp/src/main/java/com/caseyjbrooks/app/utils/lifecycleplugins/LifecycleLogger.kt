@@ -1,32 +1,38 @@
 package com.caseyjbrooks.app.utils.lifecycleplugins
 
-import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.caseyjbrooks.app.utils.BaseComponent
 
 class LifecycleLogger : DefaultLifecycleObserver {
 
     override fun onCreate(owner: LifecycleOwner) {
-        Log.d(owner::class.simpleName!!, "onCreate()")
+        check(owner is BaseComponent)
+//        owner.logger.d("onCreate()")
     }
 
     override fun onStart(owner: LifecycleOwner) {
-        Log.d(owner::class.simpleName!!, "onStart()")
+        check(owner is BaseComponent)
+//        owner.logger.d("onStart()")
     }
 
     override fun onResume(owner: LifecycleOwner) {
-        Log.d(owner::class.simpleName!!, "onResume()")
+        check(owner is BaseComponent)
+//        owner.logger.d("onResume()")
     }
 
     override fun onPause(owner: LifecycleOwner) {
-        Log.d(owner::class.simpleName!!, "onPause()")
+        check(owner is BaseComponent)
+//        owner.logger.d("onPause()")
     }
 
     override fun onStop(owner: LifecycleOwner) {
-        Log.d(owner::class.simpleName!!, "onStop()")
+        check(owner is BaseComponent)
+//        owner.logger.d("onStop()")
     }
 
     override fun onDestroy(owner: LifecycleOwner) {
-        Log.d(owner::class.simpleName!!, "onDestroy()")
+        check(owner is BaseComponent)
+//        owner.logger.d("onDestroy()")
     }
 }

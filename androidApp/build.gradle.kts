@@ -168,6 +168,8 @@ dependencies {
     implementation(libs.android.compose.previews)
     implementation(libs.android.compose.glance)
 
+    implementation(libs.androidx.workManager)
+
     // Desugaring
     coreLibraryDesugaring(libs.android.desugaring)
 

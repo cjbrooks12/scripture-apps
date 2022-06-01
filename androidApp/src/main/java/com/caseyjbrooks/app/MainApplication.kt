@@ -2,6 +2,7 @@ package com.caseyjbrooks.app
 
 import android.app.Application
 import android.content.Context
+import com.caseyjbrooks.app.service.votd.VotdPrefetchWorker
 import com.caseyjbrooks.app.widgets.votd.votdWidgetModule
 import com.copperleaf.scripturenow.di.Injector
 import com.copperleaf.scripturenow.di.kodein.ApplicationContext
@@ -26,5 +27,7 @@ class MainApplication : Application() {
                 import(votdWidgetModule())
             }
         )
+
+        VotdPrefetchWorker.scheduleWork(this)
     }
 }

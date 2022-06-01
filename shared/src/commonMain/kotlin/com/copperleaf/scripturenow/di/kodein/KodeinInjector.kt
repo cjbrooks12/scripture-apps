@@ -1,5 +1,6 @@
 package com.copperleaf.scripturenow.di.kodein
 
+import co.touchlab.kermit.Logger
 import com.copperleaf.scripturenow.api.mainApiModule
 import com.copperleaf.scripturenow.api.votd.votdApiModule
 import com.copperleaf.scripturenow.db.mainDbModule
@@ -25,6 +26,8 @@ class KodeinInjector(
     private val di: DirectDI
 ) : Injector {
     override val mainRouter: MainRouterViewModel get() = di.instance()
+    override fun logger(tag: String): Logger = di.instance(arg = tag)
+
     override fun votdViewModel(coroutineScope: CoroutineScope): VotdViewModel = di.instance(arg = coroutineScope)
 
     companion object {
