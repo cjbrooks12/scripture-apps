@@ -383,8 +383,7 @@ data class SemanticVersion(
         else {
             (major * majorFactor) +
                 (minor * minorFactor) +
-                (patch * patchFactor) +
-                snapshotSuffix
+                (patch * patchFactor)
         }.also {
             check(it < 2100000000) // the biggest number accepted by Google Play
         }
