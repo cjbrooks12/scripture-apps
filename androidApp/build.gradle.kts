@@ -22,9 +22,10 @@ android {
         minSdk = 28
         targetSdk = 31
 
-        versionName = "1.0.0"
-//        versionCode = System.currentTimeMillis()
-        versionCode = 1
+        val projectVersion = Config.projectVersion(project)
+
+        versionName = projectVersion.projectVersion
+        versionCode = projectVersion.projectVersionInt
 
         multiDexEnabled = true
 
@@ -43,13 +44,6 @@ android {
 
     signingConfigs {
         val publishConfiguration = Config.publishConfiguration(project)
-        println(publishConfiguration.debug())
-
-        val keystoreFile = file("${project.rootDir.absolutePath}/release.keystore")
-        println("path to project: ${project.rootDir.absolutePath}")
-        println("path to keystore: ${keystoreFile.absolutePath} (exists=${keystoreFile.exists()}, isFile=${keystoreFile.isFile})")
-        println("keystore metrics: size=${keystoreFile.length()}, sha=${HashUtils.getCheckSumFromFile(keystoreFile)}")
-
         getByName("debug") {
 
         }

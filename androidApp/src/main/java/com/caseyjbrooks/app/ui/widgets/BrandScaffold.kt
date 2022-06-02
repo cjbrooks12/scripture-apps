@@ -12,7 +12,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.caseyjbrooks.R
+import com.caseyjbrooks.app.R
 import com.caseyjbrooks.app.utils.theme.BrandIcons
 
 enum class BrandScaffoldHeaderIconType {

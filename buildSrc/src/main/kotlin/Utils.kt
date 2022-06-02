@@ -366,6 +366,29 @@ data class SemanticVersion(
     ): String {
         return if (isSnapshot) "$major.$minor.$patch$snapshotSuffix" else "$major.$minor.$patch"
     }
+
+    fun formatAsInt(
+        isSnapshot: Boolean = false,
+        majorFactor: Int = 1000 * 1000 * 1000,
+        minorFactor: Int = 1000 * 1000,
+        patchFactor: Int = 1000,
+        snapshotSuffix: Int = 9,
+    ): Int {
+        return if (isSnapshot) {
+            (major * majorFactor) +
+            (minor * minorFactor) +
+            (patch * patchFactor) +
+                snapshotSuffix
+        }
+        else {
+            (major * majorFactor) +
+                (minor * minorFactor) +
+                (patch * patchFactor) +
+                snapshotSuffix
+        }.also {
+            check(it < 2100000000) // the biggest number accepted by Google Play
+        }
+    }
 }
 
 data class ProjectVersion(
@@ -401,6 +424,17 @@ data class ProjectVersion(
                 previousOrInitialVersion.format(false, snapshotSuffix)
             } else {
                 nextVersion.format(true, snapshotSuffix)
+            }
+        }
+
+    val projectVersionInt: Int
+        get() {
+            return if (isRelease) {
+                nextVersion.formatAsInt(false)
+            } else if (isDocsUpdate) {
+                previousOrInitialVersion.formatAsInt(false)
+            } else {
+                nextVersion.formatAsInt(true)
             }
         }
 

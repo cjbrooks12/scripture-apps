@@ -3,7 +3,7 @@ package com.caseyjbrooks.app.utils.theme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import com.caseyjbrooks.R
+import com.caseyjbrooks.app.R
 
 val BrandPrimary @Composable get() = colorResource(R.color.colorPrimary)
 val BrandPrimaryVariant @Composable get() = colorResource(R.color.colorPrimary)

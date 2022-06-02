@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.caseyjbrooks">
+    package="com.caseyjbrooks.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".app.MainApplication"
+        android:name=".MainApplication"
         android:allowBackup="true"
         android:fullBackupOnly="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,7 +25,7 @@
         </activity>
 
         <service
-            android:name=".app.firebase.FirebaseNotificationService"
+            android:name=".firebase.FirebaseNotificationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -33,7 +33,7 @@
         </service>
 
         <receiver
-            android:name=".app.widgets.votd.VotdWidgetReceiver"
+            android:name=".widgets.votd.VotdWidgetReceiver"
             android:enabled="@bool/glance_appwidget_available"
             android:exported="false">
             <intent-filter>

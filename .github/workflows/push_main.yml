@@ -33,6 +33,6 @@ jobs:
       - name: 'Convert base64 keystore to binary'
         run: 'echo $KEYSTORE | base64 -d > ./release.keystore'
       - name: 'Assemble Artifacts'
-        run: './gradlew :androidApp:assembleScriptureNowDevRelease :androidApp:bundleScriptureNowProdRelease :androidApp:assembleTopicalBibleDevRelease :androidApp:bundleTopicalBibleProdRelease'
+        run: './gradlew :androidApp:assembleScriptureNowDevRelease :androidApp:bundleScriptureNowProdRelease :androidApp:assembleTopicalBibleDevRelease :androidApp:bundleTopicalBibleProdRelease -Prelease'
       - name: 'Upload Artifacts to Firebase'
-        run: './gradlew :androidApp:appDistributionUploadScriptureNowDevRelease :androidApp:appDistributionUploadScriptureNowProdRelease :androidApp:appDistributionUploadTopicalBibleDevRelease :androidApp:appDistributionUploadTopicalBibleProdRelease'
+        run: './gradlew :androidApp:appDistributionUploadScriptureNowDevRelease :androidApp:appDistributionUploadScriptureNowProdRelease :androidApp:appDistributionUploadTopicalBibleDevRelease :androidApp:appDistributionUploadTopicalBibleProdRelease -Prelease'
