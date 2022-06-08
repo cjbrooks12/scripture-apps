@@ -24,3 +24,7 @@ LIMIT 1;
 insertOrReplace:
 INSERT OR REPLACE INTO sn_memoryVerse (uuid, text, reference, version, verse_url, notice, created_at, updated_at)
 VALUES ?;
+
+delete:
+DELETE FROM sn_memoryVerse
+WHERE uuid = ?;

@@ -64,6 +64,7 @@ kotlin {
                 api(libs.ballast.savedState)
                 api(libs.ballast.repository)
                 api(libs.ballast.navigation)
+                api(libs.ballast.debugger)
 
                 api(libs.kotlinx.serialization.json)
 

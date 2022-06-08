@@ -45,26 +45,36 @@ class MemoryVersesRepositoryInputHandler(
         is MemoryVersesRepositoryContract.Inputs.RefreshAllCaches -> {
             // then refresh all the caches in this repository
             val currentState = getCurrentState()
-            if (currentState.dataListInitialized) {
-                postInput(MemoryVersesRepositoryContract.Inputs.RefreshDataList(true))
+            if (currentState.memoryVerseListInitialized) {
+                postInput(MemoryVersesRepositoryContract.Inputs.RefreshMemoryVerseList(true))
             }
 
             Unit
         }
 
-        is MemoryVersesRepositoryContract.Inputs.DataListUpdated -> {
-            updateState { it.copy(dataList = input.dataList) }
+        is MemoryVersesRepositoryContract.Inputs.MemoryVerseListUpdated -> {
+            updateState { it.copy(memoryVerseList = input.memoryVerseList) }
         }
-        is MemoryVersesRepositoryContract.Inputs.RefreshDataList -> {
-            updateState { it.copy(dataListInitialized = true) }
+        is MemoryVersesRepositoryContract.Inputs.RefreshMemoryVerseList -> {
+            updateState { it.copy(memoryVerseListInitialized = true) }
             fetchWithCache(
                 input = input,
                 forceRefresh = input.forceRefresh,
-                getValue = { it.dataList },
-                updateState = { MemoryVersesRepositoryContract.Inputs.DataListUpdated(it) },
+                getValue = { it.memoryVerseList },
+                updateState = { MemoryVersesRepositoryContract.Inputs.MemoryVerseListUpdated(it) },
                 doFetch = { },
                 observe = db.getMemoryVerses()
             )
+        }
+        is MemoryVersesRepositoryContract.Inputs.CreateOrUpdateMemoryVerse -> {
+            sideJob(input.toString()) {
+                db.saveVerse(input.memoryVerse)
+            }
+        }
+        is MemoryVersesRepositoryContract.Inputs.DeleteMemoryVerse -> {
+            sideJob(input.toString()) {
+                db.deleteVerse(input.memoryVerse)
+            }
         }
     }
 }

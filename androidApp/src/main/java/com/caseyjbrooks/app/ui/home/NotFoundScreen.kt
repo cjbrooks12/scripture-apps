@@ -8,7 +8,7 @@ import com.copperleaf.ballast.navigation.routing.Route
 class NotFoundScreen : ComposeScreen() {
     override val screenName: String = "NotFoundScreen"
 
-    override val route: Route? = null
+    override val route: Route = Route("/404")
 
     @Composable
     override fun ScreenContent() {

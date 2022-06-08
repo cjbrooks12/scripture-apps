@@ -8,4 +8,5 @@ interface MemoryVersesDb {
     fun getMemoryVerses(): Flow<List<MemoryVerse>>
     fun getVerseById(id: Uuid): Flow<MemoryVerse?>
     suspend fun saveVerse(verse: MemoryVerse)
+    suspend fun deleteVerse(verse: MemoryVerse)
 }

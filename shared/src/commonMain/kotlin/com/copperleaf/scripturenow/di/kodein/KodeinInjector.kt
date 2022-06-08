@@ -8,12 +8,17 @@ import com.copperleaf.scripturenow.db.verses.memoryVersesDbModule
 import com.copperleaf.scripturenow.db.votd.votdDbModule
 import com.copperleaf.scripturenow.di.Injector
 import com.copperleaf.scripturenow.repositories.mainRepositoryModule
+import com.copperleaf.scripturenow.repositories.verses.MemoryVerseInterceptor
 import com.copperleaf.scripturenow.repositories.verses.memoryVersesRepositoryModule
 import com.copperleaf.scripturenow.repositories.votd.VotdInterceptor
 import com.copperleaf.scripturenow.repositories.votd.votdRepositoryModule
 import com.copperleaf.scripturenow.ui.mainUiModule
 import com.copperleaf.scripturenow.ui.router.MainRouterViewModel
 import com.copperleaf.scripturenow.ui.router.routerVmModule
+import com.copperleaf.scripturenow.ui.verses.detail.MemoryVerseDetailsViewModel
+import com.copperleaf.scripturenow.ui.verses.edit.CreateOrEditMemoryVerseViewModel
+import com.copperleaf.scripturenow.ui.verses.list.MemoryVerseListViewModel
+import com.copperleaf.scripturenow.ui.verses.versesUiModule
 import com.copperleaf.scripturenow.ui.votd.VotdViewModel
 import com.copperleaf.scripturenow.ui.votd.votdVmModule
 import kotlinx.coroutines.CoroutineScope
@@ -29,6 +34,9 @@ class KodeinInjector(
     override fun logger(tag: String): Logger = di.instance(arg = tag)
 
     override fun votdViewModel(coroutineScope: CoroutineScope): VotdViewModel = di.instance(arg = coroutineScope)
+    override fun verseListViewModel(coroutineScope: CoroutineScope): MemoryVerseListViewModel = di.instance(arg = coroutineScope)
+    override fun createOrEditVerseViewModel(coroutineScope: CoroutineScope): CreateOrEditMemoryVerseViewModel = di.instance(arg = coroutineScope)
+    override fun verseDetailsViewModel(coroutineScope: CoroutineScope): MemoryVerseDetailsViewModel = di.instance(arg = coroutineScope)
 
     companion object {
         fun create(
@@ -38,6 +46,7 @@ class KodeinInjector(
             return KodeinInjector(
                 DI.direct {
                     bindSet<VotdInterceptor>()
+                    bindSet<MemoryVerseInterceptor>()
 
                     // Application
                     import(mainApplicationModule())
@@ -62,6 +71,7 @@ class KodeinInjector(
                     import(mainUiModule())
                     import(routerVmModule(onBackstackEmptied))
                     import(votdVmModule())
+                    import(versesUiModule())
                 }
             )
         }

@@ -35,4 +35,9 @@ class MemoryVersesSqlDb(
         queries
             .insertOrReplace(converter.convertRepositoryModelToDbModel(verse))
     }
+
+    override suspend fun deleteVerse(verse: MemoryVerse) {
+        queries
+            .delete(verse.uuid)
+    }
 }

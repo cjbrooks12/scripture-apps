@@ -17,10 +17,10 @@ plugins {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = 32
     defaultConfig {
         minSdk = 28
-        targetSdk = 31
+        targetSdk = 32
 
         val projectVersion = Config.projectVersion(project)
 
@@ -92,7 +92,8 @@ android {
         jvmTarget = "1.8"
 
         freeCompilerArgs = listOf(
-            "-Xopt-in=kotlin.RequiresOptIn"
+            "-Xopt-in=kotlin.RequiresOptIn",
+            "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi"
         )
     }
 
@@ -157,6 +158,7 @@ dependencies {
     implementation(libs.androidx.splashscreen)
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.compose.activity)
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.24.10-beta")
 
     implementation(libs.android.compose.material)
     implementation(libs.android.compose.previews)

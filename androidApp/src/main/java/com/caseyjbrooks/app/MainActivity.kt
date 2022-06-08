@@ -12,6 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -51,9 +52,15 @@ class MainActivity : ComposeActivity() {
         val routerState by routerViewModel.observeStates().collectAsState()
 
         BackHandler {
-            routerViewModel.trySend(
-                RouterContract.Inputs.GoBack
-            )
+            if(routerState.backstack.filterIsInstance<Destination>().isNotEmpty()) {
+                // if there's screens in the backstack, go back
+                routerViewModel.trySend(
+                    RouterContract.Inputs.GoBack
+                )
+            } else {
+                // otherwise, close the app
+                this@MainActivity.finish()
+            }
         }
 
         val composeScreens = listOf(
@@ -130,9 +137,11 @@ class MainActivity : ComposeActivity() {
                             }
                         }
 
-                        Firebase.analytics.logEvent("screen_view") {
-                            param(FirebaseAnalytics.Param.SCREEN_NAME, currentScreen.screenName)
-                            param(FirebaseAnalytics.Param.SCREEN_CLASS, currentScreen::class.java.name)
+                        LaunchedEffect(currentScreen) {
+                            Firebase.analytics.logEvent("screen_view") {
+                                param(FirebaseAnalytics.Param.SCREEN_NAME, currentScreen.screenName)
+                                param(FirebaseAnalytics.Param.SCREEN_CLASS, currentScreen.route.originalRoute)
+                            }
                         }
 
                         currentScreen.ScreenContent()

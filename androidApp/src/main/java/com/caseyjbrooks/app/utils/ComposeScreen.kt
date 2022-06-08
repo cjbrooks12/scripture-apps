@@ -5,7 +5,7 @@ import com.copperleaf.ballast.navigation.routing.Route
 
 abstract class ComposeScreen : BaseComponent {
     override val componentType: String = "ComposeScreen"
-    abstract val route: Route?
+    abstract val route: Route
 
     @Composable
     abstract fun ScreenContent()

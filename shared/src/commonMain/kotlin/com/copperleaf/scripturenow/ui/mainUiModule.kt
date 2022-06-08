@@ -2,6 +2,8 @@ package com.copperleaf.scripturenow.ui
 
 import com.copperleaf.ballast.BallastViewModelConfiguration
 import com.copperleaf.ballast.core.LoggingInterceptor
+import com.copperleaf.ballast.debugger.BallastDebuggerClientConnection
+import com.copperleaf.ballast.debugger.BallastDebuggerInterceptor
 import com.copperleaf.ballast.dispatchers
 import com.copperleaf.ballast.plusAssign
 import com.copperleaf.scripturenow.di.kodein.BackgroundDispatcher
@@ -28,7 +30,7 @@ fun mainUiModule() = DI.Module(name = "UI >> Main") {
                     this += LoggingInterceptor()
                     logger = { tag -> KermitBallastLogger(instance(arg = tag)) }
 
-//                    this += BallastDebuggerInterceptor(instance<BallastDebuggerClientConnection<*>>())
+                    this += BallastDebuggerInterceptor(instance<BallastDebuggerClientConnection<*>>())
                 }
         }
     }

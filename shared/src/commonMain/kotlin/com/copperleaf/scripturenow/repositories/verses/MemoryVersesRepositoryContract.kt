@@ -7,8 +7,8 @@ object MemoryVersesRepositoryContract {
     data class State(
         val initialized: Boolean = false,
 
-        val dataListInitialized: Boolean = false,
-        val dataList: Cached<List<MemoryVerse>> = Cached.NotLoaded(),
+        val memoryVerseListInitialized: Boolean = false,
+        val memoryVerseList: Cached<List<MemoryVerse>> = Cached.NotLoaded(),
     )
 
     sealed class Inputs {
@@ -16,7 +16,9 @@ object MemoryVersesRepositoryContract {
         object Initialize : Inputs()
         object RefreshAllCaches : Inputs()
 
-        data class RefreshDataList(val forceRefresh: Boolean) : Inputs()
-        data class DataListUpdated(val dataList: Cached<List<MemoryVerse>>) : Inputs()
+        data class RefreshMemoryVerseList(val forceRefresh: Boolean) : Inputs()
+        data class MemoryVerseListUpdated(val memoryVerseList: Cached<List<MemoryVerse>>) : Inputs()
+        data class CreateOrUpdateMemoryVerse(val memoryVerse: MemoryVerse) : Inputs()
+        data class DeleteMemoryVerse(val memoryVerse: MemoryVerse) : Inputs()
     }
 }
