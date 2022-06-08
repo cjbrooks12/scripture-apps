@@ -11,3 +11,10 @@ The following lists the main libraries/techniques being used for this app implem
 - [Dagger/Hilt](https://dagger.dev/hilt/)
 - [Navigation Component](https://developer.android.com/guide/navigation)
 - [SQLDelight](https://cashapp.github.io/sqldelight/android_sqlite/)
+
+Enable Firebase Analytics DebugView with the following command:
+
+```shell
+adb shell setprop debug.firebase.analytics.app com.caseybrooks.scripturememory.dev
+adb shell setprop debug.firebase.analytics.app com.caseybrooks.openbible.dev
+```

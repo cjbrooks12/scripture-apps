@@ -6,6 +6,7 @@ object Destinations {
     object App {
         val Home = Route("/app/home")
         val VerseOfTheDay = Route("/app/votd")
+        val Settings = Route("/app/settings")
 
         object Verses {
             val List = Route("/app/verses")
@@ -25,4 +26,15 @@ val bottomBarDestinations = listOf(
     BottomBarDestination(Destinations.App.Home),
     BottomBarDestination(Destinations.App.VerseOfTheDay),
     BottomBarDestination(Destinations.App.Verses.List),
+    BottomBarDestination(Destinations.App.Settings),
+)
+
+val allScreens = listOf(
+    Destinations.App.Home,
+    Destinations.App.VerseOfTheDay,
+    Destinations.App.Settings,
+    Destinations.App.Verses.List,
+    Destinations.App.Verses.Detail,
+    Destinations.App.Verses.Create,
+    Destinations.App.Verses.Edit,
 )

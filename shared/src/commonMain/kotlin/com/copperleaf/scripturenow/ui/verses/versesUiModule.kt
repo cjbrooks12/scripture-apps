@@ -33,7 +33,7 @@ fun versesUiModule() = DI.Module(name = "UI > Verses") {
                 coroutineScope = arg,
                 configBuilder = instance(tag = UiConfigBuilder),
                 inputHandler = MemoryVerseDetailsInputHandler(instance()),
-                eventHandler = MemoryVerseDetailsEventHandler(),
+                eventHandler = MemoryVerseDetailsEventHandler(instance()),
             )
         }
     }
@@ -43,7 +43,7 @@ fun versesUiModule() = DI.Module(name = "UI > Verses") {
                 coroutineScope = arg,
                 configBuilder = instance(tag = UiConfigBuilder),
                 inputHandler = CreateOrEditMemoryVerseInputHandler(instance()),
-                eventHandler = CreateOrEditMemoryVerseEventHandler(),
+                eventHandler = CreateOrEditMemoryVerseEventHandler(instance()),
             )
         }
     }

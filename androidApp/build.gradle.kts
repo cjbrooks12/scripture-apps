@@ -158,7 +158,8 @@ dependencies {
     implementation(libs.androidx.splashscreen)
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.compose.activity)
-    implementation("com.google.accompanist:accompanist-swiperefresh:0.24.10-beta")
+    implementation(libs.android.compose.icons)
+    implementation(libs.android.compose.accompanist.swiperefresh)
 
     implementation(libs.android.compose.material)
     implementation(libs.android.compose.previews)

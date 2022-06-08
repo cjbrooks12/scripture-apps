@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.caseyjbrooks.app.utils.ComposeScreen
 import com.caseyjbrooks.app.utils.theme.LocalInjector
-import com.copperleaf.ballast.navigation.routing.Route
+import com.copperleaf.ballast.navigation.routing.Destination
 import com.copperleaf.ballast.repository.cache.getCachedOrEmptyList
 import com.copperleaf.ballast.repository.cache.isLoading
 import com.copperleaf.scripturenow.ui.Destinations
@@ -34,13 +34,10 @@ import com.copperleaf.scripturenow.ui.verses.list.MemoryVerseListContract
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
-class VerseListScreen : ComposeScreen() {
-    override val screenName: String = "VerseListScreen"
-
-    override val route: Route = Destinations.App.Verses.List
+class VerseListScreen : ComposeScreen(Destinations.App.Verses.List) {
 
     @Composable
-    override fun ScreenContent() {
+    override fun ScreenContent(destination: Destination) {
         Text(screenName)
         val coroutineScope = rememberCoroutineScope()
         val injector = LocalInjector.current
@@ -48,6 +45,7 @@ class VerseListScreen : ComposeScreen() {
         val vmState by vm.observeStates().collectAsState()
 
         Scaffold(
+            modifier = Modifier.fillMaxSize(),
             topBar = {
                 TopAppBar(
 //                    navigationIcon = {
@@ -85,10 +83,15 @@ class VerseListScreen : ComposeScreen() {
                             Text("You have no saved verses. Click the + above to get started", textAlign = TextAlign.Center)
                         }
                     } else {
-                        LazyColumn(contentPadding = contentPadding) {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = contentPadding,
+                        ) {
                             items(vmState.verses.getCachedOrEmptyList(), key = { it.uuid }) { verse ->
                                 ListItem(
-                                    modifier = Modifier.clickable { },
+                                    modifier = Modifier.clickable {
+                                        vm.trySend(MemoryVerseListContract.Inputs.ViewVerse(verse))
+                                    },
                                     text = { Text(verse.reference, overflow = TextOverflow.Ellipsis, maxLines = 1) },
                                     secondaryText = {
                                         Text(

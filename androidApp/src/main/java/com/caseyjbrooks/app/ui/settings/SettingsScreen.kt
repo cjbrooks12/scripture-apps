@@ -1,4 +1,4 @@
-package com.caseyjbrooks.app.ui.home
+package com.caseyjbrooks.app.ui.settings
 
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -8,7 +8,7 @@ import com.caseyjbrooks.app.utils.ComposeScreen
 import com.copperleaf.ballast.navigation.routing.Destination
 import com.copperleaf.scripturenow.ui.Destinations
 
-class HomeScreen : ComposeScreen(Destinations.App.Home) {
+class SettingsScreen : ComposeScreen(Destinations.App.Settings) {
 
     @Composable
     override fun ScreenContent(destination: Destination) {
@@ -16,7 +16,7 @@ class HomeScreen : ComposeScreen(Destinations.App.Home) {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text("Scripture Now") },
+                    title = { Text("Settings") },
                 )
             },
             content = { contentPadding ->

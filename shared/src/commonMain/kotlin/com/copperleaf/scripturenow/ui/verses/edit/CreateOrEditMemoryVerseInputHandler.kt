@@ -5,9 +5,12 @@ import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
 import com.copperleaf.ballast.repository.cache.awaitValue
 import com.copperleaf.ballast.repository.cache.getValueOrThrow
+import com.copperleaf.scripturenow.common.now
 import com.copperleaf.scripturenow.repositories.verses.MemoryVersesRepository
 import com.copperleaf.scripturenow.repositories.verses.models.MemoryVerse
 import com.copperleaf.scripturenow.utils.EditorMode
+import kotlinx.coroutines.delay
+import kotlinx.datetime.LocalDateTime
 
 class CreateOrEditMemoryVerseInputHandler(
     private val memoryVersesRepository: MemoryVersesRepository
@@ -28,7 +31,7 @@ class CreateOrEditMemoryVerseInputHandler(
                         editorMode = EditorMode.Create,
                         loading = false,
                         savedVerse = null,
-                        edits = MemoryVerse(
+                        editingVerse = MemoryVerse(
                             uuid = uuid4(), // create a new UUID for this verse
                             main = false,
                             text = "",
@@ -36,16 +39,18 @@ class CreateOrEditMemoryVerseInputHandler(
                             version = "",
                             verseUrl = "",
                             notice = "",
+                            createdAt = LocalDateTime.now(),
+                            updatedAt = LocalDateTime.now(),
                         )
                     )
                 }
             } else {
                 updateState {
                     it.copy(
-                        editorMode = EditorMode.Create,
+                        editorMode = EditorMode.Edit,
                         loading = true,
                         savedVerse = null,
-                        edits = null,
+                        editingVerse = null,
                     )
                 }
 
@@ -58,12 +63,42 @@ class CreateOrEditMemoryVerseInputHandler(
                     it.copy(
                         loading = false,
                         savedVerse = savedVerse,
-                        edits = savedVerse.copy(),
+                        editingVerse = savedVerse.copy(),
                     )
                 }
             }
         }
+        is CreateOrEditMemoryVerseContract.Inputs.UpdateVerse -> {
+            val currentState = updateStateAndGet { it.copy(editingVerse = input.updatedVerse) }
+            if (currentState.editorMode == EditorMode.Edit) {
+                updateState { it.copy(hasUnsavedChanges = true) }
+
+                sideJob("autosave") {
+                    delay(3000)
+                    postInput(CreateOrEditMemoryVerseContract.Inputs.SaveVerse)
+                }
+            }
+
+            Unit
+        }
+        is CreateOrEditMemoryVerseContract.Inputs.SaveVerse -> {
+            val currentState = updateStateAndGet { it.copy(lastSavedOn = LocalDateTime.now(), hasUnsavedChanges = false) }
+
+            memoryVersesRepository.createOrUpdateVerse(currentState.editingVerse!!)
+
+            if (currentState.editorMode == EditorMode.Create) {
+                postEvent(CreateOrEditMemoryVerseContract.Events.NavigateUp)
+            }
+
+            Unit
+        }
         is CreateOrEditMemoryVerseContract.Inputs.GoBack -> {
+            val currentState = getCurrentState()
+
+            if(currentState.hasUnsavedChanges) {
+                memoryVersesRepository.createOrUpdateVerse(currentState.editingVerse!!)
+            }
+
             postEvent(CreateOrEditMemoryVerseContract.Events.NavigateUp)
         }
     }

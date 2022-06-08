@@ -11,17 +11,17 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.caseyjbrooks.app.ui.home.HomeScreen
-import com.caseyjbrooks.app.ui.home.NotFoundScreen
+import com.caseyjbrooks.app.ui.settings.SettingsScreen
 import com.caseyjbrooks.app.ui.verses.EditVerseScreen
 import com.caseyjbrooks.app.ui.verses.NewVerseScreen
+import com.caseyjbrooks.app.ui.verses.VerseDetailsScreen
 import com.caseyjbrooks.app.ui.verses.VerseListScreen
-import com.caseyjbrooks.app.ui.verses.ViewVerseScreen
 import com.caseyjbrooks.app.ui.votd.VotdScreen
 import com.caseyjbrooks.app.utils.ComposeActivity
 import com.caseyjbrooks.app.utils.ComposeScreen
@@ -32,10 +32,6 @@ import com.copperleaf.ballast.navigation.routing.currentDestination
 import com.copperleaf.ballast.navigation.routing.currentDestinationOrNotFound
 import com.copperleaf.scripturenow.ui.Destinations
 import com.copperleaf.scripturenow.ui.bottomBarDestinations
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.analytics.ktx.logEvent
-import com.google.firebase.ktx.Firebase
 
 class MainActivity : ComposeActivity() {
 
@@ -66,9 +62,10 @@ class MainActivity : ComposeActivity() {
         val composeScreens = listOf(
             HomeScreen(),
             VotdScreen(),
+            SettingsScreen(),
             VerseListScreen(),
             NewVerseScreen(),
-            ViewVerseScreen(),
+            VerseDetailsScreen(),
             EditVerseScreen(),
         )
         Scaffold(
@@ -87,6 +84,9 @@ class MainActivity : ComposeActivity() {
                                     Destinations.App.Verses.List -> {
                                         Icon(Icons.Default.Home, contentDescription = "Verses")
                                     }
+                                    Destinations.App.Settings -> {
+                                        Icon(Icons.Default.Settings, contentDescription = "Settings")
+                                    }
                                     else -> {
                                         Text("Error, not a valid top-level route")
                                     }
@@ -103,6 +103,9 @@ class MainActivity : ComposeActivity() {
                                     Destinations.App.Verses.List -> {
                                         Text("Verses")
                                     }
+                                    Destinations.App.Settings -> {
+                                        Text("Settings")
+                                    }
                                     else -> {
                                         Text("Error, not a valid top-level route")
                                     }
@@ -111,7 +114,7 @@ class MainActivity : ComposeActivity() {
                             selected = screen.route == routerState.currentDestination?.originalRoute,
                             onClick = {
                                 routerViewModel.trySend(
-                                    RouterContract.Inputs.GoToDestination(screen.target)
+                                    RouterContract.Inputs.ReplaceTopDestination(screen.target)
                                 )
                             }
                         )
@@ -121,7 +124,8 @@ class MainActivity : ComposeActivity() {
             content = {
                 routerState.currentDestinationOrNotFound?.let {
                     AnimatedContent(it) { token ->
-                        val currentScreen: ComposeScreen = when (token) {
+                        val destination = token as? Destination
+                        val currentScreen: ComposeScreen? = when (token) {
                             is Destination -> {
                                 token
                                     .originalRoute
@@ -130,21 +134,15 @@ class MainActivity : ComposeActivity() {
                                             screen.route == route
                                         }
                                     }
-                                    ?: NotFoundScreen()
                             }
                             else -> {
-                                NotFoundScreen()
+                                null
                             }
                         }
 
-                        LaunchedEffect(currentScreen) {
-                            Firebase.analytics.logEvent("screen_view") {
-                                param(FirebaseAnalytics.Param.SCREEN_NAME, currentScreen.screenName)
-                                param(FirebaseAnalytics.Param.SCREEN_CLASS, currentScreen.route.originalRoute)
-                            }
+                        if(currentScreen != null && destination != null){
+                            currentScreen.ScreenContent(destination)
                         }
-
-                        currentScreen.ScreenContent()
                     }
                 }
             }

@@ -13,8 +13,9 @@ import com.copperleaf.scripturenow.repositories.verses.memoryVersesRepositoryMod
 import com.copperleaf.scripturenow.repositories.votd.VotdInterceptor
 import com.copperleaf.scripturenow.repositories.votd.votdRepositoryModule
 import com.copperleaf.scripturenow.ui.mainUiModule
-import com.copperleaf.scripturenow.ui.router.MainRouterViewModel
-import com.copperleaf.scripturenow.ui.router.routerVmModule
+import com.copperleaf.scripturenow.repositories.router.MainRouterViewModel
+import com.copperleaf.scripturenow.repositories.router.RouterInterceptor
+import com.copperleaf.scripturenow.repositories.router.routerRepositoryModule
 import com.copperleaf.scripturenow.ui.verses.detail.MemoryVerseDetailsViewModel
 import com.copperleaf.scripturenow.ui.verses.edit.CreateOrEditMemoryVerseViewModel
 import com.copperleaf.scripturenow.ui.verses.list.MemoryVerseListViewModel
@@ -47,6 +48,7 @@ class KodeinInjector(
                 DI.direct {
                     bindSet<VotdInterceptor>()
                     bindSet<MemoryVerseInterceptor>()
+                    bindSet<RouterInterceptor>()
 
                     // Application
                     import(mainApplicationModule())
@@ -69,7 +71,7 @@ class KodeinInjector(
 
                     // UI
                     import(mainUiModule())
-                    import(routerVmModule(onBackstackEmptied))
+                    import(routerRepositoryModule(onBackstackEmptied))
                     import(votdVmModule())
                     import(versesUiModule())
                 }

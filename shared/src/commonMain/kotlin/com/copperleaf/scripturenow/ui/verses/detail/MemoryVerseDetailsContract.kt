@@ -12,10 +12,13 @@ object MemoryVerseDetailsContract {
     sealed class Inputs {
         data class Initialize(val verseUuid: Uuid) : Inputs()
         data class MemoryVerseUpdated(val memoryVerse: Cached<MemoryVerse>) : Inputs()
+        object EditVerse : Inputs()
+        object DeleteVerse : Inputs()
         object GoBack : Inputs()
     }
 
     sealed class Events {
-        object NavigateUp : Events()
+        object NavigateBack : Events()
+        data class NavigateTo(val destination: String) : Events()
     }
 }

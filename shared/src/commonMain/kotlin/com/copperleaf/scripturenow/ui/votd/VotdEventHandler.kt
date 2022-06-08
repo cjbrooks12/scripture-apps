@@ -3,7 +3,7 @@ package com.copperleaf.scripturenow.ui.votd
 import com.copperleaf.ballast.EventHandler
 import com.copperleaf.ballast.EventHandlerScope
 import com.copperleaf.ballast.navigation.routing.RouterContract
-import com.copperleaf.scripturenow.ui.router.MainRouterViewModel
+import com.copperleaf.scripturenow.repositories.router.MainRouterViewModel
 
 class VotdEventHandler(
     private val routerViewModel: MainRouterViewModel,

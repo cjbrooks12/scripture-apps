@@ -2,8 +2,11 @@ package com.copperleaf.scripturenow.ui.verses.detail
 
 import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
+import com.copperleaf.ballast.navigation.routing.directions
 import com.copperleaf.ballast.observeFlows
+import com.copperleaf.ballast.repository.cache.getCachedOrNull
 import com.copperleaf.scripturenow.repositories.verses.MemoryVersesRepository
+import com.copperleaf.scripturenow.ui.Destinations
 import kotlinx.coroutines.flow.map
 
 class MemoryVerseDetailsInputHandler(
@@ -30,7 +33,34 @@ class MemoryVerseDetailsInputHandler(
             updateState { it.copy(memoryVerse = input.memoryVerse) }
         }
         is MemoryVerseDetailsContract.Inputs.GoBack -> {
+            postEvent(MemoryVerseDetailsContract.Events.NavigateBack)
+        }
+        is MemoryVerseDetailsContract.Inputs.EditVerse -> {
+            val cachedVerse = getCurrentState().memoryVerse.getCachedOrNull()
 
+            if (cachedVerse != null) {
+                postEvent(
+                    MemoryVerseDetailsContract.Events.NavigateTo(
+                        Destinations.App.Verses.Edit.directions(
+                            pathParameters = mapOf(
+                                "verseId" to listOf(cachedVerse.uuid.toString())
+                            )
+                        )
+                    )
+                )
+            } else {
+                noOp()
+            }
+        }
+        is MemoryVerseDetailsContract.Inputs.DeleteVerse -> {
+            val cachedVerse = getCurrentState().memoryVerse.getCachedOrNull()
+
+            if (cachedVerse != null) {
+                memoryVersesRepository.deleteVerse(cachedVerse)
+                postEvent(MemoryVerseDetailsContract.Events.NavigateBack)
+            } else {
+                noOp()
+            }
         }
     }
 }
