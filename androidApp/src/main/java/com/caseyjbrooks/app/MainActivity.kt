@@ -26,9 +26,11 @@ import com.caseyjbrooks.app.utils.ComposeActivity
 import com.caseyjbrooks.app.utils.ComposeScreen
 import com.caseyjbrooks.app.utils.theme.LocalInjector
 import com.copperleaf.ballast.router.RouterContract
+import com.copperleaf.ballast.router.currentDestination
+import com.copperleaf.ballast.router.currentDestinationOrNotFound
+import com.copperleaf.ballast.router.routing.Destination
 import com.copperleaf.scripturenow.ui.Destinations
-import com.copperleaf.scripturenow.ui.currentDestination
-import com.copperleaf.scripturenow.ui.currentRoute
+import com.copperleaf.scripturenow.ui.bottomBarDestinations
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -62,26 +64,20 @@ class MainActivity : ComposeActivity() {
             ViewVerseScreen(),
             EditVerseScreen(),
         )
-        val items = listOf(
-            Destinations.App.Home,
-            Destinations.App.VerseOfTheDay,
-            Destinations.App.Verses,
-        )
-
         Scaffold(
             bottomBar = {
                 BottomNavigation {
-                    items.forEach { screen ->
+                    bottomBarDestinations.forEach { screen ->
                         BottomNavigationItem(
                             icon = {
-                                when (screen) {
-                                    is Destinations.App.Home -> {
+                                when (screen.route) {
+                                    Destinations.App.Home -> {
                                         Icon(Icons.Default.Home, contentDescription = "Home")
                                     }
-                                    is Destinations.App.VerseOfTheDay -> {
+                                    Destinations.App.VerseOfTheDay -> {
                                         Icon(Icons.Default.Home, contentDescription = "VOTD")
                                     }
-                                    is Destinations.App.Verses -> {
+                                    Destinations.App.Verses.List -> {
                                         Icon(Icons.Default.Home, contentDescription = "Verses")
                                     }
                                     else -> {
@@ -90,14 +86,14 @@ class MainActivity : ComposeActivity() {
                                 }
                             },
                             label = {
-                                when (screen) {
-                                    is Destinations.App.Home -> {
+                                when (screen.route) {
+                                    Destinations.App.Home -> {
                                         Text("Home")
                                     }
-                                    is Destinations.App.VerseOfTheDay -> {
+                                    Destinations.App.VerseOfTheDay -> {
                                         Text("VOTD")
                                     }
-                                    is Destinations.App.Verses -> {
+                                    Destinations.App.Verses.List -> {
                                         Text("Verses")
                                     }
                                     else -> {
@@ -105,10 +101,10 @@ class MainActivity : ComposeActivity() {
                                     }
                                 }
                             },
-                            selected = screen.destination() == routerState.currentDestination,
+                            selected = screen.route == routerState.currentDestination?.originalRoute,
                             onClick = {
                                 routerViewModel.trySend(
-                                    RouterContract.Inputs.GoToDestination(screen.destination())
+                                    RouterContract.Inputs.GoToDestination(screen.target)
                                 )
                             }
                         )
@@ -116,11 +112,23 @@ class MainActivity : ComposeActivity() {
                 }
             },
             content = {
-                routerState.currentDestination?.currentRoute?.let {
-                    AnimatedContent(it) {route ->
-                        val currentScreen: ComposeScreen = composeScreens
-                            .firstOrNull { it.matchesRoute(route) }
-                            ?: NotFoundScreen()
+                routerState.currentDestinationOrNotFound?.let {
+                    AnimatedContent(it) { token ->
+                        val currentScreen: ComposeScreen = when (token) {
+                            is Destination -> {
+                                token
+                                    .originalRoute
+                                    .let { route ->
+                                        composeScreens.firstOrNull {
+                                            it.route == token.originalRoute
+                                        }
+                                    }
+                                    ?: NotFoundScreen()
+                            }
+                            else -> {
+                                NotFoundScreen()
+                            }
+                        }
 
                         Firebase.analytics.logEvent("screen_view") {
                             param(FirebaseAnalytics.Param.SCREEN_NAME, currentScreen.screenName)

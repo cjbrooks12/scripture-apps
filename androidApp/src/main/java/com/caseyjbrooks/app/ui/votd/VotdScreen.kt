@@ -13,15 +13,13 @@ import com.caseyjbrooks.app.utils.ComposeScreen
 import com.caseyjbrooks.app.utils.theme.LocalInjector
 import com.copperleaf.ballast.repository.cache.getCachedOrNull
 import com.copperleaf.ballast.repository.cache.isLoading
+import com.copperleaf.ballast.router.routing.Route
 import com.copperleaf.scripturenow.ui.Destinations
-import com.copperleaf.scripturenow.ui.Route
 
 class VotdScreen : ComposeScreen() {
     override val screenName: String = "VotdScreen"
 
-    override fun matchesRoute(route: Route): Boolean {
-        return route is Destinations.App.VerseOfTheDay
-    }
+    override val route: Route = Destinations.App.VerseOfTheDay
 
     @Composable
     override fun ScreenContent() {

@@ -2,6 +2,11 @@ package com.copperleaf.ballast.router
 
 import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
+import com.copperleaf.ballast.router.routing.Destination
+import com.copperleaf.ballast.router.routing.MissingDestination
+import com.copperleaf.ballast.router.routing.NavToken
+import com.copperleaf.ballast.router.routing.Tag
+import com.copperleaf.ballast.router.routing.findMatch
 
 public class RouterInputHandler : InputHandler<
     RouterContract.Inputs,
@@ -14,21 +19,29 @@ public class RouterInputHandler : InputHandler<
         input: RouterContract.Inputs
     ): Unit = when (input) {
         is RouterContract.Inputs.GoToDestination -> {
+            val matchedDestination = getCurrentState().navGraph.findMatch(input.destination)
+
             val eventsToSend = mutableListOf<RouterContract.Events>()
 
-            val toAppendToBackstack = if (input.tag != null) {
-                eventsToSend += RouterContract.Events.TagPushed(input.tag)
-                eventsToSend += RouterContract.Events.DestinationPushed(input.destination)
+            val toAppendToBackstack: List<NavToken> = if (matchedDestination == null) {
+                val unmatchedDestination: MissingDestination = MissingDestination(input.destination)
+                eventsToSend += RouterContract.Events.DestinationNotFound(unmatchedDestination)
 
-                listOf(input.tag, input.destination)
+                listOf(unmatchedDestination)
+            } else if (input.tag != null) {
+                val declaredTag = Tag(input.tag)
+                eventsToSend += RouterContract.Events.TagPushed(declaredTag)
+                eventsToSend += RouterContract.Events.DestinationPushed(matchedDestination)
+
+                listOf(declaredTag, matchedDestination)
             } else {
-                eventsToSend += RouterContract.Events.DestinationPushed(input.destination)
+                eventsToSend += RouterContract.Events.DestinationPushed(matchedDestination)
 
-                listOf(input.destination)
+                listOf(matchedDestination)
             }
 
             updateState {
-                it.copy(backstack = it.backstack + toAppendToBackstack)
+                it.copy(backstack = it.backstack.dropLastWhile { it is MissingDestination } + toAppendToBackstack)
             }
 
             eventsToSend.forEach { postEvent(it) }

@@ -1,4 +1,4 @@
-package com.copperleaf.ballast.router
+package com.copperleaf.ballast.router.routing
 
 public sealed interface NavArg<T : Any> {
     public val value: T

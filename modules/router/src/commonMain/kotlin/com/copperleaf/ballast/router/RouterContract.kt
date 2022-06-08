@@ -1,8 +1,15 @@
 package com.copperleaf.ballast.router
 
+import com.copperleaf.ballast.router.routing.Destination
+import com.copperleaf.ballast.router.routing.MissingDestination
+import com.copperleaf.ballast.router.routing.NavGraph
+import com.copperleaf.ballast.router.routing.NavToken
+import com.copperleaf.ballast.router.routing.Tag
+
 public object RouterContract {
     public data class State(
-        val backstack: List<NavToken> = emptyList(),
+        val navGraph: NavGraph,
+        val backstack: List<NavToken>,
     )
 
     public sealed class Inputs {
@@ -12,8 +19,8 @@ public object RouterContract {
          * tag.
          */
         public data class GoToDestination(
-            val destination: Destination,
-            val tag: Tag? = null,
+            val destination: String,
+            val tag: String? = null,
         ) : Inputs()
 
         /**
@@ -29,6 +36,11 @@ public object RouterContract {
          * A new destination was pushed into the backstack.
          */
         public data class DestinationPushed(val newDestination: Destination) : Events()
+
+        /**
+         * We attempted to navigate to a destination that could not be found in the NavGraph.
+         */
+        public data class DestinationNotFound(val newDestination: MissingDestination) : Events()
 
         /**
          * The router navigated backward 1 destination in the backstack. If this was the start destination,

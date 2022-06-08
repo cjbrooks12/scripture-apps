@@ -38,11 +38,23 @@ kotlin {
                 api(libs.ballast.core)
                 api(libs.ballast.savedState)
                 api(libs.ballast.repository)
+                api(libs.ktor.http.utils)
+            }
+        }
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
             }
         }
 
         val jvmMain by getting {
             dependencies {
+            }
+        }
+        val jvmTest by getting {
+            dependencies {
+                implementation(kotlin("test-junit"))
             }
         }
 

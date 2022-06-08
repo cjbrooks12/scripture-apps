@@ -1,19 +1,18 @@
 package com.caseyjbrooks.app.ui.verses
 
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import com.caseyjbrooks.app.utils.ComposeScreen
+import com.copperleaf.ballast.router.routing.Route
 import com.copperleaf.scripturenow.ui.Destinations
-import com.copperleaf.scripturenow.ui.Route
 
 class ViewVerseScreen : ComposeScreen() {
-    override val screenName: String = "HomeScreen"
+    override val screenName: String = "ViewVerseScreen"
 
-    override fun matchesRoute(route: Route): Boolean {
-        return route is Destinations.App.ViewVerse
-    }
+    override val route: Route = Destinations.App.Verses.Detail
 
     @Composable
     override fun ScreenContent() {
-
+        Text(screenName)
     }
 }

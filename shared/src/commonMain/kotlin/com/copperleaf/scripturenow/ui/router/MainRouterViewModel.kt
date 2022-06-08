@@ -7,6 +7,8 @@ import com.copperleaf.ballast.eventHandler
 import com.copperleaf.ballast.forViewModel
 import com.copperleaf.ballast.router.RouterContract
 import com.copperleaf.ballast.router.RouterInputHandler
+import com.copperleaf.ballast.router.asInitialBackstack
+import com.copperleaf.ballast.router.routing.NavGraph
 import com.copperleaf.scripturenow.ui.Destinations
 import kotlinx.coroutines.CoroutineScope
 
@@ -26,7 +28,17 @@ class MainRouterViewModel(
         }
         .forViewModel(
             inputHandler = RouterInputHandler(),
-            initialState = RouterContract.State(backstack = listOf(Destinations.App.Home.destination())),
+            initialState = RouterContract.State(
+                navGraph = NavGraph(
+                    Destinations.App.Home,
+                    Destinations.App.VerseOfTheDay,
+                    Destinations.App.Verses.List,
+                    Destinations.App.Verses.Detail,
+                    Destinations.App.Verses.Create,
+                    Destinations.App.Verses.Edit,
+                ),
+                backstack = Destinations.App.Home.asInitialBackstack()
+            ),
             name = "MainRouter",
         ),
     eventHandler = eventHandler {

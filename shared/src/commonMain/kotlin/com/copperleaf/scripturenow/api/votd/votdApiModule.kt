@@ -15,7 +15,8 @@ fun votdApiModule() = DI.Module(name = "API > VOTD") {
     bind<VerseOfTheDayApi> {
         singleton {
             OurMannaApiImpl(
-                api = instance<String, Ktorfit>(arg = BASE_URL_OURMANNA).create<OurMannaApi>(),
+                api = instance<String, Ktorfit>(arg = BASE_URL_OURMANNA)
+                    .create<OurMannaApi>(),
                 converter = OurMannaApiConverterImpl(),
             )
         }
