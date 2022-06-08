@@ -59,8 +59,11 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":modules:common"))
-                api(project(":modules:router"))
-                api(project(":modules:sync"))
+
+                api(libs.ballast.core)
+                api(libs.ballast.savedState)
+                api(libs.ballast.repository)
+                api(libs.ballast.navigation)
 
                 api(libs.kotlinx.serialization.json)
 

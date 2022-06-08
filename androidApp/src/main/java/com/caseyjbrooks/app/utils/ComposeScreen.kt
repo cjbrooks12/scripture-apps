@@ -1,7 +1,7 @@
 package com.caseyjbrooks.app.utils
 
 import androidx.compose.runtime.Composable
-import com.copperleaf.ballast.router.routing.Route
+import com.copperleaf.ballast.navigation.routing.Route
 
 abstract class ComposeScreen : BaseComponent {
     override val componentType: String = "ComposeScreen"

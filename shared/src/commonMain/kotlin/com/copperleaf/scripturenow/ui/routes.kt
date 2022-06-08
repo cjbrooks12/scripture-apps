@@ -1,6 +1,6 @@
 package com.copperleaf.scripturenow.ui
 
-import com.copperleaf.ballast.router.routing.Route
+import com.copperleaf.ballast.navigation.routing.Route
 
 object Destinations {
     object App {

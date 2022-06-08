@@ -1,9 +1,11 @@
 package com.copperleaf.scripturenow.repositories.verses
 
 import com.copperleaf.ballast.BallastViewModelConfiguration
+import com.copperleaf.ballast.forViewModel
 import com.copperleaf.ballast.repository.BallastRepository
 import com.copperleaf.ballast.repository.bus.EventBus
 import com.copperleaf.ballast.repository.cache.Cached
+import com.copperleaf.ballast.repository.withRepository
 import com.copperleaf.scripturenow.repositories.verses.models.MemoryVerse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -19,12 +21,13 @@ class MemoryVersesRepositoryImpl(
     MemoryVersesRepositoryContract.State>(
     coroutineScope = coroutineScope,
     eventBus = eventBus,
-    configBuilder = configBuilder
-        .apply {
-            this.inputHandler = inputHandler
-            this.initialState = MemoryVersesRepositoryContract.State()
-            this.name = "MemoryVerses Repository"
-        },
+    config = configBuilder
+        .withRepository()
+        .forViewModel(
+            inputHandler = inputHandler,
+            initialState = MemoryVersesRepositoryContract.State(),
+            name = "MemoryVerses Repository",
+        ),
 ), MemoryVersesRepository {
 
     override fun getDataList(refreshCache: Boolean): Flow<Cached<List<MemoryVerse>>> {

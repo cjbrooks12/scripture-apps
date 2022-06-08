@@ -25,10 +25,10 @@ import com.caseyjbrooks.app.ui.votd.VotdScreen
 import com.caseyjbrooks.app.utils.ComposeActivity
 import com.caseyjbrooks.app.utils.ComposeScreen
 import com.caseyjbrooks.app.utils.theme.LocalInjector
-import com.copperleaf.ballast.router.RouterContract
-import com.copperleaf.ballast.router.currentDestination
-import com.copperleaf.ballast.router.currentDestinationOrNotFound
-import com.copperleaf.ballast.router.routing.Destination
+import com.copperleaf.ballast.navigation.routing.Destination
+import com.copperleaf.ballast.navigation.routing.RouterContract
+import com.copperleaf.ballast.navigation.routing.currentDestination
+import com.copperleaf.ballast.navigation.routing.currentDestinationOrNotFound
 import com.copperleaf.scripturenow.ui.Destinations
 import com.copperleaf.scripturenow.ui.bottomBarDestinations
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -119,8 +119,8 @@ class MainActivity : ComposeActivity() {
                                 token
                                     .originalRoute
                                     .let { route ->
-                                        composeScreens.firstOrNull {
-                                            it.route == token.originalRoute
+                                        composeScreens.firstOrNull { screen ->
+                                            screen.route == route
                                         }
                                     }
                                     ?: NotFoundScreen()

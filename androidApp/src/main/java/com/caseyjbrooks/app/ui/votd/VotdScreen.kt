@@ -11,9 +11,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.text.font.FontStyle
 import com.caseyjbrooks.app.utils.ComposeScreen
 import com.caseyjbrooks.app.utils.theme.LocalInjector
+import com.copperleaf.ballast.navigation.routing.Route
 import com.copperleaf.ballast.repository.cache.getCachedOrNull
 import com.copperleaf.ballast.repository.cache.isLoading
-import com.copperleaf.ballast.router.routing.Route
 import com.copperleaf.scripturenow.ui.Destinations
 
 class VotdScreen : ComposeScreen() {

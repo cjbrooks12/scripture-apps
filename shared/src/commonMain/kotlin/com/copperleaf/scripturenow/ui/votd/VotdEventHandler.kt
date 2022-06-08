@@ -2,7 +2,7 @@ package com.copperleaf.scripturenow.ui.votd
 
 import com.copperleaf.ballast.EventHandler
 import com.copperleaf.ballast.EventHandlerScope
-import com.copperleaf.ballast.router.RouterContract
+import com.copperleaf.ballast.navigation.routing.RouterContract
 import com.copperleaf.scripturenow.ui.router.MainRouterViewModel
 
 class VotdEventHandler(

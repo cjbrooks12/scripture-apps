@@ -1,9 +1,11 @@
 package com.copperleaf.scripturenow.repositories.votd
 
 import com.copperleaf.ballast.BallastViewModelConfiguration
+import com.copperleaf.ballast.forViewModel
 import com.copperleaf.ballast.repository.BallastRepository
 import com.copperleaf.ballast.repository.bus.EventBus
 import com.copperleaf.ballast.repository.cache.Cached
+import com.copperleaf.ballast.repository.withRepository
 import com.copperleaf.scripturenow.repositories.votd.models.VerseOfTheDay
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -19,12 +21,13 @@ class VerseOfTheDayRepositoryImpl(
     VerseOfTheDayRepositoryContract.State>(
     coroutineScope = coroutineScope,
     eventBus = eventBus,
-    configBuilder = configBuilder
-        .apply {
-            this.inputHandler = inputHandler
-            this.initialState = VerseOfTheDayRepositoryContract.State()
-            this.name = "VerseOfTheDay Repository"
-        },
+    config = configBuilder
+        .withRepository()
+        .forViewModel(
+            inputHandler = inputHandler,
+            initialState = VerseOfTheDayRepositoryContract.State(),
+            name = "VerseOfTheDay Repository",
+        ),
 ), VerseOfTheDayRepository {
 
     override fun getVerseOfTheDay(refreshCache: Boolean): Flow<Cached<VerseOfTheDay>> {
