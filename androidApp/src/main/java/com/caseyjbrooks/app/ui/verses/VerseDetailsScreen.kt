@@ -48,7 +48,7 @@ class VerseDetailsScreen : ComposeScreen(Destinations.App.Verses.Detail) {
             vm.trySend(MemoryVerseDetailsContract.Inputs.Initialize(uuid))
         }
 
-        return rememberHomescreenContent(
+        return rememberScrollableContent(
             appBarContent = {
                 TopAppBar(
                     navigationIcon = {
@@ -82,7 +82,6 @@ class VerseDetailsScreen : ComposeScreen(Destinations.App.Verses.Detail) {
                             fontStyle = FontStyle.Italic,
                         )
                     }
-//                            Spacer(Modifier.weight(1f))
 
                     var showConfirmationPopup by remember { mutableStateOf(false) }
 

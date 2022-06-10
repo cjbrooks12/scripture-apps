@@ -31,8 +31,7 @@ class VotdScreen : ComposeScreen(Destinations.App.VerseOfTheDay) {
         val vm = remember(coroutineScope, injector) { injector.votdViewModel(coroutineScope) }
         val vmState by vm.observeStates().collectAsState()
 
-        return rememberHomescreenContent(
-            swipeRefreshEnabled = true,
+        return rememberSwipeRefreshContent(
             isLoading = vmState.verseOfTheDay.isLoading(),
             onRefresh = { vm.trySend(VotdContract.Inputs.Initialize(true)) },
             appBarContent = {

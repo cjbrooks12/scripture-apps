@@ -5,10 +5,16 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -228,3 +234,14 @@ class LazyAsyncProvider<T : Any>(
 //        RemoteConfigFetchResult.Failure
 //    }
 //}
+
+@Composable
+operator fun PaddingValues.plus(dp: Dp): PaddingValues {
+    val layoutDirection = LocalLayoutDirection.current
+    return PaddingValues(
+        start = this.calculateStartPadding(layoutDirection) + dp,
+        end = this.calculateEndPadding(layoutDirection) + dp,
+        top = this.calculateTopPadding() + dp,
+        bottom = this.calculateBottomPadding() + dp,
+    )
+}

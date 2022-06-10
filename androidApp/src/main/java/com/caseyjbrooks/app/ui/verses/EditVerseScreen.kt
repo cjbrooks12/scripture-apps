@@ -35,7 +35,7 @@ class EditVerseScreen : ComposeScreen(Destinations.App.Verses.Edit) {
             vm.trySend(CreateOrEditMemoryVerseContract.Inputs.Initialize(uuid))
         }
 
-        return rememberHomescreenContent(
+        return rememberScrollableContent(
             appBarContent = {
                 TopAppBar(
                     navigationIcon = {

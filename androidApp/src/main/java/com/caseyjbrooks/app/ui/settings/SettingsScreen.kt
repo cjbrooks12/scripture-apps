@@ -4,8 +4,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -14,6 +16,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -22,11 +25,15 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.PersonOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.caseyjbrooks.app.utils.ComposeScreen
@@ -45,7 +52,7 @@ class SettingsScreen : ComposeScreen(Destinations.App.Settings) {
         val vm = remember(coroutineScope, injector) { injector.settingsViewModel(coroutineScope) }
         val vmState by vm.observeStates().collectAsState()
 
-        return rememberHomescreenContent(
+        return rememberScrollableContent(
             appBarContent = {
                 TopAppBar(
                     title = { Text("Settings") },
@@ -145,6 +152,48 @@ class SettingsScreen : ComposeScreen(Destinations.App.Settings) {
                                     Text("Sign Out")
                                 }
                             }
+                        }
+                    }
+                }
+
+                Spacer(Modifier.height(16.dp))
+
+                Card(elevation = 4.dp, modifier = Modifier.fillMaxWidth()) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth().padding(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        Text("Support Scripture Now's development", style = MaterialTheme.typography.subtitle1)
+                        Text(
+                            "This app takes considerable time and experience to develop, and is done entirely in " +
+                                "the developer's free time. Running the servers is also expensive, so a one-time " +
+                                "donation will greatly encourage me to continue development. A recurring donation " +
+                                "will unlock bonus features for you, including automatic syncing to other devices."
+                        )
+
+                        var donationAmount by remember { mutableStateOf(TextFieldValue("1")) }
+                        val donationAmountValue: Int? by derivedStateOf {
+                            donationAmount.text.toIntOrNull()
+                        }
+                        OutlinedTextField(
+                            value = donationAmount,
+                            onValueChange = { donationAmount = it },
+                            isError = donationAmountValue == null,
+                        )
+
+                        Button(
+                            onClick = { },
+                            modifier = Modifier.fillMaxWidth(),
+                            enabled = donationAmountValue != null
+                        ) {
+                            Text("Donate $$donationAmountValue one-time")
+                        }
+                        Button(
+                            onClick = { },
+                            modifier = Modifier.fillMaxWidth(),
+                            enabled = donationAmountValue != null
+                        ) {
+                            Text("Start $$donationAmountValue monthly subscription")
                         }
                     }
                 }

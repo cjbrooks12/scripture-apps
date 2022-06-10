@@ -4,11 +4,6 @@ import android.os.Bundle
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -23,8 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.caseyjbrooks.app.ui.home.HomeScreen
 import com.caseyjbrooks.app.ui.settings.SettingsScreen
@@ -46,8 +39,6 @@ import com.copperleaf.scripturenow.ui.Destinations
 import com.copperleaf.scripturenow.ui.bottomBarDestinations
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import org.kodein.di.instance
@@ -194,42 +185,7 @@ class MainActivity : ComposeActivity() {
             scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState),
             content = { contentPadding ->
                 AnimatedContent(screenContent) { content ->
-                    if (content != null) {
-                        if (content.swipeRefreshEnabled.value) {
-                            SwipeRefresh(
-                                state = rememberSwipeRefreshState(content.isLoading.value),
-                                onRefresh = { content.onRefresh },
-                            ) {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .verticalScroll(rememberScrollState())
-                                        .padding(
-                                            top = contentPadding.calculateTopPadding() + 16.dp,
-                                            bottom = contentPadding.calculateBottomPadding() + 16.dp,
-                                            start = 16.dp,
-                                            end = 16.dp,
-                                        )
-                                ) {
-                                    content.mainContent.value(this)
-                                }
-                            }
-                        } else {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .verticalScroll(rememberScrollState())
-                                    .padding(
-                                        top = contentPadding.calculateTopPadding() + 16.dp,
-                                        bottom = contentPadding.calculateBottomPadding() + 16.dp,
-                                        start = 16.dp,
-                                        end = 16.dp,
-                                    )
-                            ) {
-                                content.mainContent.value(this)
-                            }
-                        }
-                    }
+                    content?.MainContent(contentPadding)
                 }
             }
         )

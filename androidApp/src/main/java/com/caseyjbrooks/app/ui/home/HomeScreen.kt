@@ -17,7 +17,7 @@ class HomeScreen : ComposeScreen(Destinations.App.Home) {
 
     @Composable
     override fun screenContent(destination: Destination): Content {
-        return rememberHomescreenContent(
+        return rememberScrollableContent(
             appBarContent = {
                 TopAppBar(
                     title = { Text("Scripture Now") },
@@ -27,7 +27,6 @@ class HomeScreen : ComposeScreen(Destinations.App.Home) {
                 Card(elevation = 4.dp, modifier = Modifier.fillMaxWidth().padding()) {
                     Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
                         Text("Welcome to Scripture Now!")
-
                     }
                 }
             }
