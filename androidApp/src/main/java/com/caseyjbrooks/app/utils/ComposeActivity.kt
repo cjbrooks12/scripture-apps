@@ -4,8 +4,14 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.lifecycle.DefaultLifecycleObserver
+import com.caseyjbrooks.app.MainApplication
 import com.caseyjbrooks.app.utils.theme.BrandTheme
+import com.caseyjbrooks.app.utils.theme.LocalInjector
+import com.copperleaf.scripturenow.repositories.router.BackstackEmptiedCallback
+import org.kodein.di.bind
+import org.kodein.di.provider
 
 abstract class ComposeActivity : AppCompatActivity() {
 
@@ -15,9 +21,22 @@ abstract class ComposeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val applicationContext = this.applicationContext as MainApplication
+        val activityInjector = applicationContext.injector + {
+            bind<AppCompatActivity> {
+                provider { this@ComposeActivity }
+            }
+            bind<BackstackEmptiedCallback>(overrides = true) {
+                provider { BackstackEmptiedCallback { this@ComposeActivity.finish() } }
+            }
+        }
+
         setContent {
-            BrandTheme {
-                ScreenContent()
+            CompositionLocalProvider(LocalInjector providesDefault activityInjector) {
+                BrandTheme {
+                    ScreenContent()
+                }
             }
         }
     }

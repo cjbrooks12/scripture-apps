@@ -14,10 +14,10 @@ var projectVersion: ProjectVersion by project.extra
 description = "Opinionated Application State Management framework for Kotlin Multiplatform"
 
 android {
-    compileSdk = 31
+    compileSdk = 33
     defaultConfig {
         minSdk = 28
-        targetSdk = 31
+        targetSdk = 33
     }
 
     sourceSets {
@@ -86,6 +86,9 @@ kotlin {
             dependencies {
                 implementation(libs.ktor.client.okhttp)
                 implementation(libs.sqldelight.driver.android)
+
+                implementation(project.dependencies.platform(libs.firebase.bom))
+                implementation(libs.firebase.auth)
             }
         }
 

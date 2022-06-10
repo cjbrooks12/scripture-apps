@@ -1,16 +1,18 @@
 package com.caseyjbrooks.app.utils.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.AppBarDefaults
+import androidx.compose.material.LocalAbsoluteElevation
+import androidx.compose.material.LocalElevationOverlay
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import com.caseyjbrooks.app.MainApplication
 import com.copperleaf.scripturenow.di.Injector
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 val LocalInjector = staticCompositionLocalOf<Injector> { error("Injector not provided") }
 
@@ -19,18 +21,13 @@ fun BrandTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val applicationContext = LocalContext.current.applicationContext as MainApplication
-    val injector = applicationContext.injector
-
     MaterialTheme(
         colors = if (darkTheme) DarkColors else LightColors,
         typography = BrandTypography,
         shapes = BrandShapes,
         content = {
-            CompositionLocalProvider(LocalInjector providesDefault injector) {
-                StatusBarColor()
-                content()
-            }
+            StatusBarColor()
+            content()
         }
     )
 }
@@ -40,21 +37,21 @@ fun BrandTheme(
  */
 @Composable
 private fun StatusBarColor() {
-//    val systemUiController = rememberSystemUiController()
-//    val colors = MaterialTheme.colors
-//
-//    val elevationOverlay = LocalElevationOverlay.current
-//    val absoluteElevation = LocalAbsoluteElevation.current + AppBarDefaults.TopAppBarElevation
-//    val appBarSurfaceColor = elevationOverlay
-//        ?.apply(MaterialTheme.colors.surface, absoluteElevation)
-//        ?: MaterialTheme.colors.surface
-//
-//    SideEffect {
-//        systemUiController.setStatusBarColor(
-//            color = if(colors.isLight) colors.primary else appBarSurfaceColor,
-//            darkIcons = colors.isLight
-//        )
-//    }
+    val systemUiController = rememberSystemUiController()
+    val colors = MaterialTheme.colors
+
+    val elevationOverlay = LocalElevationOverlay.current
+    val absoluteElevation = LocalAbsoluteElevation.current + AppBarDefaults.TopAppBarElevation
+    val appBarSurfaceColor = elevationOverlay
+        ?.apply(MaterialTheme.colors.surface, absoluteElevation)
+        ?: MaterialTheme.colors.surface
+
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = if(colors.isLight) colors.primary else appBarSurfaceColor,
+            darkIcons = colors.isLight
+        )
+    }
 }
 
 private val LightColors @Composable get() = lightColors(

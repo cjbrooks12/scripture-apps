@@ -8,13 +8,18 @@ import com.copperleaf.ballast.eventHandler
 import com.copperleaf.ballast.navigation.routing.NavGraph
 import com.copperleaf.ballast.navigation.routing.RouterContract
 import com.copperleaf.ballast.navigation.routing.withRouter
+import com.copperleaf.scripturenow.ui.Destinations
 import com.copperleaf.scripturenow.ui.allScreens
 import kotlinx.coroutines.CoroutineScope
+
+fun interface BackstackEmptiedCallback {
+    fun onBackstackEmptied()
+}
 
 class MainRouterViewModel(
     coroutineScope: CoroutineScope,
     configBuilder: BallastViewModelConfiguration.Builder,
-    onBackstackEmptied: () -> Unit,
+    onBackstackEmptied: BackstackEmptiedCallback,
 ) : BasicViewModel<
     RouterContract.Inputs,
     RouterContract.Events,
@@ -25,13 +30,14 @@ class MainRouterViewModel(
             inputStrategy = FifoInputStrategy()
         }
         .withRouter(
-            navGraph = NavGraph(allScreens)
+            navGraph = NavGraph(allScreens),
+            initialRoute = Destinations.App.Settings,
         )
         .build(),
     eventHandler = eventHandler {
         when (it) {
             is RouterContract.Events.OnBackstackEmptied -> {
-                onBackstackEmptied()
+                onBackstackEmptied.onBackstackEmptied()
             }
             else -> {
                 // ignore

@@ -17,10 +17,10 @@ plugins {
 }
 
 android {
-    compileSdk = 32
+    compileSdk = 33
     defaultConfig {
         minSdk = 28
-        targetSdk = 32
+        targetSdk = 33
 
         val projectVersion = Config.projectVersion(project)
 
@@ -159,7 +159,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.compose.activity)
     implementation(libs.android.compose.icons)
+    implementation(libs.android.compose.accompanist.systemuicontroller)
     implementation(libs.android.compose.accompanist.swiperefresh)
+    implementation("io.coil-kt:coil:2.1.0")
+    implementation("io.coil-kt:coil-compose:2.1.0")
 
     implementation(libs.android.compose.material)
     implementation(libs.android.compose.previews)
@@ -178,4 +181,7 @@ dependencies {
     implementation(libs.firebase.remoteConfig)
     implementation(libs.firebase.cloudMessaging)
     implementation(libs.firebase.inAppMessaging)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.auth.ui)
+    implementation("com.google.android.gms:play-services-auth:20.2.0")
 }

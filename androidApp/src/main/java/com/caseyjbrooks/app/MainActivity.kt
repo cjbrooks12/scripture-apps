@@ -4,17 +4,24 @@ import android.os.Bundle
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.caseyjbrooks.app.ui.home.HomeScreen
 import com.caseyjbrooks.app.ui.settings.SettingsScreen
@@ -27,13 +34,30 @@ import com.caseyjbrooks.app.utils.ComposeActivity
 import com.caseyjbrooks.app.utils.ComposeScreen
 import com.caseyjbrooks.app.utils.theme.LocalInjector
 import com.copperleaf.ballast.navigation.routing.Destination
+import com.copperleaf.ballast.navigation.routing.MissingDestination
 import com.copperleaf.ballast.navigation.routing.RouterContract
-import com.copperleaf.ballast.navigation.routing.currentDestination
+import com.copperleaf.ballast.navigation.routing.Tag
 import com.copperleaf.ballast.navigation.routing.currentDestinationOrNotFound
+import com.copperleaf.scripturenow.di.kodein.KodeinInjector
 import com.copperleaf.scripturenow.ui.Destinations
 import com.copperleaf.scripturenow.ui.bottomBarDestinations
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.channels.Channel
+import org.kodein.di.instance
 
 class MainActivity : ComposeActivity() {
+
+    val firebaseSignInResultChannel = Channel<FirebaseAuthUIAuthenticationResult>(
+        capacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+    )
+    val signInLauncher = registerForActivityResult(
+        FirebaseAuthUIActivityResultContract()
+    ) { res ->
+        firebaseSignInResultChannel.trySend(res)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -43,12 +67,17 @@ class MainActivity : ComposeActivity() {
     @OptIn(ExperimentalAnimationApi::class)
     @Composable
     override fun ScreenContent() {
+        val injector = LocalInjector.current
         val routerViewModel = LocalInjector.current.mainRouter
 
         val routerState by routerViewModel.observeStates().collectAsState()
 
+        val snackbarHostState: SnackbarHostState = remember {
+            (injector as KodeinInjector).di.instance()
+        }
+
         BackHandler {
-            if(routerState.backstack.filterIsInstance<Destination>().isNotEmpty()) {
+            if (routerState.backstack.filterIsInstance<Destination>().isNotEmpty()) {
                 // if there's screens in the backstack, go back
                 routerViewModel.trySend(
                     RouterContract.Inputs.GoBack
@@ -111,7 +140,15 @@ class MainActivity : ComposeActivity() {
                                     }
                                 }
                             },
-                            selected = screen.route == routerState.currentDestination?.originalRoute,
+                            selected = routerState
+                                .backstack
+                                .any {
+                                    when(it) {
+                                        is Tag -> false
+                                        is Destination -> it.originalRoute == screen.route
+                                        is MissingDestination -> false
+                                    }
+                                },
                             onClick = {
                                 routerViewModel.trySend(
                                     RouterContract.Inputs.ReplaceTopDestination(screen.target)
@@ -121,27 +158,30 @@ class MainActivity : ComposeActivity() {
                     }
                 }
             },
+            scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState),
             content = {
-                routerState.currentDestinationOrNotFound?.let {
-                    AnimatedContent(it) { token ->
-                        val destination = token as? Destination
-                        val currentScreen: ComposeScreen? = when (token) {
-                            is Destination -> {
-                                token
-                                    .originalRoute
-                                    .let { route ->
-                                        composeScreens.firstOrNull { screen ->
-                                            screen.route == route
+                Box(Modifier.fillMaxSize().padding(it)) {
+                    routerState.currentDestinationOrNotFound?.let {
+                        AnimatedContent(it) { token ->
+                            val destination = token as? Destination
+                            val currentScreen: ComposeScreen? = when (token) {
+                                is Destination -> {
+                                    token
+                                        .originalRoute
+                                        .let { route ->
+                                            composeScreens.firstOrNull { screen ->
+                                                screen.route == route
+                                            }
                                         }
-                                    }
+                                }
+                                else -> {
+                                    null
+                                }
                             }
-                            else -> {
-                                null
-                            }
-                        }
 
-                        if(currentScreen != null && destination != null){
-                            currentScreen.ScreenContent(destination)
+                            if (currentScreen != null && destination != null) {
+                                currentScreen.ScreenContent(destination)
+                            }
                         }
                     }
                 }

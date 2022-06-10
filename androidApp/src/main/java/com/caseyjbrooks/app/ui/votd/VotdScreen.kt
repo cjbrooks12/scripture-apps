@@ -2,9 +2,11 @@ package com.caseyjbrooks.app.ui.votd
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Card
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -67,9 +69,13 @@ class VotdScreen : ComposeScreen(Destinations.App.VerseOfTheDay) {
                                 end = 16.dp,
                             )
                     ) {
-                        vmState.verseOfTheDay.getCachedOrNull()?.let { votd ->
-                            Text(votd.text)
-                            Text(votd.reference, fontStyle = FontStyle.Italic)
+                        Card(elevation = 4.dp, modifier = Modifier.fillMaxWidth()) {
+                            Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+                                vmState.verseOfTheDay.getCachedOrNull()?.let { votd ->
+                                    Text(votd.text)
+                                    Text(votd.reference, fontStyle = FontStyle.Italic)
+                                }
+                            }
                         }
                     }
                 }
