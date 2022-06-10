@@ -14,10 +14,10 @@ var projectVersion: ProjectVersion by project.extra
 description = "Opinionated Application State Management framework for Kotlin Multiplatform"
 
 android {
-    compileSdk = 33
+    compileSdk = 31
     defaultConfig {
         minSdk = 28
-        targetSdk = 33
+        targetSdk = 31
     }
 
     sourceSets {

@@ -17,10 +17,10 @@ plugins {
 }
 
 android {
-    compileSdk = 33
+    compileSdk = 31
     defaultConfig {
         minSdk = 28
-        targetSdk = 33
+        targetSdk = 31
 
         val projectVersion = Config.projectVersion(project)
 

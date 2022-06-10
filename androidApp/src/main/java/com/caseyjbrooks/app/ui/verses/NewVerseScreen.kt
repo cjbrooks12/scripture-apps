@@ -1,13 +1,7 @@
 package com.caseyjbrooks.app.ui.verses
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -19,8 +13,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.caseyjbrooks.app.ui.widgets.EditVerseForm
 import com.caseyjbrooks.app.utils.ComposeScreen
 import com.caseyjbrooks.app.utils.theme.LocalInjector
@@ -31,7 +23,7 @@ import com.copperleaf.scripturenow.ui.verses.edit.CreateOrEditMemoryVerseContrac
 class NewVerseScreen : ComposeScreen(Destinations.App.Verses.Create) {
 
     @Composable
-    override fun ScreenContent(destination: Destination) {
+    override fun screenContent(destination: Destination): Content {
         val coroutineScope = rememberCoroutineScope()
         val injector = LocalInjector.current
         val vm = remember(coroutineScope, injector) { injector.createOrEditVerseViewModel(coroutineScope) }
@@ -41,8 +33,8 @@ class NewVerseScreen : ComposeScreen(Destinations.App.Verses.Create) {
             vm.trySend(CreateOrEditMemoryVerseContract.Inputs.Initialize(null))
         }
 
-        Scaffold(
-            topBar = {
+        return rememberHomescreenContent(
+            appBarContent = {
                 TopAppBar(
                     navigationIcon = {
                         IconButton(onClick = { vm.trySend(CreateOrEditMemoryVerseContract.Inputs.GoBack) }) {
@@ -57,27 +49,15 @@ class NewVerseScreen : ComposeScreen(Destinations.App.Verses.Create) {
                     }
                 )
             },
-            content = { contentPadding ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                        .padding(
-                            top = contentPadding.calculateTopPadding() + 16.dp,
-                            bottom = contentPadding.calculateBottomPadding() + 16.dp,
-                            start = 16.dp,
-                            end = 16.dp,
-                        ),
-                ) {
-                    if(vmState.editingVerse != null) {
-                        EditVerseForm(
-                            vmState.editingVerse!!
-                        ) {
-                            vm.trySend(CreateOrEditMemoryVerseContract.Inputs.UpdateVerse(it))
-                        }
+            mainContent = {
+                if (vmState.editingVerse != null) {
+                    EditVerseForm(
+                        vmState.editingVerse!!
+                    ) {
+                        vm.trySend(CreateOrEditMemoryVerseContract.Inputs.UpdateVerse(it))
                     }
                 }
-            },
+            }
         )
     }
 }

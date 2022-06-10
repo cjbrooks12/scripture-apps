@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -31,28 +30,23 @@ import com.copperleaf.ballast.repository.cache.getCachedOrEmptyList
 import com.copperleaf.ballast.repository.cache.isLoading
 import com.copperleaf.scripturenow.ui.Destinations
 import com.copperleaf.scripturenow.ui.verses.list.MemoryVerseListContract
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 class VerseListScreen : ComposeScreen(Destinations.App.Verses.List) {
 
     @Composable
-    override fun ScreenContent(destination: Destination) {
+    override fun screenContent(destination: Destination): Content {
         Text(screenName)
         val coroutineScope = rememberCoroutineScope()
         val injector = LocalInjector.current
         val vm = remember(coroutineScope, injector) { injector.verseListViewModel(coroutineScope) }
         val vmState by vm.observeStates().collectAsState()
 
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
+        return rememberHomescreenContent(
+            swipeRefreshEnabled = true,
+            isLoading = vmState.verses.isLoading(),
+            onRefresh = { vm.trySend(MemoryVerseListContract.Inputs.Initialize(true)) },
+            appBarContent = {
                 TopAppBar(
-//                    navigationIcon = {
-//                        IconButton(onClick = { vm.trySend(MemoryVerseListContract.Inputs.CreateVerse) }) {
-//                            Icon(Icons.Default.ArrowBack, "Go Back")
-//                        }
-//                    },
                     title = { Text("Memory Verses") },
                     actions = {
                         IconButton(onClick = { vm.trySend(MemoryVerseListContract.Inputs.CreateVerse) }) {
@@ -61,51 +55,41 @@ class VerseListScreen : ComposeScreen(Destinations.App.Verses.List) {
                     }
                 )
             },
-            content = { contentPadding ->
-                SwipeRefresh(
-                    state = rememberSwipeRefreshState(vmState.verses.isLoading()),
-                    onRefresh = { vm.trySend(MemoryVerseListContract.Inputs.Initialize(true)) },
-                ) {
-                    val verses = remember(vmState) { vmState.verses.getCachedOrEmptyList() }
+            mainContent = {
+                val verses = remember(vmState) { vmState.verses.getCachedOrEmptyList() }
 
-                    if (verses.isEmpty()) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(
-                                    top = contentPadding.calculateTopPadding(),
-                                    bottom = contentPadding.calculateBottomPadding(),
-                                    start = 16.dp,
-                                    end = 16.dp,
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text("You have no saved verses. Click the + above to get started", textAlign = TextAlign.Center)
-                        }
-                    } else {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            contentPadding = contentPadding,
-                        ) {
-                            items(vmState.verses.getCachedOrEmptyList(), key = { it.uuid }) { verse ->
-                                ListItem(
-                                    modifier = Modifier.clickable {
-                                        vm.trySend(MemoryVerseListContract.Inputs.ViewVerse(verse))
-                                    },
-                                    text = { Text(verse.reference, overflow = TextOverflow.Ellipsis, maxLines = 1) },
-                                    secondaryText = {
-                                        Text(
-                                            verse.text,
-                                            overflow = TextOverflow.Ellipsis,
-                                            maxLines = 2
-                                        )
-                                    },
-                                )
-                            }
+                if (verses.isEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("You have no saved verses. Click the + above to get started", textAlign = TextAlign.Center)
+                    }
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                    ) {
+                        items(vmState.verses.getCachedOrEmptyList(), key = { it.uuid }) { verse ->
+                            ListItem(
+                                modifier = Modifier.clickable {
+                                    vm.trySend(MemoryVerseListContract.Inputs.ViewVerse(verse))
+                                },
+                                text = { Text(verse.reference, overflow = TextOverflow.Ellipsis, maxLines = 1) },
+                                secondaryText = {
+                                    Text(
+                                        verse.text,
+                                        overflow = TextOverflow.Ellipsis,
+                                        maxLines = 2
+                                    )
+                                },
+                            )
                         }
                     }
                 }
-            },
+            }
         )
+
     }
 }

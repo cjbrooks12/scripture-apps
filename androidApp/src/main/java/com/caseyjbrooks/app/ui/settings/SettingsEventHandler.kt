@@ -58,7 +58,7 @@ class SettingsEventHandler(
                 if (response == null) {
                     snackbarHostState.showSnackbar("Sign-in cancelled")
                 } else {
-                    snackbarHostState.showSnackbar("Something went wrong, please try again later")
+                    snackbarHostState.showSnackbar(response.error?.message ?: "Unknown error, try again later")
                 }
             }
 
