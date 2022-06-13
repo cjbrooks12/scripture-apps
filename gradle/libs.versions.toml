@@ -16,6 +16,7 @@ uuid = "0.3.1"
 ballast = "1.2.2-SNAPSHOT"
 sqldelight = "1.5.3"
 kodein = "7.11.0"
+coil = "2.1.0"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -59,6 +60,7 @@ android-compose-accompanist-swiperefresh = { module = "com.google.accompanist:ac
 android-compose-swipeToReveal = { module = "de.charlex.compose:revealswipe", version = "1.0.0" }
 android-compose-glance = { module = "androidx.glance:glance-appwidget", version = "1.0.0-alpha03" }
 android-desugaring = { module = "com.android.tools:desugar_jdk_libs", version = "1.1.5" }
+android-playStore-review = { module = "com.google.android.play:review-ktx", version = "2.0.0" }
 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version = "30.1.0" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
@@ -92,3 +94,6 @@ sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extension
 sqldelight-driver-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
 
 kermit-core = { module = "co.touchlab:kermit", version = "1.1.2" }
+
+coil-core = { module = "io.coil-kt:coil", version.ref = "coil" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }

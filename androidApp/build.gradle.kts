@@ -161,8 +161,10 @@ dependencies {
     implementation(libs.android.compose.icons)
     implementation(libs.android.compose.accompanist.systemuicontroller)
     implementation(libs.android.compose.accompanist.swiperefresh)
-    implementation("io.coil-kt:coil:2.1.0")
-    implementation("io.coil-kt:coil-compose:2.1.0")
+    implementation(libs.android.playStore.review)
+
+    implementation(libs.coil.core)
+    implementation(libs.coil.compose)
 
     implementation(libs.android.compose.material)
     implementation(libs.android.compose.previews)
@@ -183,5 +185,5 @@ dependencies {
     implementation(libs.firebase.inAppMessaging)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.auth.ui)
-    implementation("com.google.android.gms:play-services-auth:20.2.0")
+//    implementation("com.google.android.gms:play-services-auth:20.2.0")
 }

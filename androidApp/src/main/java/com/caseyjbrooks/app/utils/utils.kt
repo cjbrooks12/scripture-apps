@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
@@ -203,17 +204,21 @@ class LazyAsyncProvider<T : Any>(
     }
 }
 
-//suspend fun <T : Any> Task<T>.await(): T? {
-//    return suspendCancellableCoroutine { cont ->
-//        this.addOnCompleteListener { task ->
-//            if (task.isSuccessful) {
-//                cont.resume(task.result)
-//            } else {
-//                cont.resume(null)
-//            }
-//        }
-//    }
-//}
+suspend fun <T : Any> Task<T>.await(): Result<T> {
+    return suspendCancellableCoroutine { cont ->
+        this.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                cont.resume(Result.success(task.result))
+            } else {
+                if(task.exception != null) {
+                    cont.resume(Result.failure(task.exception!!))
+                } else {
+                    cont.resume(Result.failure(NullPointerException()))
+                }
+            }
+        }
+    }
+}
 //
 //enum class RemoteConfigFetchResult {
 //    FetchedAndUpdated, FetchedWithNoChange, Failure
