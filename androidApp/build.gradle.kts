@@ -2,13 +2,10 @@
 import com.google.firebase.appdistribution.gradle.AppDistributionExtension
 
 plugins {
-    id("com.android.application")
-    id("kotlin-android")
+    `copper-leaf-android-app`
     `copper-leaf-base`
     `copper-leaf-version`
     `copper-leaf-lint`
-
-//    id("androidx.navigation.safeargs.kotlin")
 
     id("com.google.gms.google-services")
     id("com.google.firebase.appdistribution")
@@ -17,29 +14,14 @@ plugins {
 }
 
 android {
-    compileSdk = 31
     defaultConfig {
-        minSdk = 28
-        targetSdk = 31
-
         val projectVersion = Config.projectVersion(project)
-
         versionName = projectVersion.projectVersion
         versionCode = projectVersion.projectVersionInt
-
-        multiDexEnabled = true
-
-        ndk.abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))
     }
 
     buildFeatures {
         compose = true
-    }
-
-    packagingOptions {
-        exclude("META-INF/LICENSE")
-        exclude("META-INF/NOTICE")
-        exclude("META-INF/LICENSE.txt")
     }
 
     signingConfigs {
@@ -69,36 +51,26 @@ android {
         release {
             // Releases are signed by CI/CD pipelines
 
-            // TODO: Figure out how to fix errors when this is enabled
-            // TODO: Create process for de-obfuscation of stacktraces when logged to crash reporting / diagnostic tools
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            // Enables code shrinking, obfuscation, and optimization for only
+            // your project's release build type.
+            isMinifyEnabled = true
+
+            // Enables resource shrinking, which is performed by the
+            // Android Gradle plugin.
+            isShrinkResources = true
+
+            // Includes the default ProGuard rules files that are packaged with
+            // the Android Gradle plugin. To learn more, go to the section about
+            // R8 configuration files.
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
-    lint {
-        // Check for errors in release builds,
-        // but continue the build even when errors are found:
-        isAbortOnError = false
-    }
-
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
-
-        freeCompilerArgs = listOf(
-            "-Xopt-in=kotlin.RequiresOptIn",
-            "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi"
-        )
-    }
-
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.1.1"
+        kotlinCompilerExtensionVersion = "1.4.0"
     }
 
     flavorDimensions.add("mode")
@@ -154,36 +126,7 @@ android {
 dependencies {
     implementation(project(":shared"))
 
-    implementation(libs.androidx.core)
     implementation(libs.androidx.splashscreen)
-    implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.compose.activity)
-    implementation(libs.android.compose.icons)
-    implementation(libs.android.compose.accompanist.systemuicontroller)
-    implementation(libs.android.compose.accompanist.swiperefresh)
-    implementation(libs.android.playStore.review)
-
-    implementation(libs.coil.core)
-    implementation(libs.coil.compose)
-
-    implementation(libs.android.compose.material)
-    implementation(libs.android.compose.previews)
-    implementation(libs.android.compose.glance)
-
-    implementation(libs.androidx.workManager)
-
-    // Desugaring
-    coreLibraryDesugaring(libs.android.desugaring)
-
-    // Firebase
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.crashlytics)
-    implementation(libs.firebase.performanceMonitoring)
-    implementation(libs.firebase.remoteConfig)
-    implementation(libs.firebase.cloudMessaging)
-    implementation(libs.firebase.inAppMessaging)
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.auth.ui)
-//    implementation("com.google.android.gms:play-services-auth:20.2.0")
+    implementation("io.ktor:ktor-client-logging-jvm:2.2.3")
 }

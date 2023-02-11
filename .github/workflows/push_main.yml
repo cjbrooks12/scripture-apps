@@ -8,7 +8,29 @@ on:
     branches: ['main']
 
 jobs:
-  publishArtifactsOnMacOs:
+  website:
+    runs-on: 'macos-latest'
+    env:
+      GITHUB_ACTOR: '${{ github.actor }}'
+      GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+      FIREBASE_TOKEN: '${{ secrets.FIREBASE_TOKEN }}'
+      KEYSTORE: '${{ secrets.KEYSTORE }}'
+      KEYSTORE_PASSWORD: '${{ secrets.KEYSTORE_PASSWORD }}'
+      KEYSTORE_OB_KEY_ALIAS: '${{ secrets.KEYSTORE_OB_KEY_ALIAS }}'
+      KEYSTORE_OB_KEY_PASSWORD: '${{ secrets.KEYSTORE_OB_KEY_PASSWORD }}'
+      KEYSTORE_SM_KEY_ALIAS: '${{ secrets.KEYSTORE_SM_KEY_ALIAS }}'
+      KEYSTORE_SM_KEY_PASSWORD: '${{ secrets.KEYSTORE_SM_KEY_PASSWORD }}'
+    steps:
+      - uses: 'actions/checkout@v2'
+      - run: 'git fetch --prune --unshallow --tags'
+      - name: 'Set up JDK 11'
+        uses: 'actions/setup-java@v2'
+        with:
+          distribution: 'temurin'
+          java-version: 11
+      - name: 'Publish Website'
+        run: './gradlew :site:publish -Prelease'
+  scriptureNowDevRelease:
     runs-on: 'macos-latest'
     env:
       GITHUB_ACTOR: '${{ github.actor }}'
@@ -33,6 +55,90 @@ jobs:
       - name: 'Convert base64 keystore to binary'
         run: 'echo $KEYSTORE | base64 -d > ./release.keystore'
       - name: 'Assemble Artifacts'
-        run: './gradlew :androidApp:assembleScriptureNowDevRelease :androidApp:bundleScriptureNowProdRelease :androidApp:assembleTopicalBibleDevRelease :androidApp:bundleTopicalBibleProdRelease -Prelease'
+        run: './gradlew :androidApp:assembleScriptureNowDevRelease -Prelease -Pvariant=scriptureNowDev'
       - name: 'Upload Artifacts to Firebase'
-        run: './gradlew :androidApp:appDistributionUploadScriptureNowDevRelease :androidApp:appDistributionUploadScriptureNowProdRelease :androidApp:appDistributionUploadTopicalBibleDevRelease :androidApp:appDistributionUploadTopicalBibleProdRelease -Prelease'
+        run: './gradlew :androidApp:appDistributionUploadScriptureNowDevRelease -Prelease -Pvariant=scriptureNowDev'
+  scriptureNowProdRelease:
+    runs-on: 'macos-latest'
+    env:
+      GITHUB_ACTOR: '${{ github.actor }}'
+      GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+      FIREBASE_TOKEN: '${{ secrets.FIREBASE_TOKEN }}'
+      KEYSTORE: '${{ secrets.KEYSTORE }}'
+      KEYSTORE_PASSWORD: '${{ secrets.KEYSTORE_PASSWORD }}'
+      KEYSTORE_OB_KEY_ALIAS: '${{ secrets.KEYSTORE_OB_KEY_ALIAS }}'
+      KEYSTORE_OB_KEY_PASSWORD: '${{ secrets.KEYSTORE_OB_KEY_PASSWORD }}'
+      KEYSTORE_SM_KEY_ALIAS: '${{ secrets.KEYSTORE_SM_KEY_ALIAS }}'
+      KEYSTORE_SM_KEY_PASSWORD: '${{ secrets.KEYSTORE_SM_KEY_PASSWORD }}'
+    steps:
+      - uses: 'actions/checkout@v2'
+      - run: 'git fetch --prune --unshallow --tags'
+      - name: 'Set up JDK 11'
+        uses: 'actions/setup-java@v2'
+        with:
+          distribution: 'temurin'
+          java-version: 11
+      - name: 'Write keystore base64 to file'
+        run: 'echo $KEYSTORE > ./release.keystore.txt'
+      - name: 'Convert base64 keystore to binary'
+        run: 'echo $KEYSTORE | base64 -d > ./release.keystore'
+      - name: 'Assemble Artifacts'
+        run: './gradlew :androidApp:bundleScriptureNowProdRelease -Prelease -Pvariant=scriptureNowProd'
+      - name: 'Upload Artifacts to Firebase'
+        run: './gradlew :androidApp:appDistributionUploadScriptureNowProdRelease -Prelease -Pvariant=scriptureNowProd'
+  topicalBibleDevRelease:
+    runs-on: 'macos-latest'
+    env:
+      GITHUB_ACTOR: '${{ github.actor }}'
+      GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+      FIREBASE_TOKEN: '${{ secrets.FIREBASE_TOKEN }}'
+      KEYSTORE: '${{ secrets.KEYSTORE }}'
+      KEYSTORE_PASSWORD: '${{ secrets.KEYSTORE_PASSWORD }}'
+      KEYSTORE_OB_KEY_ALIAS: '${{ secrets.KEYSTORE_OB_KEY_ALIAS }}'
+      KEYSTORE_OB_KEY_PASSWORD: '${{ secrets.KEYSTORE_OB_KEY_PASSWORD }}'
+      KEYSTORE_SM_KEY_ALIAS: '${{ secrets.KEYSTORE_SM_KEY_ALIAS }}'
+      KEYSTORE_SM_KEY_PASSWORD: '${{ secrets.KEYSTORE_SM_KEY_PASSWORD }}'
+    steps:
+      - uses: 'actions/checkout@v2'
+      - run: 'git fetch --prune --unshallow --tags'
+      - name: 'Set up JDK 11'
+        uses: 'actions/setup-java@v2'
+        with:
+          distribution: 'temurin'
+          java-version: 11
+      - name: 'Write keystore base64 to file'
+        run: 'echo $KEYSTORE > ./release.keystore.txt'
+      - name: 'Convert base64 keystore to binary'
+        run: 'echo $KEYSTORE | base64 -d > ./release.keystore'
+      - name: 'Assemble Artifacts'
+        run: './gradlew :androidApp:assembleTopicalBibleDevRelease -Prelease -Pvariant=topicalBibleDev'
+      - name: 'Upload Artifacts to Firebase'
+        run: './gradlew :androidApp:appDistributionUploadTopicalBibleDevRelease -Prelease -Pvariant=topicalBibleDev'
+  topicalBibleProdRelease:
+    runs-on: 'macos-latest'
+    env:
+      GITHUB_ACTOR: '${{ github.actor }}'
+      GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+      FIREBASE_TOKEN: '${{ secrets.FIREBASE_TOKEN }}'
+      KEYSTORE: '${{ secrets.KEYSTORE }}'
+      KEYSTORE_PASSWORD: '${{ secrets.KEYSTORE_PASSWORD }}'
+      KEYSTORE_OB_KEY_ALIAS: '${{ secrets.KEYSTORE_OB_KEY_ALIAS }}'
+      KEYSTORE_OB_KEY_PASSWORD: '${{ secrets.KEYSTORE_OB_KEY_PASSWORD }}'
+      KEYSTORE_SM_KEY_ALIAS: '${{ secrets.KEYSTORE_SM_KEY_ALIAS }}'
+      KEYSTORE_SM_KEY_PASSWORD: '${{ secrets.KEYSTORE_SM_KEY_PASSWORD }}'
+    steps:
+      - uses: 'actions/checkout@v2'
+      - run: 'git fetch --prune --unshallow --tags'
+      - name: 'Set up JDK 11'
+        uses: 'actions/setup-java@v2'
+        with:
+          distribution: 'temurin'
+          java-version: 11
+      - name: 'Write keystore base64 to file'
+        run: 'echo $KEYSTORE > ./release.keystore.txt'
+      - name: 'Convert base64 keystore to binary'
+        run: 'echo $KEYSTORE | base64 -d > ./release.keystore'
+      - name: 'Assemble Artifacts'
+        run: './gradlew :androidApp:bundleTopicalBibleProdRelease -Prelease -Pvariant=topicalBibleProd'
+      - name: 'Upload Artifacts to Firebase'
+        run: './gradlew :androidApp:appDistributionUploadTopicalBibleProdRelease -Prelease -Pvariant=topicalBibleProd'

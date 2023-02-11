@@ -1,0 +1,19 @@
+### Get list of English bibles
+GET https://api.scripture.api.bible/v1/bibles?language=eng&include-full-details=false
+accept: application/json
+api-key: {{abs_api_token}}
+
+### Get list of books in KJV
+GET https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-02/books
+accept: application/json
+api-key: {{abs_api_token}}
+
+### Get list of chapters in Genesis in KJV
+GET https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-02/books/GEN/chapters
+accept: application/json
+api-key: {{abs_api_token}}
+
+### Get list of verses in Genesis in KJV
+GET https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-02/chapters/GEN.1/verses
+accept: application/json
+api-key: {{abs_api_token}}

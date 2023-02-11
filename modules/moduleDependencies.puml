@@ -1,0 +1,27 @@
+@startuml
+[*] --> models
+
+models --> utils
+utils --> config
+
+
+config --> api
+config --> database
+
+api --> repositories
+database --> repositories
+
+repositories --> viewModels
+repositories --> analytics
+repositories --> notifications
+repositories --> appWidgets
+repositories --> jobs
+
+viewModels --> UI
+UI --> analytics
+
+UI ---> AndroidApp
+UI ---> iOSApp
+UI ---> WebApp
+
+@enduml

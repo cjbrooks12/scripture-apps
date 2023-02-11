@@ -3,6 +3,4 @@
     <string name="back">Back</string>
     <string name="close">Close</string>
     <string name="template">Template</string>
-
-    <string name="votd_widget_description">Display today\'s Verse of the Day</string>
 </resources>

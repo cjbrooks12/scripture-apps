@@ -1,0 +1,3 @@
+### Get list of English bibles
+GET https://www.biblegateway.com/usage/votd/rss/votd.rdf?31
+accept: application/xml

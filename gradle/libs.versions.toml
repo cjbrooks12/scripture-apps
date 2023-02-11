@@ -1,36 +1,25 @@
 [versions]
-coroutines = "1.6.1"
-serialization = "1.3.2"
-datetime = "0.3.2"
+coroutines = "1.6.4"
+ktor = "2.2.3"
 
-ktor = "2.0.1"
-ktorfit = "1.0.0-beta06"
+ktorfit = "1.0.0-beta17"
+kotest = "5.5.5"
 
 androidxLifecycle = "2.4.1"
-androidxNavigation = "2.4.1"
-androidCompose = "1.0.5"
-accompanist = "0.20.0"
+accompanist = "0.29.1-alpha"
+androidCompose = "1.4.0-beta01"
 
-multiplatformSettings = "0.8.1"
-uuid = "0.3.1"
-ballast = "1.2.2-SNAPSHOT"
-sqldelight = "1.5.3"
-kodein = "7.11.0"
-coil = "2.1.0"
+ballast = "3.0.0-SNAPSHOT"
+multiplatformSettings = "1.0.0"
+sqldelight = "1.5.5"
+coil = "2.2.0"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
-kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.5.0-RC" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.4.0" }
 
-ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
-ktor-server-cio = { module = "io.ktor:ktor-server-cio", version.ref = "ktor" }
-ktor-server-callLogging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor" }
-ktor-server-auth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor" }
-ktor-server-authJwt = { module = "io.ktor:ktor-server-auth-jwt", version.ref = "ktor" }
-ktor-server-serialization = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
-ktor-server-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
@@ -39,6 +28,7 @@ ktor-client-ios = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" 
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-client-serialization = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-serialization-xml = { module = "io.ktor:ktor-serialization-kotlinx-xml", version.ref = "ktor" }
 ktor-http-utils = { module = "io.ktor:ktor-http", version.ref = "ktor" }
 
 androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", version.ref = "androidxLifecycle" }
@@ -49,16 +39,12 @@ androidx-fragment = { module = "androidx.fragment:fragment-ktx", version = "1.4.
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version = "1.0.0-rc01" }
 androidx-workManager = { module = "androidx.work:work-runtime-ktx", version = "2.7.1" }
 androidx-compose-activity = { module = "androidx.activity:activity-compose", version = "1.4.0" }
-androidx-navigation = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "androidxNavigation" }
-androidx-navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "androidxNavigation" }
-androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidxNavigation" }
-android-compose-material = { module = "androidx.compose.material:material", version.ref = "androidCompose" }
 android-compose-previews = { module = "androidx.compose.ui:ui-tooling", version.ref = "androidCompose" }
 android-compose-icons = { module = "androidx.compose.material:material-icons-extended", version.ref = "androidCompose" }
 android-compose-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 android-compose-accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
 android-compose-swipeToReveal = { module = "de.charlex.compose:revealswipe", version = "1.0.0" }
-android-compose-glance = { module = "androidx.glance:glance-appwidget", version = "1.0.0-alpha03" }
+android-compose-glance = { module = "androidx.glance:glance-appwidget", version = "1.0.0-alpha05" }
 android-desugaring = { module = "com.android.tools:desugar_jdk_libs", version = "1.1.5" }
 android-playStore-review = { module = "com.google.android.play:review-ktx", version = "2.0.0" }
 
@@ -74,9 +60,9 @@ firebase-auth-ui = { module = "com.firebaseui:firebase-ui-auth", version = "7.2.
 
 multiplatformSettings-core = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 multiplatformSettings-noArg = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatformSettings" }
+multiplatformSettings-test = { module = "com.russhwolf:multiplatform-settings-test", version.ref = "multiplatformSettings" }
 
-benasher44-uuid = { module = "com.benasher44:uuid", version.ref = "uuid" }
-kodein-core = { module = "org.kodein.di:kodein-di", version.ref = "kodein" }
+benasher44-uuid = { module = "com.benasher44:uuid", version = "0.6.0" }
 
 ksp-ktorfit-compiler = { module = "de.jensklingenberg.ktorfit:ktorfit-ksp", version.ref = "ktorfit" }
 ksp-ktorfit-runtime = { module =  "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref = "ktorfit" }
@@ -88,12 +74,23 @@ ballast-firebaseCrashlytics = { module = "io.github.copper-leaf:ballast-firebase
 ballast-firebaseAnalytics = { module = "io.github.copper-leaf:ballast-firebase-analytics", version.ref = "ballast" }
 ballast-debugger = { module = "io.github.copper-leaf:ballast-debugger", version.ref = "ballast" }
 ballast-navigation = { module = "io.github.copper-leaf:ballast-navigation", version.ref = "ballast" }
+ballast-undo = { module = "io.github.copper-leaf:ballast-navigation", version.ref = "ballast" }
+ballast-test = { module = "io.github.copper-leaf:ballast-test", version.ref = "ballast" }
 
 sqldelight-core = { module = "com.squareup.sqldelight:core", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-sqldelight-driver-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
+sqldelight-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
+sqldelight-jvm = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 
 kermit-core = { module = "co.touchlab:kermit", version = "1.1.2" }
 
 coil-core = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+
+kotest-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
+kotest-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-dataTest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
+kotest-propertyTest = { module = "io.kotest:kotest-property", version.ref = "kotest" }
+
+jsoup = { module = "org.jsoup:jsoup", version = "1.15.3" }

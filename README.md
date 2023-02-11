@@ -4,13 +4,14 @@
 
 The following lists the main libraries/techniques being used for this app implementation:
 
-- [Jetpack Compose](https://developer.android.com/jetpack/compose/documentation)
 - [Kotlin](https://kotlinlang.org/docs/home.html)
 - [Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
 - [Kotlinx Serialization](https://kotlinlang.org/docs/serialization.html)
-- [Dagger/Hilt](https://dagger.dev/hilt/)
-- [Navigation Component](https://developer.android.com/guide/navigation)
+- [Jetpack Compose](https://developer.android.com/jetpack/compose/documentation)
 - [SQLDelight](https://cashapp.github.io/sqldelight/android_sqlite/)
+- [Ktorfit](https://github.com/Foso/Ktorfit)
+- [Ballast](https://github.com/copper-leaf/ballast)
+- [Ballast Navigation](https://copper-leaf.github.io/ballast/wiki/modules/ballast-navigation/)
 
 Enable Firebase Analytics DebugView with the following command:
 

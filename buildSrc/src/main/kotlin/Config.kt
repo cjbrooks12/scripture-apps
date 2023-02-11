@@ -47,4 +47,22 @@ object Config {
             openBibleKeyPassword = project.loadProperty("keystore_ob_key_password"),
         )
     }
+
+    fun customProperties(project: Project): Map<String, Any> {
+        return project
+            .properties
+            .entries
+            .filter { it.key.startsWith("caseyjbrooks") && it.value != null }
+            .map {
+                val stringValue = it.value!!.toString()
+                val booleanValue = when (stringValue) {
+                    "true" -> true
+                    "false" -> false
+                    else -> null
+                }
+
+                it.key to (booleanValue ?: stringValue)
+            }
+            .toMap()
+    }
 }

@@ -1,0 +1,7 @@
+### Get today's Verse of the Day from TheySaidSo.com
+GET https://quotes.rest/bible/vod
+accept: application/xml
+
+### Get a random Verse of the Day from TheySaidSo.com
+GET https://quotes.rest/bible/verse
+accept: application/json
