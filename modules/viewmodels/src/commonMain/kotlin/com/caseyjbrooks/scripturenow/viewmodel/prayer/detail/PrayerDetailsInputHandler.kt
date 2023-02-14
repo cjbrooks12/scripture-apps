@@ -1,10 +1,15 @@
 package com.caseyjbrooks.scripturenow.viewmodel.prayer.detail
 
+import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
 import com.caseyjbrooks.scripturenow.repositories.prayer.PrayerRepository
 import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
+import com.copperleaf.ballast.navigation.routing.build
+import com.copperleaf.ballast.navigation.routing.directions
+import com.copperleaf.ballast.navigation.routing.path
 import com.copperleaf.ballast.observeFlows
 import com.copperleaf.ballast.repository.cache.getCachedOrNull
+import com.copperleaf.ballast.repository.cache.getCachedOrThrow
 import kotlinx.coroutines.flow.map
 
 public class PrayerDetailsInputHandler(
@@ -23,7 +28,7 @@ public class PrayerDetailsInputHandler(
             observeFlows(
                 "focused memory verse",
                 prayerRepository
-                    .getPrayer(input.verseUuid)
+                    .getPrayerById(input.prayerUuid)
                     .map { PrayerDetailsContract.Inputs.PrayerUpdated(it) }
             )
         }
@@ -36,25 +41,18 @@ public class PrayerDetailsInputHandler(
             postEvent(PrayerDetailsContract.Events.NavigateBack)
         }
 
-        is PrayerDetailsContract.Inputs.EditVerse -> {
-            val cachedVerse = getCurrentState().prayer.getCachedOrNull()
-
-            if (cachedVerse != null) {
-//                postEvent(
-//                    PrayerDetailsContract.Events.NavigateTo(
-//                        Destinations.App.Verses.Edit.directions(
-//                            pathParameters = mapOf(
-//                                "verseId" to listOf(cachedVerse.uuid.toString())
-//                            )
-//                        )
-//                    )
-//                )
-            } else {
-                noOp()
-            }
+        is PrayerDetailsContract.Inputs.EditPrayer -> {
+            postEvent(
+                PrayerDetailsContract.Events.NavigateTo(
+                    ScriptureNowRoute.PrayerEdit
+                        .directions()
+                        .path(getCurrentState().prayer.getCachedOrThrow().uuid.toString())
+                        .build()
+                )
+            )
         }
 
-        is PrayerDetailsContract.Inputs.DeleteVerse -> {
+        is PrayerDetailsContract.Inputs.DeletePrayer -> {
             val cachedVerse = getCurrentState().prayer.getCachedOrNull()
 
             if (cachedVerse != null) {

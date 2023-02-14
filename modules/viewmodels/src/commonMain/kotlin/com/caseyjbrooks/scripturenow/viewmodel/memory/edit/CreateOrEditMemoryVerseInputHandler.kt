@@ -1,20 +1,25 @@
 package com.caseyjbrooks.scripturenow.viewmodel.memory.edit
 
-import com.benasher44.uuid.uuid4
 import com.caseyjbrooks.scripturenow.models.EditorMode
 import com.caseyjbrooks.scripturenow.models.memory.MemoryVerse
+import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
 import com.caseyjbrooks.scripturenow.repositories.memory.MemoryVerseRepository
-import com.caseyjbrooks.scripturenow.utils.now
-import com.caseyjbrooks.scripturenow.utils.parseVerseReference
+import com.caseyjbrooks.scripturenow.utils.converter.Converter
 import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
-import com.copperleaf.ballast.repository.cache.awaitValue
-import com.copperleaf.ballast.repository.cache.getValueOrThrow
-import kotlinx.coroutines.delay
-import kotlinx.datetime.LocalDateTime
+import com.copperleaf.ballast.navigation.routing.build
+import com.copperleaf.ballast.navigation.routing.directions
+import com.copperleaf.ballast.navigation.routing.path
+import com.copperleaf.ballast.observeFlows
+import com.copperleaf.ballast.repository.cache.getCachedOrThrow
+import com.copperleaf.ballast.repository.cache.getValueOrNull
+import kotlinx.coroutines.flow.map
+import kotlinx.serialization.json.JsonElement
 
 public class CreateOrEditMemoryVerseInputHandler(
-    private val memoryVerseRepository: MemoryVerseRepository
+    private val memoryVerseRepository: MemoryVerseRepository,
+    private val fromJsonConverter: Converter<JsonElement, MemoryVerse>,
+    private val toJsonConverter: Converter<MemoryVerse, JsonElement>,
 ) : InputHandler<
         CreateOrEditMemoryVerseContract.Inputs,
         CreateOrEditMemoryVerseContract.Events,
@@ -30,80 +35,70 @@ public class CreateOrEditMemoryVerseInputHandler(
                 updateState {
                     it.copy(
                         editorMode = EditorMode.Create,
-                        loading = false,
-                        savedVerse = null,
-                        editingVerse = MemoryVerse(
-                            uuid = uuid4(), // create a new UUID for this verse
-                            main = false,
-                            text = "",
-                            reference = "".parseVerseReference(),
-                            version = "",
-                            verseUrl = "",
-                            notice = "",
-                            createdAt = LocalDateTime.now(),
-                            updatedAt = LocalDateTime.now(),
-                        )
                     )
                 }
             } else {
                 updateState {
                     it.copy(
                         editorMode = EditorMode.Edit,
-                        loading = true,
-                        savedVerse = null,
-                        editingVerse = null,
                     )
                 }
 
-                val savedVerse: MemoryVerse = memoryVerseRepository
-                    .getVerse(input.verseUuid)
-                    .awaitValue()
-                    .getValueOrThrow()
-
-                updateState {
-                    it.copy(
-                        loading = false,
-                        savedVerse = savedVerse,
-                        editingVerse = savedVerse.copy(),
-                    )
-                }
+                observeFlows(
+                    "saved verse",
+                    memoryVerseRepository
+                        .getVerseById(input.verseUuid)
+                        .map { CreateOrEditMemoryVerseContract.Inputs.SavedVerseUpdated(it) },
+                )
             }
+
+            observeFlows(
+                "schema definition",
+                memoryVerseRepository
+                    .loadForm()
+                    .map { CreateOrEditMemoryVerseContract.Inputs.SchemaUpdated(it) },
+            )
         }
 
-        is CreateOrEditMemoryVerseContract.Inputs.UpdateVerse -> {
-            val currentState = updateStateAndGet { it.copy(editingVerse = input.updatedVerse) }
-            if (currentState.editorMode == EditorMode.Edit) {
-                updateState { it.copy(hasUnsavedChanges = true) }
+        is CreateOrEditMemoryVerseContract.Inputs.SchemaUpdated -> {
+            updateState { it.copy(schema = input.schema) }
+        }
 
-                sideJob("autosave") {
-                    delay(3000)
-                    postInput(CreateOrEditMemoryVerseContract.Inputs.SaveVerse)
-                }
+        is CreateOrEditMemoryVerseContract.Inputs.SavedVerseUpdated -> {
+            updateState { it.copy(savedVerse = input.savedVerse) }
+
+            val value = input.savedVerse.getValueOrNull()
+            if (value != null) {
+                updateState { it.copy(formData = toJsonConverter.convertValue(value)) }
             }
 
             Unit
+        }
+
+        is CreateOrEditMemoryVerseContract.Inputs.UpdateFormData -> {
+            updateState { it.copy(formData = input.updatedData) }
         }
 
         is CreateOrEditMemoryVerseContract.Inputs.SaveVerse -> {
-            val currentState =
-                updateStateAndGet { it.copy(lastSavedOn = LocalDateTime.now(), hasUnsavedChanges = false) }
+            val currentState = getCurrentState()
 
-            memoryVerseRepository.createOrUpdateVerse(currentState.editingVerse!!)
-
-            if (currentState.editorMode == EditorMode.Create) {
-                postEvent(CreateOrEditMemoryVerseContract.Events.NavigateUp)
+            var parsedVerse = fromJsonConverter.convertValue(currentState.formData)
+            if (currentState.editorMode == EditorMode.Edit) {
+                parsedVerse = parsedVerse.copy(uuid = currentState.savedVerse.getCachedOrThrow().uuid)
             }
+            memoryVerseRepository.createOrUpdateVerse(parsedVerse)
 
-            Unit
+            postEvent(
+                CreateOrEditMemoryVerseContract.Events.NavigateTo(
+                    ScriptureNowRoute.MemoryVerseDetails
+                        .directions()
+                        .path(parsedVerse.uuid.toString())
+                        .build()
+                )
+            )
         }
 
         is CreateOrEditMemoryVerseContract.Inputs.GoBack -> {
-            val currentState = getCurrentState()
-
-            if (currentState.hasUnsavedChanges) {
-                memoryVerseRepository.createOrUpdateVerse(currentState.editingVerse!!)
-            }
-
             postEvent(CreateOrEditMemoryVerseContract.Events.NavigateUp)
         }
     }

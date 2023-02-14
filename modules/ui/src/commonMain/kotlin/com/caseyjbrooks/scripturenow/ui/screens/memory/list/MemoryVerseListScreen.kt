@@ -1,16 +1,15 @@
 package com.caseyjbrooks.scripturenow.ui.screens.memory.list
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.caseyjbrooks.scripturenow.ui.LocalInjector
-import com.caseyjbrooks.scripturenow.ui.layouts.MainLayout
-import com.caseyjbrooks.scripturenow.ui.layouts.ScrollableContent
+import com.caseyjbrooks.scripturenow.ui.layouts.LazyContent
+import com.caseyjbrooks.scripturenow.ui.layouts.BottomBarLayout
+import com.caseyjbrooks.scripturenow.utils.referenceText
 import com.caseyjbrooks.scripturenow.viewmodel.memory.list.MemoryVerseListContract
 
 @Composable
@@ -23,20 +22,29 @@ public fun MemoryVerseListScreen() {
     MemoryVerseListScreen(vmState) { vm.trySend(it) }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 public fun MemoryVerseListScreen(
     state: MemoryVerseListContract.State,
     postInput: (MemoryVerseListContract.Inputs) -> Unit,
 ) {
-    MainLayout(
+    BottomBarLayout(
         title = { Text("Verses") },
     ) {
-        ScrollableContent {
-            Card(modifier = Modifier.fillMaxWidth().padding()) {
-                Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-                    Text("Welcome to Scripture Now!")
+        LazyContent(
+            state.verses,
+            onItemClick = { postInput(MemoryVerseListContract.Inputs.ViewVerse(it)) },
+            beforeItems = {
+                stickyHeader {
+                    Button(
+                        onClick = { postInput(MemoryVerseListContract.Inputs.CreateVerse) },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) { Text("Add Verse") }
                 }
             }
+        ) { verse ->
+            Text(verse.text)
+            Text(verse.reference.referenceText)
         }
     }
 }

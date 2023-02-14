@@ -1,10 +1,15 @@
 package com.caseyjbrooks.scripturenow.viewmodel.memory.detail
 
+import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
 import com.caseyjbrooks.scripturenow.repositories.memory.MemoryVerseRepository
 import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
+import com.copperleaf.ballast.navigation.routing.build
+import com.copperleaf.ballast.navigation.routing.directions
+import com.copperleaf.ballast.navigation.routing.path
 import com.copperleaf.ballast.observeFlows
 import com.copperleaf.ballast.repository.cache.getCachedOrNull
+import com.copperleaf.ballast.repository.cache.getCachedOrThrow
 import kotlinx.coroutines.flow.map
 
 public class MemoryVerseDetailsInputHandler(
@@ -23,7 +28,7 @@ public class MemoryVerseDetailsInputHandler(
             observeFlows(
                 "focused memory verse",
                 memoryVerseRepository
-                    .getVerse(input.verseUuid)
+                    .getVerseById(input.verseUuid)
                     .map { MemoryVerseDetailsContract.Inputs.MemoryVerseUpdated(it) }
             )
         }
@@ -37,21 +42,14 @@ public class MemoryVerseDetailsInputHandler(
         }
 
         is MemoryVerseDetailsContract.Inputs.EditVerse -> {
-            val cachedVerse = getCurrentState().memoryVerse.getCachedOrNull()
-
-            if (cachedVerse != null) {
-//                postEvent(
-//                    MemoryVerseDetailsContract.Events.NavigateTo(
-//                        Destinations.App.Verses.Edit.directions(
-//                            pathParameters = mapOf(
-//                                "verseId" to listOf(cachedVerse.uuid.toString())
-//                            )
-//                        )
-//                    )
-//                )
-            } else {
-                noOp()
-            }
+            postEvent(
+                MemoryVerseDetailsContract.Events.NavigateTo(
+                    ScriptureNowRoute.MemoryVerseEdit
+                        .directions()
+                        .path(getCurrentState().memoryVerse.getCachedOrThrow().uuid.toString())
+                        .build()
+                )
+            )
         }
 
         is MemoryVerseDetailsContract.Inputs.DeleteVerse -> {

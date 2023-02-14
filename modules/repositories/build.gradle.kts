@@ -15,6 +15,7 @@ kotlin {
                 api(project(":modules:api"))
                 api(project(":modules:database"))
                 api(libs.ballast.navigation)
+                api(libs.jsonForms.core)
             }
         }
         val commonTest by getting {

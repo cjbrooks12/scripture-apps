@@ -1,10 +1,13 @@
 package com.caseyjbrooks.scripturenow.viewmodel.memory.list
 
+import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
 import com.copperleaf.ballast.EventHandler
 import com.copperleaf.ballast.EventHandlerScope
+import com.copperleaf.ballast.navigation.routing.RouterContract
+import com.copperleaf.ballast.navigation.vm.Router
 
 public class MemoryVerseListEventHandler(
-//    private val routerViewModel: MainRouterViewModel
+    private val router: Router<ScriptureNowRoute>
 ) : EventHandler<
         MemoryVerseListContract.Inputs,
         MemoryVerseListContract.Events,
@@ -16,11 +19,11 @@ public class MemoryVerseListEventHandler(
         event: MemoryVerseListContract.Events
     ): Unit = when (event) {
         is MemoryVerseListContract.Events.NavigateTo -> {
-//            routerViewModel.send(RouterContract.Inputs.GoToDestination(event.destination))
+            router.send(RouterContract.Inputs.GoToDestination(event.destination))
         }
 
         MemoryVerseListContract.Events.NavigateBack -> {
-//            routerViewModel.send(RouterContract.Inputs.GoBack)
+            router.send(RouterContract.Inputs.GoBack())
         }
     }
 }

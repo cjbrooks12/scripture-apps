@@ -1,0 +1,12 @@
+{
+    "type": "object",
+    "properties": {
+        "prayerDescription": {
+            "type": "string",
+            "description": "What do you want to remember to pray for?"
+        }
+    },
+    "required": [
+        "prayerDescription"
+    ]
+}

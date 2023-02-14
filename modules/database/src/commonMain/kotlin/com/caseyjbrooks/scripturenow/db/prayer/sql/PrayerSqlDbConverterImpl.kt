@@ -12,7 +12,7 @@ internal class PrayerSqlDbConverterImpl : PrayerSqlDbConverter {
     ): Prayer = with(dbModel) {
         Prayer(
             uuid = dbModel.uuid,
-            text = dbModel.text,
+            prayerDescription = dbModel.text,
             createdAt = dbModel.created_at,
             updatedAt = dbModel.updated_at,
         )
@@ -23,7 +23,7 @@ internal class PrayerSqlDbConverterImpl : PrayerSqlDbConverter {
     ): Sn_prayer = with(repositoryModel) {
         Sn_prayer(
             uuid = repositoryModel.uuid,
-            text = repositoryModel.text,
+            text = repositoryModel.prayerDescription,
             created_at = repositoryModel.createdAt,
             updated_at = LocalDateTime.now(),
         )

@@ -6,6 +6,7 @@ import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
 import com.copperleaf.ballast.observeFlows
 import com.copperleaf.ballast.repository.cache.Cached
+import com.copperleaf.ballast.repository.cache.getCachedOrNull
 import com.copperleaf.ballast.repository.cache.getValueOrThrow
 import com.copperleaf.ballast.repository.cache.isLoading
 import kotlinx.coroutines.flow.map
@@ -25,7 +26,7 @@ public class VerseOfTheDayInputHandler(
     ): Unit = when (input) {
         is VerseOfTheDayContract.Inputs.Initialize -> {
             observeFlows(
-                "votd",
+                "Verse of the DaY",
                 verseOfTheDayRepository
                     .getCurrentVerseOfTheDay(input.forceRefresh)
                     .map { VerseOfTheDayContract.Inputs.VerseOfTheDayUpdated(it) }
@@ -34,6 +35,21 @@ public class VerseOfTheDayInputHandler(
 
         is VerseOfTheDayContract.Inputs.VerseOfTheDayUpdated -> {
             updateState { it.copy(verseOfTheDay = input.verseOfTheDay) }
+
+            input.verseOfTheDay.getCachedOrNull()?.let { votd ->
+                observeFlows(
+                    "Memory Verse for Verse of the Day",
+                    memoryVerseRepository
+                        .getVerseByReference(votd.reference, false)
+                        .map { VerseOfTheDayContract.Inputs.SavedMemoryVerseUpdated(it) }
+                )
+            }
+
+            Unit
+        }
+
+        is VerseOfTheDayContract.Inputs.SavedMemoryVerseUpdated -> {
+            updateState { it.copy(savedMemoryVerse = input.memoryVerse) }
         }
 
         is VerseOfTheDayContract.Inputs.SaveAsMemoryVerse -> {
@@ -41,14 +57,12 @@ public class VerseOfTheDayInputHandler(
 
             if (currentState.verseOfTheDay.isLoading()) {
                 // verse is not ready yet, ignore
-                noOp()
             } else if (currentState.verseOfTheDay is Cached.FetchingFailed) {
                 // verse could not be loaded, try again later
-                noOp()
             } else {
                 memoryVerseRepository.saveAsMemoryVerse(currentState.verseOfTheDay.getValueOrThrow())
-                updateState { it.copy(saved = true) }
             }
+            noOp()
         }
 
         is VerseOfTheDayContract.Inputs.GoBack -> {

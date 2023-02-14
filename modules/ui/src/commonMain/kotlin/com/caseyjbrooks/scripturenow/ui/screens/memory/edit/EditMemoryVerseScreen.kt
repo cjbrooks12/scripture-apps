@@ -1,20 +1,22 @@
 package com.caseyjbrooks.scripturenow.ui.screens.memory.edit
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import com.caseyjbrooks.scripturenow.models.EditorMode
 import com.caseyjbrooks.scripturenow.ui.LocalInjector
-import com.caseyjbrooks.scripturenow.ui.layouts.MainLayout
+import com.caseyjbrooks.scripturenow.ui.layouts.BottomBarLayout
 import com.caseyjbrooks.scripturenow.ui.layouts.ScrollableContent
 import com.caseyjbrooks.scripturenow.viewmodel.memory.edit.CreateOrEditMemoryVerseContract
+import com.copperleaf.ballast.repository.cache.getCachedOrThrow
+import com.copperleaf.forms.compose.form.MaterialForm
 
 @Composable
-public fun EditMemoryVerseScreen(verseId: String) {
+public fun EditMemoryVerseScreen(verseId: String?) {
     val injector = LocalInjector.current
     val coroutineScope = rememberCoroutineScope()
     val vm = remember(injector, coroutineScope) {
@@ -33,13 +35,34 @@ public fun EditMemoryVerseScreen(
     state: CreateOrEditMemoryVerseContract.State,
     postInput: (CreateOrEditMemoryVerseContract.Inputs) -> Unit,
 ) {
-    MainLayout(
+    BottomBarLayout(
         title = { Text("Edit Verse") },
     ) {
         ScrollableContent {
-            Card(modifier = Modifier.fillMaxWidth().padding()) {
-                Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-                    Text("Welcome to Scripture Now!")
+            if (state.loading) {
+                CircularProgressIndicator()
+            } else {
+                val (schema, uiSchema) = state.schema.getCachedOrThrow()
+                MaterialForm(
+                    schema = schema,
+                    uiSchema = uiSchema,
+                    data = state.formData,
+                    onDataChanged = {
+                        postInput(CreateOrEditMemoryVerseContract.Inputs.UpdateFormData(it))
+                    },
+                )
+
+                Spacer(Modifier.weight(1f))
+
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { postInput(CreateOrEditMemoryVerseContract.Inputs.SaveVerse) },
+                ) {
+                    if (state.editorMode == EditorMode.Create) {
+                        Text("Create")
+                    } else {
+                        Text("Save Changes")
+                    }
                 }
             }
         }

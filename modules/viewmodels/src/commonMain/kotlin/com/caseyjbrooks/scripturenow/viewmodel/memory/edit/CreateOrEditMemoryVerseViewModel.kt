@@ -11,6 +11,6 @@ public typealias CreateOrEditMemoryVerseViewModel = BasicViewModel<
 public fun interface CreateOrEditMemoryVerseViewModelProvider {
     public fun getCreateOrEditMemoryVerseViewModel(
         coroutineScope: CoroutineScope,
-        verseId: String,
+        verseId: String?,
     ): CreateOrEditMemoryVerseViewModel
 }

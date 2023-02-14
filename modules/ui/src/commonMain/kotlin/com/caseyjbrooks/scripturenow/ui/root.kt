@@ -14,13 +14,6 @@ import com.caseyjbrooks.scripturenow.ui.screens.settings.SettingsScreen
 import com.caseyjbrooks.scripturenow.ui.screens.votd.VerseOfTheDayScreen
 import com.caseyjbrooks.scripturenow.ui.theme.ScriptureNowTheme
 import com.caseyjbrooks.scripturenow.viewmodel.ViewModelsInjector
-import com.caseyjbrooks.scripturenow.viewmodel.memory.detail.MemoryVerseDetailsContract
-import com.caseyjbrooks.scripturenow.viewmodel.memory.edit.CreateOrEditMemoryVerseContract
-import com.caseyjbrooks.scripturenow.viewmodel.memory.list.MemoryVerseListContract
-import com.caseyjbrooks.scripturenow.viewmodel.prayer.detail.PrayerDetailsContract
-import com.caseyjbrooks.scripturenow.viewmodel.prayer.edit.CreateOrEditPrayerContract
-import com.caseyjbrooks.scripturenow.viewmodel.prayer.list.PrayerListContract
-import com.caseyjbrooks.scripturenow.viewmodel.settings.SettingsContract
 import com.copperleaf.ballast.navigation.routing.Destination
 import com.copperleaf.ballast.navigation.routing.renderCurrentDestination
 import com.copperleaf.ballast.navigation.routing.stringPath
@@ -66,45 +59,45 @@ private fun Destination.Match<ScriptureNowRoute>.RouteContent(
         }
 
         ScriptureNowRoute.Settings -> {
-            SettingsScreen(SettingsContract.State()) { }
+            SettingsScreen()
         }
 
         // Prayers
         ScriptureNowRoute.MemoryVerseList -> {
-            MemoryVerseListScreen(MemoryVerseListContract.State()) { }
+            MemoryVerseListScreen()
         }
 
         ScriptureNowRoute.MemoryVerseDetails -> {
             val verseId by stringPath()
-            MemoryVerseDetailsScreen(MemoryVerseDetailsContract.State()) { }
+            MemoryVerseDetailsScreen(verseId)
         }
 
         ScriptureNowRoute.MemoryVerseCreate -> {
-            EditMemoryVerseScreen(CreateOrEditMemoryVerseContract.State()) { }
+            EditMemoryVerseScreen(null)
         }
 
         ScriptureNowRoute.MemoryVerseEdit -> {
             val verseId by stringPath()
-            EditMemoryVerseScreen(CreateOrEditMemoryVerseContract.State()) { }
+            EditMemoryVerseScreen(verseId)
         }
 
         // Prayers
         ScriptureNowRoute.PrayerList -> {
-            PrayerListScreen(PrayerListContract.State()) { }
+            PrayerListScreen()
         }
 
         ScriptureNowRoute.PrayerDetails -> {
             val prayerId by stringPath()
-            PrayerDetailsScreen(PrayerDetailsContract.State()) { }
+            PrayerDetailsScreen(prayerId)
         }
 
         ScriptureNowRoute.PrayerCreate -> {
-            EditPrayerScreen(CreateOrEditPrayerContract.State()) { }
+            EditPrayerScreen(null)
         }
 
         ScriptureNowRoute.PrayerEdit -> {
             val prayerId by stringPath()
-            EditPrayerScreen(CreateOrEditPrayerContract.State()) { }
+            EditPrayerScreen(prayerId)
         }
     }
 }

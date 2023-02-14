@@ -11,6 +11,7 @@ import com.caseyjbrooks.scripturenow.db.impl.sql.SqlDbProvider
 import com.caseyjbrooks.scripturenow.db.memory.MemoryVerseDb
 import com.caseyjbrooks.scripturenow.db.memory.MemoryVerseDbProvider
 import com.caseyjbrooks.scripturenow.db.prayer.PrayerDb
+import com.caseyjbrooks.scripturenow.db.prayer.PrayerDbProvider
 import com.caseyjbrooks.scripturenow.db.votd.VerseOfTheDayDb
 import com.caseyjbrooks.scripturenow.db.votd.VerseOfTheDayDbProvider
 import com.caseyjbrooks.scripturenow.models.auth.SessionService
@@ -44,7 +45,7 @@ class DataSourcesInjectorImpl(
     }
 
     public fun getPrayerDb(): PrayerDb {
-        TODO()
+        return PrayerDbProvider.get(sqlDatabase)
     }
 
     public fun getVerseOfTheDayApi(): VerseOfTheDayApi {

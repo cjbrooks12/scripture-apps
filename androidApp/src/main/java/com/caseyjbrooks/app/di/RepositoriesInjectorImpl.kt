@@ -2,6 +2,7 @@ package com.caseyjbrooks.app.di
 
 import com.caseyjbrooks.scripturenow.appwidgets.votd.VerseOfTheDayWidgetInterceptor
 import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
+import com.caseyjbrooks.scripturenow.repositories.AndroidAssetsFormLoader
 import com.caseyjbrooks.scripturenow.repositories.RepositoriesInjector
 import com.caseyjbrooks.scripturenow.repositories.auth.AuthRepository
 import com.caseyjbrooks.scripturenow.repositories.auth.AuthRepositoryImpl
@@ -17,17 +18,15 @@ import com.caseyjbrooks.scripturenow.repositories.votd.VerseOfTheDayRepository
 import com.caseyjbrooks.scripturenow.repositories.votd.VerseOfTheDayRepositoryImpl
 import com.caseyjbrooks.scripturenow.repositories.votd.VerseOfTheDayRepositoryInputHandler
 import com.caseyjbrooks.scripturenow.utils.models.votd.VerseOfTheDayToMemoryVerseConverterImpl
-import com.copperleaf.ballast.BallastViewModelConfiguration
-import com.copperleaf.ballast.build
+import com.copperleaf.ballast.*
 import com.copperleaf.ballast.core.AndroidLogger
 import com.copperleaf.ballast.core.BasicViewModel
 import com.copperleaf.ballast.core.BootstrapInterceptor
 import com.copperleaf.ballast.core.LoggingInterceptor
-import com.copperleaf.ballast.eventHandler
 import com.copperleaf.ballast.navigation.routing.*
 import com.copperleaf.ballast.navigation.vm.Router
 import com.copperleaf.ballast.navigation.vm.withRouter
-import com.copperleaf.ballast.plusAssign
+import kotlinx.coroutines.Dispatchers
 
 class RepositoriesInjectorImpl(
     private val appInjector: AppInjector,
@@ -36,6 +35,12 @@ class RepositoriesInjectorImpl(
 
     private fun getRepositoryBuilder(): BallastViewModelConfiguration.Builder {
         return BallastViewModelConfiguration.Builder()
+            .dispatchers(
+                inputsDispatcher = Dispatchers.Default,
+                eventsDispatcher = Dispatchers.Default,
+                sideJobsDispatcher = Dispatchers.IO,
+                interceptorDispatcher = Dispatchers.Default
+            )
             .apply {
                 if (dataSourcesInjector.localAppConfig.logRepositories) {
                     this += LoggingInterceptor()
@@ -59,6 +64,7 @@ class RepositoriesInjectorImpl(
                 db = dataSourcesInjector.getMemoryVerseDb(),
                 verseOfTheDayToMemoryVerseConverter = VerseOfTheDayToMemoryVerseConverterImpl(),
             ),
+            memoryVerseFormLoader = AndroidAssetsFormLoader(appInjector.applicationContext, "memory"),
         )
     }
     private val _prayerRepository: PrayerRepository by lazy {
@@ -66,6 +72,7 @@ class RepositoriesInjectorImpl(
             coroutineScope = appInjector.appCoroutineScope,
             configBuilder = getRepositoryBuilder(),
             inputHandler = PrayerRepositoryInputHandler(dataSourcesInjector.getPrayerDb()),
+            prayerFormLoader = AndroidAssetsFormLoader(appInjector.applicationContext, "prayer"),
         )
     }
     private lateinit var _router: Router<ScriptureNowRoute>
@@ -109,7 +116,15 @@ class RepositoriesInjectorImpl(
                     }
                     .build(),
                 coroutineScope = appInjector.appCoroutineScope,
-                eventHandler = eventHandler { },
+                eventHandler = eventHandler {
+                    when (it) {
+                        is RouterContract.Events.BackstackEmptied -> {
+                            backstackEmptiedCallbacks.values.forEach { it() }
+                        }
+
+                        else -> {}
+                    }
+                },
             )
         } else {
             if (deepLinkUrl != null) {
@@ -124,5 +139,14 @@ class RepositoriesInjectorImpl(
 
     override fun getVerseOfTheDayRepository(): VerseOfTheDayRepository {
         return _verseOfTheDayRepository
+    }
+
+    private var backstackEmptiedCallbacks = mutableMapOf<Any, () -> Unit>()
+    override fun registerBackstackEmptiedCallback(owner: Any, block: () -> Unit) {
+        backstackEmptiedCallbacks += owner to block
+    }
+
+    override fun unregisterBackstackEmptiedCallback(owner: Any) {
+        backstackEmptiedCallbacks.remove(owner)
     }
 }

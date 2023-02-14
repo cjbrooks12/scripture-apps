@@ -9,7 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.caseyjbrooks.scripturenow.ui.LocalInjector
-import com.caseyjbrooks.scripturenow.ui.layouts.MainLayout
+import com.caseyjbrooks.scripturenow.ui.layouts.BottomBarLayout
 import com.caseyjbrooks.scripturenow.ui.layouts.ScrollableContent
 import com.caseyjbrooks.scripturenow.viewmodel.settings.SettingsContract
 
@@ -28,7 +28,7 @@ public fun SettingsScreen(
     state: SettingsContract.State,
     postInput: (SettingsContract.Inputs) -> Unit,
 ) {
-    MainLayout(
+    BottomBarLayout(
         title = { Text("Settings") },
     ) {
         ScrollableContent {

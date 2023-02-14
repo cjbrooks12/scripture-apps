@@ -10,10 +10,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.caseyjbrooks.scripturenow.ui.LocalInjector
-import com.caseyjbrooks.scripturenow.ui.layouts.MainLayout
+import com.caseyjbrooks.scripturenow.ui.layouts.BottomBarLayout
 import com.caseyjbrooks.scripturenow.ui.layouts.ScrollableContent
 import com.caseyjbrooks.scripturenow.utils.referenceText
 import com.caseyjbrooks.scripturenow.viewmodel.votd.VerseOfTheDayContract
+import com.copperleaf.ballast.repository.cache.Cached
 import com.copperleaf.ballast.repository.cache.getCachedOrNull
 
 @Composable
@@ -31,7 +32,7 @@ public fun VerseOfTheDayScreen(
     state: VerseOfTheDayContract.State,
     postInput: (VerseOfTheDayContract.Inputs) -> Unit,
 ) {
-    MainLayout(
+    BottomBarLayout(
         title = { Text("Verse of the Day") },
     ) {
         ScrollableContent {
@@ -43,14 +44,23 @@ public fun VerseOfTheDayScreen(
                     }
                 }
             }
+
+            val saveButtonEnabled = when (state.savedMemoryVerse) {
+                is Cached.NotLoaded -> false
+                is Cached.Fetching -> false
+                is Cached.FetchingFailed -> true // this indicated the query completed, but no matching verse if found. So we can save it
+                is Cached.Value -> false // the query completed, but this verse is already saved
+            }
+
             Button(
+                modifier = Modifier.fillMaxWidth(),
                 onClick = { postInput(VerseOfTheDayContract.Inputs.SaveAsMemoryVerse) },
-                enabled = !state.saved
+                enabled = saveButtonEnabled
             ) {
-                if(state.saved) {
-                    Text("Verse saved")
-                } else {
+                if (saveButtonEnabled) {
                     Text("Save as memory verse")
+                } else {
+                    Text("Verse saved")
                 }
             }
         }

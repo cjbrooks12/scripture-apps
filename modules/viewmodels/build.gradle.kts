@@ -13,6 +13,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":modules:repositories"))
+                api(libs.jsonForms.core)
             }
         }
         val commonTest by getting {

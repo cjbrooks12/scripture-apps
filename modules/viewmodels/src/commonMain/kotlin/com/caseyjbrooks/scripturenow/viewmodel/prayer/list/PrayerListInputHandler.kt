@@ -1,8 +1,12 @@
 package com.caseyjbrooks.scripturenow.viewmodel.prayer.list
 
+import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
 import com.caseyjbrooks.scripturenow.repositories.prayer.PrayerRepository
 import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
+import com.copperleaf.ballast.navigation.routing.build
+import com.copperleaf.ballast.navigation.routing.directions
+import com.copperleaf.ballast.navigation.routing.path
 import com.copperleaf.ballast.observeFlows
 import kotlinx.coroutines.flow.map
 
@@ -20,55 +24,52 @@ public class PrayerListInputHandler(
     ): Unit = when (input) {
         is PrayerListContract.Inputs.Initialize -> {
             observeFlows(
-                "focused memory verse",
+                "prayers list",
                 prayerRepository
                     .getAllPrayers(input.forceRefresh)
-                    .map { PrayerListContract.Inputs.VersesUpdated(it) }
+                    .map { PrayerListContract.Inputs.PrayersUpdated(it) }
             )
         }
 
-        is PrayerListContract.Inputs.VersesUpdated -> {
-            updateState { it.copy(verses = input.verses) }
+        is PrayerListContract.Inputs.PrayersUpdated -> {
+            updateState { it.copy(prayers = input.prayers) }
         }
 
-        is PrayerListContract.Inputs.CreateVerse -> {
-//            postEvent(
-//                PrayerListContract.Events.NavigateTo(
-//                    Destinations.App.Verses.Create.directions()
-//                )
-//            )
+        is PrayerListContract.Inputs.CreatePrayer -> {
+            postEvent(
+                PrayerListContract.Events.NavigateTo(
+                    ScriptureNowRoute.PrayerCreate
+                        .directions()
+                        .build()
+                )
+            )
         }
 
-        is PrayerListContract.Inputs.ViewVerse -> {
-//            postEvent(
-//                PrayerListContract.Events.NavigateTo(
-//                    Destinations.App.Verses.Detail.directions(
-//                        pathParameters = mapOf(
-//                            "verseId" to listOf(input.verse.uuid.toString())
-//                        )
-//                    )
-//                )
-//            )
+        is PrayerListContract.Inputs.ViewPrayer -> {
+            postEvent(
+                PrayerListContract.Events.NavigateTo(
+                    ScriptureNowRoute.PrayerDetails
+                        .directions()
+                        .path(input.prayer.uuid.toString())
+                        .build()
+                )
+            )
         }
 
-        is PrayerListContract.Inputs.EditVerse -> {
-//            postEvent(
-//                PrayerListContract.Events.NavigateTo(
-//                    Destinations.App.Verses.Edit.directions(
-//                        pathParameters = mapOf(
-//                            "verseId" to listOf(input.verse.uuid.toString())
-//                        )
-//                    )
-//                )
-//            )
+        is PrayerListContract.Inputs.EditPrayer -> {
+            postEvent(
+                PrayerListContract.Events.NavigateTo(
+                    ScriptureNowRoute.PrayerEdit
+                        .directions()
+                        .path(input.prayer.uuid.toString())
+                        .build()
+                )
+            )
         }
 
-        is PrayerListContract.Inputs.DeleteVerse -> {
-            // delete the verse
-            prayerRepository.deletePrayer(input.verse)
-
-            // then exit the screen
-            postEvent(PrayerListContract.Events.NavigateBack)
+        is PrayerListContract.Inputs.DeletePrayer -> {
+            // delete the prayer
+            prayerRepository.deletePrayer(input.prayer)
         }
     }
 }

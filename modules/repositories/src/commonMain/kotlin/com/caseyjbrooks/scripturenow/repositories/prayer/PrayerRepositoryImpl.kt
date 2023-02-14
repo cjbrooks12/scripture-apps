@@ -2,12 +2,15 @@ package com.caseyjbrooks.scripturenow.repositories.prayer
 
 import com.benasher44.uuid.Uuid
 import com.caseyjbrooks.scripturenow.models.prayer.Prayer
+import com.caseyjbrooks.scripturenow.repositories.FormLoader
 import com.copperleaf.ballast.*
 import com.copperleaf.ballast.core.BasicViewModel
 import com.copperleaf.ballast.core.BootstrapInterceptor
 import com.copperleaf.ballast.core.FifoInputStrategy
 import com.copperleaf.ballast.repository.cache.Cached
 import com.copperleaf.ballast.repository.cache.map
+import com.copperleaf.forms.core.ui.UiSchema
+import com.copperleaf.json.schema.JsonSchema
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -16,6 +19,7 @@ public class PrayerRepositoryImpl(
     coroutineScope: CoroutineScope,
     configBuilder: BallastViewModelConfiguration.Builder,
     inputHandler: PrayerRepositoryInputHandler,
+    private val prayerFormLoader: FormLoader,
 ) : BasicViewModel<
         PrayerRepositoryContract.Inputs,
         PrayerRepositoryContract.Events,
@@ -43,7 +47,7 @@ public class PrayerRepositoryImpl(
             .map { it.prayerList }
     }
 
-    override fun getPrayer(uuid: Uuid, refreshCache: Boolean): Flow<Cached<Prayer>> {
+    override fun getPrayerById(uuid: Uuid, refreshCache: Boolean): Flow<Cached<Prayer>> {
         trySend(PrayerRepositoryContract.Inputs.RefreshPrayerList(refreshCache))
         return observeStates()
             .map {
@@ -53,6 +57,10 @@ public class PrayerRepositoryImpl(
                         prayers.single { prayer -> prayer.uuid == uuid }
                     }
             }
+    }
+
+    override fun loadForm(): Flow<Cached<Pair<JsonSchema, UiSchema>>> {
+        return prayerFormLoader.loadForm()
     }
 
     override suspend fun createOrUpdatePrayer(prayer: Prayer) {

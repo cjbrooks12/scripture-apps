@@ -6,20 +6,19 @@ import com.caseyjbrooks.scripturenow.api.votd.impl.theysaidso.models.TheySaidSoB
 import com.caseyjbrooks.scripturenow.models.VerseReference
 import com.caseyjbrooks.scripturenow.models.votd.VerseOfTheDay
 import com.caseyjbrooks.scripturenow.models.votd.VerseOfTheDayService
+import com.caseyjbrooks.scripturenow.utils.converter.Converter
 import com.caseyjbrooks.scripturenow.utils.of
 import kotlinx.datetime.LocalDate
 
-internal class TheySaidSoApiConverterImpl : TheySaidSoApiConverter {
-    override fun convertApiModelToRepositoryModel(
-        date: LocalDate,
-        apiModel: TheySaidSoBibleVerseResponse,
-    ): VerseOfTheDay = with(apiModel) {
+internal class TheySaidSoApiConverterImpl : Converter<Pair<LocalDate, TheySaidSoBibleVerseResponse>, VerseOfTheDay> {
+    override fun convertValue(from: Pair<LocalDate, TheySaidSoBibleVerseResponse>): VerseOfTheDay {
+        val (date, apiModel) = from
         return VerseOfTheDay(
-            uuid = contents.uuid?.let { uuid5Of(uuid4(), it) } ?: uuid4(),
+            uuid = apiModel.contents.uuid?.let { uuid5Of(uuid4(), it) } ?: uuid4(),
             providedBy = VerseOfTheDayService.TheySaidSo,
             date = date,
-            text = contents.verse,
-            reference = VerseReference.of(contents.book, contents.chapter, contents.number),
+            text = apiModel.contents.verse,
+            reference = VerseReference.of(apiModel.contents.book, apiModel.contents.chapter, apiModel.contents.number),
             version = "",
             verseUrl = "https://theysaidso.com",
             notice = "Powered by quotes from theysaidso.com",

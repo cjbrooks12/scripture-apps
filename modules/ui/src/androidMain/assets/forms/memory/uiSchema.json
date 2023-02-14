@@ -1,0 +1,13 @@
+{
+    "type": "VerticalLayout",
+    "elements": [
+        {
+            "type": "Control",
+            "scope": "#/properties/reference"
+        },
+        {
+            "type": "Control",
+            "scope": "#/properties/text"
+        }
+    ]
+}

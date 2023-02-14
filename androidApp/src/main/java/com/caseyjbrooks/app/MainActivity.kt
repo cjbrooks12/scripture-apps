@@ -9,6 +9,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.DefaultLifecycleObserver
 import com.caseyjbrooks.app.di.ViewModelsInjectorImpl
 import com.caseyjbrooks.scripturenow.ui.ApplicationRoot
+import com.caseyjbrooks.scripturenow.ui.widgets.finishActivityOnRouterEmptied
 
 class MainActivity : ComponentActivity() {
 
@@ -26,6 +27,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             val mainApplication = LocalContext.current.applicationContext as MainApplication
             val mainInjector = remember(mainApplication) { mainApplication.appInjector }
+
+            finishActivityOnRouterEmptied(this@MainActivity, mainInjector.repositoriesInjector)
+
             val router = remember(mainInjector) { mainInjector.repositoriesInjector.getScriptureNowRouter(deepLinkUrl) }
             ApplicationRoot(router, ViewModelsInjectorImpl(mainInjector))
         }

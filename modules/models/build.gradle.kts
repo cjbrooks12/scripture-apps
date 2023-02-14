@@ -5,6 +5,7 @@ plugins {
     `copper-leaf-version`
     `copper-leaf-testing`
     `copper-leaf-lint`
+    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -12,6 +13,8 @@ kotlin {
         // Common Sourcesets
         val commonMain by getting {
             dependencies {
+                api(libs.ktor.client.serialization)
+                api(libs.ktor.client.serialization.json)
                 api(libs.kotlinx.datetime)
                 api(libs.benasher44.uuid)
                 api(libs.ballast.navigation)

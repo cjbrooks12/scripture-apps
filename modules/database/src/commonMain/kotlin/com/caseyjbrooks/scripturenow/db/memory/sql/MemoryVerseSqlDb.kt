@@ -2,9 +2,11 @@ package com.caseyjbrooks.scripturenow.db.memory.sql
 
 import com.benasher44.uuid.Uuid
 import com.caseyjbrooks.scripturenow.db.memory.MemoryVerseDb
+import com.caseyjbrooks.scripturenow.models.VerseReference
 import com.caseyjbrooks.scripturenow.models.memory.MemoryVerse
 import com.caseyjbrooks.scripturenow.utils.mapEach
 import com.caseyjbrooks.scripturenow.utils.mapIfNotNull
+import com.caseyjbrooks.scripturenow.utils.referenceText
 import com.copperleaf.scripturenow.Sn_memoryVerseQueries
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
@@ -26,6 +28,14 @@ internal class MemoryVerseSqlDb(
     override fun getVerseById(id: Uuid): Flow<MemoryVerse?> {
         return queries
             .getById(id)
+            .asFlow()
+            .mapToOneOrNull()
+            .mapIfNotNull(converter::convertDbModelToRepositoryModel)
+    }
+
+    override fun getVerseByReference(reference: VerseReference): Flow<MemoryVerse?> {
+        return queries
+            .getByReference(reference.referenceText)
             .asFlow()
             .mapToOneOrNull()
             .mapIfNotNull(converter::convertDbModelToRepositoryModel)

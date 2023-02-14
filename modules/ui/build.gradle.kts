@@ -21,6 +21,7 @@ kotlin {
             dependencies {
                 api(project(":modules:viewmodels"))
                 api(libs.ballast.navigation)
+                api(libs.jsonForms.material)
 
                 api(libs.android.compose.icons)
                 implementation(libs.android.compose.accompanist.systemuicontroller)
@@ -44,6 +45,7 @@ kotlin {
             dependencies {
                 implementation(libs.coil.core)
                 implementation(libs.coil.compose)
+                implementation(libs.androidx.compose.activity)
 
                 implementation(project.dependencies.platform(libs.firebase.bom))
                 implementation(libs.firebase.auth.ui)

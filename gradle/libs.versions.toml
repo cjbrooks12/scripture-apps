@@ -13,6 +13,7 @@ ballast = "3.0.0-SNAPSHOT"
 multiplatformSettings = "1.0.0"
 sqldelight = "1.5.5"
 coil = "2.2.0"
+jsonForms = "0.7.0"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -76,6 +77,9 @@ ballast-debugger = { module = "io.github.copper-leaf:ballast-debugger", version.
 ballast-navigation = { module = "io.github.copper-leaf:ballast-navigation", version.ref = "ballast" }
 ballast-undo = { module = "io.github.copper-leaf:ballast-navigation", version.ref = "ballast" }
 ballast-test = { module = "io.github.copper-leaf:ballast-test", version.ref = "ballast" }
+
+jsonForms-core = { module = "io.github.copper-leaf:json-forms-core", version.ref = "jsonForms" }
+jsonForms-material = { module = "io.github.copper-leaf:json-forms-compose-material", version.ref = "jsonForms" }
 
 sqldelight-core = { module = "com.squareup.sqldelight:core", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }

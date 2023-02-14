@@ -11,6 +11,6 @@ public typealias CreateOrEditPrayerViewModel = BasicViewModel<
 public fun interface CreateOrEditPrayerViewModelProvider {
     public fun getCreateOrEditPrayerViewModel(
         coroutineScope: CoroutineScope,
-        prayerId: String,
+        prayerId: String?,
     ): CreateOrEditPrayerViewModel
 }

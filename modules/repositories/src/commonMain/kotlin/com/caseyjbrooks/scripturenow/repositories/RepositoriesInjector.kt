@@ -11,7 +11,11 @@ public interface RepositoriesInjector :
     MemoryVerseRepositoryProvider,
     PrayerRepositoryProvider,
     ScriptureNowRouterProvider,
-    VerseOfTheDayRepositoryProvider
+    VerseOfTheDayRepositoryProvider {
+
+    public fun registerBackstackEmptiedCallback(owner: Any, block: () -> Unit)
+    public fun unregisterBackstackEmptiedCallback(owner: Any)
+}
 
 public interface RepositoriesInjectorProvider {
     public fun getRepositoriesInjector(): RepositoriesInjector

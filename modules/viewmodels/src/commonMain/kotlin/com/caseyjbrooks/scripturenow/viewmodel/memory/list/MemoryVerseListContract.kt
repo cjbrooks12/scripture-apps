@@ -18,7 +18,7 @@ public object MemoryVerseListContract {
     }
 
     public sealed class Events {
-        public object NavigateBack : Events()
         public data class NavigateTo(val destination: String) : Events()
+        public object NavigateBack : Events()
     }
 }

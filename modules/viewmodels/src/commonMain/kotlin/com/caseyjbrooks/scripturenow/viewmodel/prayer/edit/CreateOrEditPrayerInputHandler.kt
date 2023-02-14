@@ -1,19 +1,25 @@
 package com.caseyjbrooks.scripturenow.viewmodel.prayer.edit
 
-import com.benasher44.uuid.uuid4
 import com.caseyjbrooks.scripturenow.models.EditorMode
 import com.caseyjbrooks.scripturenow.models.prayer.Prayer
+import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
 import com.caseyjbrooks.scripturenow.repositories.prayer.PrayerRepository
-import com.caseyjbrooks.scripturenow.utils.now
+import com.caseyjbrooks.scripturenow.utils.converter.Converter
 import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
-import com.copperleaf.ballast.repository.cache.awaitValue
-import com.copperleaf.ballast.repository.cache.getValueOrThrow
-import kotlinx.coroutines.delay
-import kotlinx.datetime.LocalDateTime
+import com.copperleaf.ballast.navigation.routing.build
+import com.copperleaf.ballast.navigation.routing.directions
+import com.copperleaf.ballast.navigation.routing.path
+import com.copperleaf.ballast.observeFlows
+import com.copperleaf.ballast.repository.cache.getCachedOrThrow
+import com.copperleaf.ballast.repository.cache.getValueOrNull
+import kotlinx.coroutines.flow.map
+import kotlinx.serialization.json.JsonElement
 
 public class CreateOrEditPrayerInputHandler(
-    private val prayerRepository: PrayerRepository
+    private val prayerRepository: PrayerRepository,
+    private val fromJsonConverter: Converter<JsonElement, Prayer>,
+    private val toJsonConverter: Converter<Prayer, JsonElement>,
 ) : InputHandler<
         CreateOrEditPrayerContract.Inputs,
         CreateOrEditPrayerContract.Events,
@@ -25,79 +31,74 @@ public class CreateOrEditPrayerInputHandler(
         input: CreateOrEditPrayerContract.Inputs
     ): Unit = when (input) {
         is CreateOrEditPrayerContract.Inputs.Initialize -> {
-            if (input.verseUuid == null) {
+            if (input.prayerUuid == null) {
                 updateState {
                     it.copy(
                         editorMode = EditorMode.Create,
-                        loading = false,
-                        savedVerse = null,
-                        editingVerse = Prayer(
-                            uuid = uuid4(), // create a new UUID for this verse
-                            text = "",
-                            createdAt = LocalDateTime.now(),
-                            updatedAt = LocalDateTime.now(),
-                        )
                     )
                 }
             } else {
                 updateState {
                     it.copy(
                         editorMode = EditorMode.Edit,
-                        loading = true,
-                        savedVerse = null,
-                        editingVerse = null,
                     )
                 }
 
-                val savedVerse: Prayer = prayerRepository
-                    .getPrayer(input.verseUuid)
-                    .awaitValue()
-                    .getValueOrThrow()
-
-                updateState {
-                    it.copy(
-                        loading = false,
-                        savedVerse = savedVerse,
-                        editingVerse = savedVerse.copy(),
-                    )
-                }
+                observeFlows(
+                    "saved prayer",
+                    prayerRepository
+                        .getPrayerById(input.prayerUuid)
+                        .map { CreateOrEditPrayerContract.Inputs.SavedPrayerUpdated(it) },
+                )
             }
+
+            observeFlows(
+                "schema definition",
+                prayerRepository
+                    .loadForm()
+                    .map { CreateOrEditPrayerContract.Inputs.SchemaUpdated(it) },
+            )
         }
 
-        is CreateOrEditPrayerContract.Inputs.UpdateVerse -> {
-            val currentState = updateStateAndGet { it.copy(editingVerse = input.updatedVerse) }
+        is CreateOrEditPrayerContract.Inputs.SchemaUpdated -> {
+            updateState { it.copy(schema = input.schema) }
+        }
+
+        is CreateOrEditPrayerContract.Inputs.SavedPrayerUpdated -> {
+            updateState { it.copy(savedPrayer = input.savedPrayer) }
+
+            val value = input.savedPrayer.getValueOrNull()
+            if (value != null) {
+                updateState { it.copy(formData = toJsonConverter.convertValue(value)) }
+            }
+
+            Unit
+        }
+
+        is CreateOrEditPrayerContract.Inputs.UpdateFormData -> {
+            updateState { it.copy(formData = input.updatedData) }
+        }
+
+        is CreateOrEditPrayerContract.Inputs.SavePrayer -> {
+            val currentState = getCurrentState()
+
+            var parsedPrayer = fromJsonConverter.convertValue(currentState.formData)
             if (currentState.editorMode == EditorMode.Edit) {
-                updateState { it.copy(hasUnsavedChanges = true) }
-
-                sideJob("autosave") {
-                    delay(3000)
-                    postInput(CreateOrEditPrayerContract.Inputs.SaveVerse)
-                }
+                parsedPrayer = parsedPrayer.copy(uuid = currentState.savedPrayer.getCachedOrThrow().uuid)
             }
+            prayerRepository.createOrUpdatePrayer(parsedPrayer)
 
-            Unit
-        }
-
-        is CreateOrEditPrayerContract.Inputs.SaveVerse -> {
-            val currentState =
-                updateStateAndGet { it.copy(lastSavedOn = LocalDateTime.now(), hasUnsavedChanges = false) }
-
-            prayerRepository.createOrUpdatePrayer(currentState.editingVerse!!)
-
-            if (currentState.editorMode == EditorMode.Create) {
-                postEvent(CreateOrEditPrayerContract.Events.NavigateUp)
-            }
-
-            Unit
+            postEvent(
+                CreateOrEditPrayerContract.Events.NavigateTo(
+                    ScriptureNowRoute.PrayerDetails
+                        .directions()
+                        .path(parsedPrayer.uuid.toString())
+                        .build()
+                )
+            )
         }
 
         is CreateOrEditPrayerContract.Inputs.GoBack -> {
-            val currentState = getCurrentState()
-
-            if (currentState.hasUnsavedChanges) {
-                prayerRepository.createOrUpdatePrayer(currentState.editingVerse!!)
-            }
-
             postEvent(CreateOrEditPrayerContract.Events.NavigateUp)
         }
     }

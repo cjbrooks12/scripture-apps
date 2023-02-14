@@ -1,10 +1,13 @@
 package com.caseyjbrooks.scripturenow.viewmodel.prayer.detail
 
+import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
 import com.copperleaf.ballast.EventHandler
 import com.copperleaf.ballast.EventHandlerScope
+import com.copperleaf.ballast.navigation.routing.RouterContract
+import com.copperleaf.ballast.navigation.vm.Router
 
 public class PrayerDetailsEventHandler(
-//    private val routerViewModel: MainRouterViewModel
+    private val router: Router<ScriptureNowRoute>,
 ) : EventHandler<
         PrayerDetailsContract.Inputs,
         PrayerDetailsContract.Events,
@@ -15,12 +18,12 @@ public class PrayerDetailsEventHandler(
             PrayerDetailsContract.State>.handleEvent(
         event: PrayerDetailsContract.Events
     ): Unit = when (event) {
-        is PrayerDetailsContract.Events.NavigateBack -> {
-//            routerViewModel.send(RouterContract.Inputs.GoBack)
+        is PrayerDetailsContract.Events.NavigateTo -> {
+            router.send(RouterContract.Inputs.GoToDestination(event.destination))
         }
 
-        is PrayerDetailsContract.Events.NavigateTo -> {
-//            routerViewModel.send(RouterContract.Inputs.GoToDestination(event.destination))
+        is PrayerDetailsContract.Events.NavigateBack -> {
+            router.send(RouterContract.Inputs.GoBack())
         }
     }
 }

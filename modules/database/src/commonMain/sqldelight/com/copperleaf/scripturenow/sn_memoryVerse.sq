@@ -21,6 +21,10 @@ SELECT * FROM sn_memoryVerse
 WHERE uuid = ?
 LIMIT 1;
 
+getByReference:
+SELECT * FROM sn_memoryVerse
+WHERE reference = ?;
+
 insertOrReplace:
 INSERT OR REPLACE INTO sn_memoryVerse (uuid, text, reference, version, verse_url, notice, created_at, updated_at)
 VALUES ?;

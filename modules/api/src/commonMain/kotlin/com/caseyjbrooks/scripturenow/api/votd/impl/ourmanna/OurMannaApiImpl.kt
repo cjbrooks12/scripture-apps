@@ -1,19 +1,21 @@
 package com.caseyjbrooks.scripturenow.api.votd.impl.ourmanna
 
 import com.caseyjbrooks.scripturenow.api.votd.VerseOfTheDayApi
+import com.caseyjbrooks.scripturenow.api.votd.impl.ourmanna.models.OurMannaVotdResponse
 import com.caseyjbrooks.scripturenow.models.votd.VerseOfTheDay
+import com.caseyjbrooks.scripturenow.utils.converter.Converter
 import com.caseyjbrooks.scripturenow.utils.now
 import kotlinx.datetime.LocalDate
 
 internal class OurMannaApiImpl(
     private val api: OurMannaApi,
-    private val converter: OurMannaApiConverter,
+    private val converter: Converter<Pair<LocalDate, OurMannaVotdResponse>, VerseOfTheDay>,
 ) : VerseOfTheDayApi {
 
     override suspend fun getTodaysVerseOfTheDay(): VerseOfTheDay {
         return api
             .getVerseOfTheDay(order = OurMannaApi.VerseOfTheDayOrder.daily.name)
-            .let { converter.convertApiModelToRepositoryModel(LocalDate.now(), it) }
+            .let { converter.convertValue(LocalDate.now() to it) }
     }
 
     override suspend fun getHistoricalVerseOfTheDay(date: LocalDate): VerseOfTheDay {
@@ -23,6 +25,6 @@ internal class OurMannaApiImpl(
     override suspend fun getRandomVerseOfTheDay(): VerseOfTheDay {
         return api
             .getVerseOfTheDay(order = OurMannaApi.VerseOfTheDayOrder.random.name)
-            .let { converter.convertApiModelToRepositoryModel(LocalDate.now(), it) }
+            .let { converter.convertValue(LocalDate.now() to it) }
     }
 }

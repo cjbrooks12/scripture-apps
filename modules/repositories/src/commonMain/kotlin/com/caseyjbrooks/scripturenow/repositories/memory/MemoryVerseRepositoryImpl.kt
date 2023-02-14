@@ -1,14 +1,19 @@
 package com.caseyjbrooks.scripturenow.repositories.memory
 
 import com.benasher44.uuid.Uuid
+import com.caseyjbrooks.scripturenow.models.VerseReference
 import com.caseyjbrooks.scripturenow.models.memory.MemoryVerse
 import com.caseyjbrooks.scripturenow.models.votd.VerseOfTheDay
+import com.caseyjbrooks.scripturenow.repositories.FormLoader
+import com.caseyjbrooks.scripturenow.utils.referenceText
 import com.copperleaf.ballast.*
 import com.copperleaf.ballast.core.BasicViewModel
 import com.copperleaf.ballast.core.BootstrapInterceptor
 import com.copperleaf.ballast.core.FifoInputStrategy
 import com.copperleaf.ballast.repository.cache.Cached
 import com.copperleaf.ballast.repository.cache.map
+import com.copperleaf.forms.core.ui.UiSchema
+import com.copperleaf.json.schema.JsonSchema
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -17,6 +22,7 @@ public class MemoryVerseRepositoryImpl(
     coroutineScope: CoroutineScope,
     configBuilder: BallastViewModelConfiguration.Builder,
     inputHandler: MemoryVerseRepositoryInputHandler,
+    private val memoryVerseFormLoader: FormLoader,
 ) : BasicViewModel<
         MemoryVerseRepositoryContract.Inputs,
         MemoryVerseRepositoryContract.Events,
@@ -44,7 +50,7 @@ public class MemoryVerseRepositoryImpl(
             .map { it.memoryVerseList }
     }
 
-    override fun getVerse(uuid: Uuid, refreshCache: Boolean): Flow<Cached<MemoryVerse>> {
+    override fun getVerseById(uuid: Uuid, refreshCache: Boolean): Flow<Cached<MemoryVerse>> {
         trySend(MemoryVerseRepositoryContract.Inputs.RefreshMemoryVerseList(refreshCache))
         return observeStates()
             .map {
@@ -54,6 +60,22 @@ public class MemoryVerseRepositoryImpl(
                         memoryVerses.single { verse -> verse.uuid == uuid }
                     }
             }
+    }
+
+    override fun getVerseByReference(reference: VerseReference, refreshCache: Boolean): Flow<Cached<MemoryVerse>> {
+        trySend(MemoryVerseRepositoryContract.Inputs.RefreshMemoryVerseList(refreshCache))
+        return observeStates()
+            .map {
+                it
+                    .memoryVerseList
+                    .map { memoryVerses ->
+                        memoryVerses.single { verse -> verse.reference.referenceText == reference.referenceText }
+                    }
+            }
+    }
+
+    override fun loadForm(): Flow<Cached<Pair<JsonSchema, UiSchema>>> {
+        return memoryVerseFormLoader.loadForm()
     }
 
     override suspend fun createOrUpdateVerse(verse: MemoryVerse) {
