@@ -27,9 +27,14 @@ getByReference:
 SELECT * FROM sn_memoryVerse
 WHERE reference = ?;
 
-updateMainVerse:
+changeMainVerse:
 UPDATE sn_memoryVerse
 SET main = (uuid = ?);
+
+clearMainVerse:
+UPDATE sn_memoryVerse
+SET main = 0
+WHERE main = 1;
 
 insertOrReplace:
 INSERT OR REPLACE INTO sn_memoryVerse (uuid, main, text, reference, version, verse_url, notice, created_at, updated_at)

@@ -1,10 +1,15 @@
 package com.caseyjbrooks.scripturenow.viewmodel.home
 
+import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
 import com.caseyjbrooks.scripturenow.repositories.memory.MemoryVerseRepository
 import com.caseyjbrooks.scripturenow.repositories.votd.VerseOfTheDayRepository
 import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
+import com.copperleaf.ballast.navigation.routing.build
+import com.copperleaf.ballast.navigation.routing.directions
+import com.copperleaf.ballast.navigation.routing.path
 import com.copperleaf.ballast.observeFlows
+import com.copperleaf.ballast.repository.cache.getCachedOrNull
 import kotlinx.coroutines.flow.map
 
 public class HomeInputHandler(
@@ -26,9 +31,9 @@ public class HomeInputHandler(
                 verseOfTheDayRepository
                     .getCurrentVerseOfTheDay(false)
                     .map { HomeContract.Inputs.VerseOfTheDayUpdated(it) },
-//                memoryVerseRepository
-//                    .getVerse(false)
-//                    .map { HomeContract.Inputs.MemoryVerseUpdated(it) },
+                memoryVerseRepository
+                    .getMainVerse(false)
+                    .map { HomeContract.Inputs.MainMemoryVerseUpdated(it) },
             )
         }
 
@@ -36,11 +41,41 @@ public class HomeInputHandler(
             updateState { it.copy(verseOfTheDay = input.verseOfTheDay) }
         }
 
-        is HomeContract.Inputs.MemoryVerseUpdated -> {
-            updateState { it.copy(memoryVerse = input.memoryVerse) }
+        is HomeContract.Inputs.MainMemoryVerseUpdated -> {
+            updateState { it.copy(mainMemoryVerse = input.mainMemoryVerse) }
         }
+
         is HomeContract.Inputs.VerseOfTheDayCardClicked -> {
-            postEvent(HomeContract.Events.GoToVerseOfTheDay)
+            postEvent(
+                HomeContract.Events.NavigateTo(
+                    ScriptureNowRoute.VerseOfTheDay
+                        .directions()
+                        .build()
+                )
+            )
+        }
+
+        is HomeContract.Inputs.MemoryVerseCardClicked -> {
+            val currentMemoryVerse = getCurrentState().mainMemoryVerse.getCachedOrNull()
+
+            if (currentMemoryVerse != null) {
+                postEvent(
+                    HomeContract.Events.NavigateTo(
+                        ScriptureNowRoute.MemoryVerseDetails
+                            .directions()
+                            .path(currentMemoryVerse.uuid.toString())
+                            .build()
+                    )
+                )
+            } else {
+                postEvent(
+                    HomeContract.Events.NavigateTo(
+                        ScriptureNowRoute.MemoryVerseList
+                            .directions()
+                            .build()
+                    )
+                )
+            }
         }
     }
 }

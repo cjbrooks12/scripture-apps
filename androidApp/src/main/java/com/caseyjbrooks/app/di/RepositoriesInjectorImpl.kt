@@ -3,6 +3,7 @@ package com.caseyjbrooks.app.di
 import com.caseyjbrooks.scripturenow.appwidgets.memory.MemoryVerseWidgetInterceptor
 import com.caseyjbrooks.scripturenow.appwidgets.votd.VerseOfTheDayWidgetInterceptor
 import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
+import com.caseyjbrooks.scripturenow.notifications.memory.MemoryVerseNotificationInterceptor
 import com.caseyjbrooks.scripturenow.repositories.AndroidAssetsFormLoader
 import com.caseyjbrooks.scripturenow.repositories.RepositoriesInjector
 import com.caseyjbrooks.scripturenow.repositories.auth.AuthRepository
@@ -63,6 +64,7 @@ class RepositoriesInjectorImpl(
             configBuilder = getRepositoryBuilder()
                 .apply {
                     this += MemoryVerseWidgetInterceptor(appInjector.applicationContext)
+                    this += MemoryVerseNotificationInterceptor(appInjector.applicationContext)
                 },
             inputHandler = MemoryVerseRepositoryInputHandler(
                 db = dataSourcesInjector.getMemoryVerseDb(),

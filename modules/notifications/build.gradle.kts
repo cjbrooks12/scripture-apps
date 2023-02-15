@@ -19,6 +19,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":modules:repositories"))
+                api(libs.androidx.core)
             }
         }
         val commonTest by getting {

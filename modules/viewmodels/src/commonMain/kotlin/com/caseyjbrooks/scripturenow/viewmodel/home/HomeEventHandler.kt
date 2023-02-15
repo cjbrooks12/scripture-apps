@@ -4,8 +4,6 @@ import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
 import com.copperleaf.ballast.EventHandler
 import com.copperleaf.ballast.EventHandlerScope
 import com.copperleaf.ballast.navigation.routing.RouterContract
-import com.copperleaf.ballast.navigation.routing.build
-import com.copperleaf.ballast.navigation.routing.directions
 import com.copperleaf.ballast.navigation.vm.Router
 
 public class HomeEventHandler(
@@ -20,12 +18,12 @@ public class HomeEventHandler(
             HomeContract.State>.handleEvent(
         event: HomeContract.Events
     ): Unit = when (event) {
-        is HomeContract.Events.GoToVerseOfTheDay -> {
-            router.send(
-                RouterContract.Inputs.GoToDestination(
-                    ScriptureNowRoute.VerseOfTheDay.directions().build()
-                )
-            )
+        is HomeContract.Events.NavigateTo -> {
+            router.send(RouterContract.Inputs.GoToDestination(event.destination))
+        }
+
+        is HomeContract.Events.NavigateBack -> {
+            router.send(RouterContract.Inputs.GoBack())
         }
     }
 }

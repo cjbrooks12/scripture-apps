@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.Flow
 
 public interface MemoryVerseRepository {
 
+    public fun getMainVerse(refreshCache: Boolean = false): Flow<Cached<MemoryVerse>>
     public fun getAllVerses(refreshCache: Boolean = false): Flow<Cached<List<MemoryVerse>>>
     public fun getVerseById(uuid: Uuid, refreshCache: Boolean = false): Flow<Cached<MemoryVerse>>
     public fun getVerseByReference(reference: VerseReference, refreshCache: Boolean = false): Flow<Cached<MemoryVerse>>
@@ -19,5 +20,6 @@ public interface MemoryVerseRepository {
     public suspend fun createOrUpdateVerse(verse: MemoryVerse)
     public suspend fun saveAsMemoryVerse(verse: VerseOfTheDay)
     public suspend fun setAsMainMemoryVerse(verse: MemoryVerse)
+    public suspend fun clearMainMemoryVerse()
     public suspend fun deleteVerse(verse: MemoryVerse)
 }

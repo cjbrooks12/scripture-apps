@@ -7,17 +7,20 @@ import com.copperleaf.ballast.repository.cache.Cached
 public object HomeContract {
     public data class State(
         val verseOfTheDay: Cached<VerseOfTheDay> = Cached.NotLoaded(),
-        val memoryVerse: Cached<MemoryVerse> = Cached.NotLoaded(),
+        val mainMemoryVerse: Cached<MemoryVerse> = Cached.NotLoaded(),
     )
 
     public sealed class Inputs {
         public object Initialize : Inputs()
         public data class VerseOfTheDayUpdated(val verseOfTheDay: Cached<VerseOfTheDay>) : Inputs()
-        public data class MemoryVerseUpdated(val memoryVerse: Cached<MemoryVerse>) : Inputs()
+        public data class MainMemoryVerseUpdated(val mainMemoryVerse: Cached<MemoryVerse>) : Inputs()
+
         public object VerseOfTheDayCardClicked : Inputs()
+        public object MemoryVerseCardClicked : Inputs()
     }
 
     public sealed class Events {
-        public object GoToVerseOfTheDay : Events()
+        public data class NavigateTo(val destination: String) : Events()
+        public object NavigateBack : Events()
     }
 }

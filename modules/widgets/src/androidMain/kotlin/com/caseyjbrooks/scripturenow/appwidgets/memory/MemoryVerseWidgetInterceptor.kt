@@ -5,7 +5,6 @@ import com.caseyjbrooks.scripturenow.appwidgets.ScriptureNowAppWidgetInterceptor
 import com.caseyjbrooks.scripturenow.models.memory.MemoryVerse
 import com.caseyjbrooks.scripturenow.repositories.memory.MemoryVerseRepositoryContract
 import com.copperleaf.ballast.repository.cache.Cached
-import com.copperleaf.ballast.repository.cache.map
 
 public class MemoryVerseWidgetInterceptor(
     applicationContext: Context,
@@ -17,9 +16,5 @@ public class MemoryVerseWidgetInterceptor(
         >(
     applicationContext = applicationContext,
     getWidget = ::MemoryVerseWidget,
-    selectProperty = {
-        it
-            .memoryVerseList
-            .map { verses -> verses.single { it.main } }
-    },
+    selectProperty = { it.mainMemoryVerse },
 )

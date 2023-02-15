@@ -53,6 +53,12 @@ public class MemoryVerseDetailsInputHandler(
             }
         }
 
+        is MemoryVerseDetailsContract.Inputs.ClearMainVerse -> {
+            sideJob("clearing main verse") {
+                memoryVerseRepository.clearMainMemoryVerse()
+            }
+        }
+
         is MemoryVerseDetailsContract.Inputs.EditVerse -> {
             postEvent(
                 MemoryVerseDetailsContract.Events.NavigateTo(

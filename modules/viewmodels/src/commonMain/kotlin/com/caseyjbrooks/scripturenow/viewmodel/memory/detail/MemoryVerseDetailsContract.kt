@@ -17,6 +17,7 @@ public object MemoryVerseDetailsContract {
         public data class MemoryVerseUpdated(val memoryVerse: Cached<MemoryVerse>) : Inputs()
 
         public object SetAsMainVerse : Inputs()
+        public object ClearMainVerse : Inputs()
         public object EditVerse : Inputs()
         public object DeleteVerse : Inputs()
         public object GoBack : Inputs()

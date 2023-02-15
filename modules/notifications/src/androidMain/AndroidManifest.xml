@@ -4,9 +4,11 @@
         xmlns:tools="http://schemas.android.com/tools"
         package="com.caseyjbrooks.scripturenow.notifications">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
     <application>
         <service
-                android:name="com.caseyjbrooks.scripturenow.notifications.ScriptureNowFirebaseNotificationService"
+                android:name="com.caseyjbrooks.scripturenow.notifications.push.ScriptureNowFirebaseNotificationService"
                 android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>

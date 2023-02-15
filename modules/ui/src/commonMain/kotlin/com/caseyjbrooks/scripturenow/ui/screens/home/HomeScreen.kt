@@ -41,7 +41,26 @@ public fun HomeScreen(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding()
+                    .clickable { postInput(HomeContract.Inputs.MemoryVerseCardClicked) }
+            ) {
+                Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+                    Text("Main Memory verse")
+
+                    if (state.mainMemoryVerse is Cached.FetchingFailed) {
+                        Text("No verse set")
+                    } else {
+                        state.mainMemoryVerse.getCachedOrNull()
+                            ?.let {
+                                Text(it.text)
+                                Text(it.reference.referenceText)
+                            }
+                    }
+                }
+            }
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
                     .clickable { postInput(HomeContract.Inputs.VerseOfTheDayCardClicked) }
             ) {
                 Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
@@ -50,21 +69,6 @@ public fun HomeScreen(
                     state.verseOfTheDay.getCachedOrNull()?.let {
                         Text(it.text)
                         Text(it.reference.referenceText)
-                    }
-                }
-            }
-            Card(modifier = Modifier.fillMaxWidth().padding()) {
-                Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-                    Text("Memory verse")
-
-                    if (state.memoryVerse is Cached.FetchingFailed) {
-                        Text("No verse set")
-                    } else {
-                        state.memoryVerse.getCachedOrNull()
-                            ?.let {
-                                Text(it.text)
-                                Text(it.reference.referenceText)
-                            }
                     }
                 }
             }
@@ -90,7 +94,7 @@ public fun LoginScreen(
 ) {
     var emailState by remember { mutableStateOf("") }
     LaunchedEffect(state.email) {
-        if(emailState != state.email) {
+        if (emailState != state.email) {
             emailState = state.email
         }
     }

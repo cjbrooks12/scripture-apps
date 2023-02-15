@@ -59,11 +59,20 @@ public fun MemoryVerseDetailsScreen(
 
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { postInput(MemoryVerseDetailsContract.Inputs.SetAsMainVerse) },
+                    onClick = {
+                        if (verse.main) {
+                            postInput(MemoryVerseDetailsContract.Inputs.ClearMainVerse)
+                        } else {
+                            postInput(MemoryVerseDetailsContract.Inputs.SetAsMainVerse)
+                        }
+                    },
                     colors = ButtonDefaults.filledTonalButtonColors(),
-                    enabled = !verse.main
                 ) {
-                    Text("Set As Main Verse")
+                    if (verse.main) {
+                        Text("Clear Main Verse")
+                    } else {
+                        Text("Set As Main Verse")
+                    }
                 }
                 Button(
                     modifier = Modifier.fillMaxWidth(),

@@ -1,4 +1,4 @@
-package com.caseyjbrooks.scripturenow.notifications
+package com.caseyjbrooks.scripturenow.notifications.push
 
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService

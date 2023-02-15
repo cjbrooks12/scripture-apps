@@ -44,6 +44,12 @@ public class MemoryVerseRepositoryImpl(
     eventHandler = eventHandler { },
 ), MemoryVerseRepository {
 
+    override fun getMainVerse(refreshCache: Boolean): Flow<Cached<MemoryVerse>> {
+        trySend(MemoryVerseRepositoryContract.Inputs.RefreshMemoryVerseList(refreshCache))
+        return observeStates()
+            .map { it.mainMemoryVerse }
+    }
+
     override fun getAllVerses(refreshCache: Boolean): Flow<Cached<List<MemoryVerse>>> {
         trySend(MemoryVerseRepositoryContract.Inputs.RefreshMemoryVerseList(refreshCache))
         return observeStates()
@@ -88,6 +94,10 @@ public class MemoryVerseRepositoryImpl(
 
     override suspend fun setAsMainMemoryVerse(verse: MemoryVerse) {
         send(MemoryVerseRepositoryContract.Inputs.SetAsMainVerse(verse))
+    }
+
+    override suspend fun clearMainMemoryVerse() {
+        send(MemoryVerseRepositoryContract.Inputs.ClearMainVerse)
     }
 
     override suspend fun deleteVerse(verse: MemoryVerse) {
