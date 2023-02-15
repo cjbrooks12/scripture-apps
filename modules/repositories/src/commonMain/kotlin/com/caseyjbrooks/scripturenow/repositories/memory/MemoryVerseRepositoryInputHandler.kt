@@ -82,6 +82,12 @@ public class MemoryVerseRepositoryInputHandler(
             }
         }
 
+        is MemoryVerseRepositoryContract.Inputs.SetAsMainVerse -> {
+            sideJob(input.toString()) {
+                db.setAsMainVerse(input.memoryVerse)
+            }
+        }
+
         is MemoryVerseRepositoryContract.Inputs.DeleteMemoryVerse -> {
             sideJob(input.toString()) {
                 db.deleteVerse(input.memoryVerse)

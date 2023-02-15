@@ -18,5 +18,6 @@ public interface MemoryVerseRepository {
 
     public suspend fun createOrUpdateVerse(verse: MemoryVerse)
     public suspend fun saveAsMemoryVerse(verse: VerseOfTheDay)
+    public suspend fun setAsMainMemoryVerse(verse: MemoryVerse)
     public suspend fun deleteVerse(verse: MemoryVerse)
 }

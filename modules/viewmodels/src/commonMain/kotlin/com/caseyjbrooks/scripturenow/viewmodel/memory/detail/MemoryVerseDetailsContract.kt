@@ -15,6 +15,8 @@ public object MemoryVerseDetailsContract {
     public sealed class Inputs {
         public data class Initialize(val verseUuid: Uuid) : Inputs()
         public data class MemoryVerseUpdated(val memoryVerse: Cached<MemoryVerse>) : Inputs()
+
+        public object SetAsMainVerse : Inputs()
         public object EditVerse : Inputs()
         public object DeleteVerse : Inputs()
         public object GoBack : Inputs()

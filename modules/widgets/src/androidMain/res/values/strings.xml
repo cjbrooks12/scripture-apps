@@ -1,3 +1,4 @@
 <resources>
     <string name="votd_widget_description">Display today\'s Verse of the Day</string>
+    <string name="memory_verse_widget_description">Show your main Memory Verse</string>
 </resources>

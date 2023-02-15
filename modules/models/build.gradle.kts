@@ -18,6 +18,7 @@ kotlin {
                 api(libs.kotlinx.datetime)
                 api(libs.benasher44.uuid)
                 api(libs.ballast.navigation)
+                api(libs.ballast.repository)
             }
         }
         val commonTest by getting {

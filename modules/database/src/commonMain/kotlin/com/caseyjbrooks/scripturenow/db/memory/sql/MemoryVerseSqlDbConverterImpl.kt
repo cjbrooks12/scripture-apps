@@ -14,7 +14,7 @@ internal class MemoryVerseSqlDbConverterImpl : MemoryVerseSqlDbConverter {
     ): MemoryVerse = with(dbModel) {
         MemoryVerse(
             uuid = dbModel.uuid,
-            main = false,
+            main = dbModel.main,
             text = dbModel.text,
             reference = dbModel.reference.parseVerseReference(),
             version = dbModel.version,
@@ -30,6 +30,7 @@ internal class MemoryVerseSqlDbConverterImpl : MemoryVerseSqlDbConverter {
     ): Sn_memoryVerse = with(repositoryModel) {
         Sn_memoryVerse(
             uuid = repositoryModel.uuid,
+            main = repositoryModel.main,
             text = repositoryModel.text,
             reference = repositoryModel.reference.referenceText,
             version = repositoryModel.version,

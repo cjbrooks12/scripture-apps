@@ -1,9 +1,11 @@
 import com.benasher44.uuid.Uuid;
+import kotlin.Boolean;
 import kotlinx.datetime.LocalDate;
 import kotlinx.datetime.LocalDateTime;
 
 CREATE TABLE sn_memoryVerse (
   uuid TEXT AS Uuid NOT NULL PRIMARY KEY,
+  main INTEGER AS Boolean NOT NULL,
   text TEXT NOT NULL,
   reference TEXT NOT NULL,
   version TEXT NOT NULL,
@@ -25,8 +27,12 @@ getByReference:
 SELECT * FROM sn_memoryVerse
 WHERE reference = ?;
 
+updateMainVerse:
+UPDATE sn_memoryVerse
+SET main = (uuid = ?);
+
 insertOrReplace:
-INSERT OR REPLACE INTO sn_memoryVerse (uuid, text, reference, version, verse_url, notice, created_at, updated_at)
+INSERT OR REPLACE INTO sn_memoryVerse (uuid, main, text, reference, version, verse_url, notice, created_at, updated_at)
 VALUES ?;
 
 delete:

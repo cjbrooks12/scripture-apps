@@ -21,6 +21,7 @@ public object MemoryVerseRepositoryContract {
         public data class MemoryVerseListUpdated(val memoryVerseList: Cached<List<MemoryVerse>>) : Inputs()
         public data class CreateOrUpdateMemoryVerse(val memoryVerse: MemoryVerse) : Inputs()
         public data class SaveAsMemoryVerse(val verseOfTheDay: VerseOfTheDay) : Inputs()
+        public data class SetAsMainVerse(val memoryVerse: MemoryVerse) : Inputs()
         public data class DeleteMemoryVerse(val memoryVerse: MemoryVerse) : Inputs()
     }
 

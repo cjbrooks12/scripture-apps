@@ -36,27 +36,35 @@ public fun MemoryVerseDetailsScreen(
     postInput: (MemoryVerseDetailsContract.Inputs) -> Unit,
 ) {
     BottomBarLayout(
-        title = { Text("Prayer Details") },
+        title = { Text("Verse Details") },
     ) {
         ScrollableContent {
             if (state.loading) {
                 CircularProgressIndicator()
             } else {
-                val prayer = state.memoryVerse.getCachedOrThrow()
+                val verse = state.memoryVerse.getCachedOrThrow()
                 Card(modifier = Modifier.fillMaxWidth().padding()) {
                     Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-                        Text(prayer.text)
-                        Text(prayer.reference.referenceText)
-                        Text(prayer.version)
-                        Text(prayer.notice)
-                        Text(prayer.verseUrl)
-                        Text("Created at: ${prayer.createdAt}")
-                        Text("Updated at: ${prayer.updatedAt}")
+                        Text(verse.text)
+                        Text(verse.reference.referenceText)
+                        Text(verse.version)
+                        Text(verse.notice)
+                        Text(verse.verseUrl)
+                        Text("Created at: ${verse.createdAt}")
+                        Text("Updated at: ${verse.updatedAt}")
                     }
                 }
 
                 Spacer(Modifier.weight(1f))
 
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { postInput(MemoryVerseDetailsContract.Inputs.SetAsMainVerse) },
+                    colors = ButtonDefaults.filledTonalButtonColors(),
+                    enabled = !verse.main
+                ) {
+                    Text("Set As Main Verse")
+                }
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = { postInput(MemoryVerseDetailsContract.Inputs.EditVerse) },

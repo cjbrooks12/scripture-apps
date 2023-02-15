@@ -12,4 +12,5 @@ public interface MemoryVerseDb {
 
     public suspend fun saveVerse(verse: MemoryVerse)
     public suspend fun deleteVerse(verse: MemoryVerse)
+    public suspend fun setAsMainVerse(verse: MemoryVerse)
 }

@@ -41,6 +41,18 @@ public class MemoryVerseDetailsInputHandler(
             postEvent(MemoryVerseDetailsContract.Events.NavigateBack)
         }
 
+        is MemoryVerseDetailsContract.Inputs.SetAsMainVerse -> {
+            val verse = getCurrentState().memoryVerse.getCachedOrNull()
+
+            if (verse == null) {
+                noOp()
+            } else {
+                sideJob("setting as main verse") {
+                    memoryVerseRepository.setAsMainMemoryVerse(verse)
+                }
+            }
+        }
+
         is MemoryVerseDetailsContract.Inputs.EditVerse -> {
             postEvent(
                 MemoryVerseDetailsContract.Events.NavigateTo(

@@ -1,5 +1,6 @@
 package com.caseyjbrooks.app.di
 
+import com.caseyjbrooks.scripturenow.appwidgets.memory.MemoryVerseWidgetInterceptor
 import com.caseyjbrooks.scripturenow.appwidgets.votd.VerseOfTheDayWidgetInterceptor
 import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
 import com.caseyjbrooks.scripturenow.repositories.AndroidAssetsFormLoader
@@ -59,7 +60,10 @@ class RepositoriesInjectorImpl(
     private val _memoryVerseRepository: MemoryVerseRepository by lazy {
         MemoryVerseRepositoryImpl(
             coroutineScope = appInjector.appCoroutineScope,
-            configBuilder = getRepositoryBuilder(),
+            configBuilder = getRepositoryBuilder()
+                .apply {
+                    this += MemoryVerseWidgetInterceptor(appInjector.applicationContext)
+                },
             inputHandler = MemoryVerseRepositoryInputHandler(
                 db = dataSourcesInjector.getMemoryVerseDb(),
                 verseOfTheDayToMemoryVerseConverter = VerseOfTheDayToMemoryVerseConverterImpl(),

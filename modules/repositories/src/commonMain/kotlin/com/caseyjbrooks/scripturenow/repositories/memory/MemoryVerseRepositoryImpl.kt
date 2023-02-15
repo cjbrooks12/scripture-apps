@@ -86,6 +86,10 @@ public class MemoryVerseRepositoryImpl(
         send(MemoryVerseRepositoryContract.Inputs.SaveAsMemoryVerse(verse))
     }
 
+    override suspend fun setAsMainMemoryVerse(verse: MemoryVerse) {
+        send(MemoryVerseRepositoryContract.Inputs.SetAsMainVerse(verse))
+    }
+
     override suspend fun deleteVerse(verse: MemoryVerse) {
         send(MemoryVerseRepositoryContract.Inputs.DeleteMemoryVerse(verse))
     }

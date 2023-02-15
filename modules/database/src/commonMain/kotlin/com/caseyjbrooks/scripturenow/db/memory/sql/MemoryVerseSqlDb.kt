@@ -50,4 +50,9 @@ internal class MemoryVerseSqlDb(
         queries
             .delete(verse.uuid)
     }
+
+    override suspend fun setAsMainVerse(verse: MemoryVerse) {
+        queries
+            .updateMainVerse(verse.uuid)
+    }
 }
