@@ -12,7 +12,7 @@ plugins {
 android {
     compileSdk = 33
     defaultConfig {
-        minSdk = 21
+        minSdk = 26
         targetSdk = 33
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true

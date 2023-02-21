@@ -14,6 +14,8 @@ public object AuthRepositoryContract {
         public object Initialize : Inputs()
         public data class AuthStateChanged(val authState: AuthState) : Inputs()
         public object RequestSignOut : Inputs()
+        public data class FirebaseInstallationIdUpdated(val firebaseInstallationId: String) : Inputs()
+        public data class FirebaseTokenUpdated(val token: String) : Inputs()
     }
 
     public sealed class Events

@@ -8,4 +8,7 @@ public interface AuthRepository {
     public fun clearAllCaches()
     public fun getAuthState(refreshCache: Boolean = false): Flow<AuthState>
     public fun signOut()
+
+    public fun firebaseInstallationIdUpdated(firebaseInstallationId: String)
+    public fun firebaseTokenUpdated(token: String)
 }

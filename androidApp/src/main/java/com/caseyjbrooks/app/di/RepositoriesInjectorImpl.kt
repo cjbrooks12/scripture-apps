@@ -55,7 +55,10 @@ class RepositoriesInjectorImpl(
         AuthRepositoryImpl(
             coroutineScope = appInjector.appCoroutineScope,
             configBuilder = getRepositoryBuilder(),
-            inputHandler = AuthRepositoryInputHandler(dataSourcesInjector.getSession()),
+            inputHandler = AuthRepositoryInputHandler(
+                session = dataSourcesInjector.getSession(),
+                preferences = dataSourcesInjector.getAppPreferences(),
+            ),
         )
     }
     private val _memoryVerseRepository: MemoryVerseRepository by lazy {

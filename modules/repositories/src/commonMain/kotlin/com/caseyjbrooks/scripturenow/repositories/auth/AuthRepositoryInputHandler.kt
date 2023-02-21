@@ -1,6 +1,7 @@
 package com.caseyjbrooks.scripturenow.repositories.auth
 
 import com.caseyjbrooks.scripturenow.api.auth.Session
+import com.caseyjbrooks.scripturenow.db.preferences.AppPreferences
 import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
 import com.copperleaf.ballast.observeFlows
@@ -8,14 +9,15 @@ import kotlinx.coroutines.flow.map
 
 public class AuthRepositoryInputHandler(
     private val session: Session,
+    private val preferences: AppPreferences,
 ) : InputHandler<
-    AuthRepositoryContract.Inputs,
-    AuthRepositoryContract.Events,
-    AuthRepositoryContract.State> {
-    override suspend fun InputHandlerScope<
         AuthRepositoryContract.Inputs,
         AuthRepositoryContract.Events,
-        AuthRepositoryContract.State>.handleInput(
+        AuthRepositoryContract.State> {
+    override suspend fun InputHandlerScope<
+            AuthRepositoryContract.Inputs,
+            AuthRepositoryContract.Events,
+            AuthRepositoryContract.State>.handleInput(
         input: AuthRepositoryContract.Inputs
     ): Unit = when (input) {
         is AuthRepositoryContract.Inputs.ClearCaches -> {
@@ -48,6 +50,17 @@ public class AuthRepositoryInputHandler(
         is AuthRepositoryContract.Inputs.RequestSignOut -> {
             sideJob("sign out") {
                 session.signOut()
+            }
+        }
+
+        is AuthRepositoryContract.Inputs.FirebaseTokenUpdated -> {
+            sideJob("save firebase token") {
+                preferences.firebaseToken = input.token
+            }
+        }
+        is AuthRepositoryContract.Inputs.FirebaseInstallationIdUpdated -> {
+            sideJob("save firebase installation ID") {
+                preferences.firebaseInstallationId = input.firebaseInstallationId
             }
         }
     }

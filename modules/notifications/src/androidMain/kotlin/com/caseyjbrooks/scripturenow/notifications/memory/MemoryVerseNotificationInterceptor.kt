@@ -1,16 +1,19 @@
 package com.caseyjbrooks.scripturenow.notifications.memory
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
-import android.content.Context.NOTIFICATION_SERVICE
-import android.os.Build
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import com.caseyjbrooks.scripturenow.models.memory.MemoryVerse
+import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
+import com.caseyjbrooks.scripturenow.notifications.NotificationChannelDescription
+import com.caseyjbrooks.scripturenow.notifications.NotificationDescription
+import com.caseyjbrooks.scripturenow.notifications.cancelNotification
+import com.caseyjbrooks.scripturenow.notifications.showNotification
 import com.caseyjbrooks.scripturenow.repositories.memory.MemoryVerseRepositoryContract
 import com.caseyjbrooks.scripturenow.utils.referenceText
 import com.copperleaf.ballast.*
+import com.copperleaf.ballast.navigation.routing.build
+import com.copperleaf.ballast.navigation.routing.directions
+import com.copperleaf.ballast.navigation.routing.path
 import com.copperleaf.ballast.repository.cache.getCachedOrNull
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.*
@@ -49,62 +52,42 @@ public class MemoryVerseNotificationInterceptor(
         }
     }
 
-    private fun BallastInterceptorScope<
-            MemoryVerseRepositoryContract.Inputs,
-            MemoryVerseRepositoryContract.Events,
-            MemoryVerseRepositoryContract.State>.removeNotification() {
-        logger.debug("Removing Notification")
-        NotificationManagerCompat
-            .from(applicationContext)
-            .cancel(MEMORY_VERSE_NOTIFICATION_ID)
+    private fun removeNotification() {
+        notificationDescription.cancelNotification(applicationContext)
     }
 
-    private fun BallastInterceptorScope<
-            MemoryVerseRepositoryContract.Inputs,
-            MemoryVerseRepositoryContract.Events,
-            MemoryVerseRepositoryContract.State>.showNotification(memoryVerse: MemoryVerse) {
-        logger.debug("Updating Notification")
-
-        // create the notification channel
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            applicationContext
-                .getSystemService(NOTIFICATION_SERVICE)
-                .let { it as NotificationManager }
-                .createNotificationChannel(
-                    NotificationChannel(
-                        MEMORY_VERSE_NOTIFICATION_CHANNEL,
-                        "Memory Verse",
-                        NotificationManager.IMPORTANCE_DEFAULT,
-                    )
-                        .apply { description = "Show an ongoing notification with your main memory verse" }
-                )
-        }
-
-        // show the notification in that channel
-        NotificationManagerCompat
-            .from(applicationContext)
-            .notify(
-                MEMORY_VERSE_NOTIFICATION_ID,
+    private fun showNotification(memoryVerse: MemoryVerse) {
+        notificationDescription.showNotification(
+            applicationContext = applicationContext,
+            deepLinkPath = ScriptureNowRoute.MemoryVerseDetails
+                .directions()
+                .path(memoryVerse.uuid.toString())
+                .build(),
+        ) {
+            setContentTitle(memoryVerse.reference.referenceText)
+            setContentText(memoryVerse.text)
+            setStyle(
                 NotificationCompat
-                    .Builder(applicationContext, MEMORY_VERSE_NOTIFICATION_CHANNEL)
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setCategory(NotificationCompat.CATEGORY_STATUS)
-                    .setOnlyAlertOnce(true)
-                    .setOngoing(true)
-                    .setSmallIcon(android.R.drawable.ic_notification_clear_all)
-                    .setContentTitle(memoryVerse.reference.referenceText)
-                    .setContentText(memoryVerse.text)
-                    .setStyle(
-                        NotificationCompat
-                            .BigTextStyle()
-                            .bigText(memoryVerse.text)
-                    )
-                    .build()
+                    .BigTextStyle()
+                    .bigText(memoryVerse.text)
             )
+        }
     }
 
     companion object {
-        const val MEMORY_VERSE_NOTIFICATION_ID = 1
-        const val MEMORY_VERSE_NOTIFICATION_CHANNEL = "memory verse"
+        private val notificationDescription = NotificationDescription(
+            channel = NotificationChannelDescription(
+                id = "memory verse",
+                name = "Memory Verse",
+                description = "Show an ongoing notification with your main memory verse",
+            ),
+            notificationId = 1,
+        ) {
+            setPriority(NotificationCompat.PRIORITY_LOW)
+            setCategory(NotificationCompat.CATEGORY_STATUS)
+            setOnlyAlertOnce(true)
+            setOngoing(true)
+            setSilent(true)
+        }
     }
 }

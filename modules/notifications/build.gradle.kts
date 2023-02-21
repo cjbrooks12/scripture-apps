@@ -40,6 +40,7 @@ kotlin {
                 implementation(project.dependencies.platform(libs.firebase.bom))
                 implementation(libs.firebase.cloudMessaging)
                 implementation(libs.firebase.inAppMessaging)
+                implementation(libs.androidx.startup)
             }
         }
         val androidUnitTest by getting {

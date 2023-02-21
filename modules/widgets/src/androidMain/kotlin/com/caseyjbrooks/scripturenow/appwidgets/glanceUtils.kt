@@ -33,12 +33,12 @@ fun BroadcastReceiver.launchInReceiver(
     context: CoroutineContext = EmptyCoroutineContext,
     block: suspend CoroutineScope.() -> Unit
 ) {
-    val pendingResult = goAsync()
+    val pendingResult: BroadcastReceiver.PendingResult? = goAsync()
     CoroutineScope(SupervisorJob()).launch(context) {
         try {
             block()
         } finally {
-            pendingResult.finish()
+            pendingResult?.finish()
         }
     }
 }

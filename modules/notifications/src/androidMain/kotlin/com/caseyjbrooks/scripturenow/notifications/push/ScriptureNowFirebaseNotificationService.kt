@@ -1,12 +1,21 @@
 package com.caseyjbrooks.scripturenow.notifications.push
 
 import android.util.Log
+import androidx.core.app.NotificationCompat
+import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
+import com.caseyjbrooks.scripturenow.notifications.NotificationChannelDescription
+import com.caseyjbrooks.scripturenow.notifications.NotificationDescription
+import com.caseyjbrooks.scripturenow.notifications.showNotification
+import com.caseyjbrooks.scripturenow.repositories.RepositoriesInjectorProvider
+import com.copperleaf.ballast.navigation.routing.build
+import com.copperleaf.ballast.navigation.routing.directions
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 class ScriptureNowFirebaseNotificationService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
-        Log.d(TAG, "Refreshed token: $token")
+        val mainInjector = (applicationContext as RepositoriesInjectorProvider).getRepositoriesInjector()
+        mainInjector.getAuthRepository().firebaseTokenUpdated(token)
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -20,44 +29,35 @@ class ScriptureNowFirebaseNotificationService : FirebaseMessagingService() {
         // Check if message contains a notification payload.
         remoteMessage.notification?.let {
             Log.d(TAG, "Message Notification Body: ${it.body}")
-            sendNotification(it.body ?: "")
+            sendNotification(it)
         }
     }
 
-    private fun sendNotification(messageBody: String) {
-//        val intent = Intent(this, MainActivity::class.java)
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//        val pendingIntent = PendingIntent.getActivity(
-//            this,
-//            0,
-//            intent,
-//            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
-//        )
-//
-//        val channelId = "fcm_default_channel"
-//        val notificationBuilder = NotificationCompat.Builder(
-//            this,
-//            channelId
-//        )
-//            .setSmallIcon(R.drawable.image_placeholder)
-//            .setContentTitle("FCM Message")
-//            .setContentText(messageBody)
-//            .setAutoCancel(true)
-//            .setContentIntent(pendingIntent)
-//
-//        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//
-//        val channel = NotificationChannel(
-//            channelId,
-//            "Channel human readable title",
-//            NotificationManager.IMPORTANCE_DEFAULT
-//        )
-//        notificationManager.createNotificationChannel(channel)
-//
-//        notificationManager.notify(0, notificationBuilder.build())
+    private fun sendNotification(remoteMessage: RemoteMessage.Notification) {
+        notificationDescription.showNotification(
+            applicationContext,
+            deepLinkPath = ScriptureNowRoute.Home
+                .directions()
+                .build(),
+        ) {
+            remoteMessage.title?.let { setContentTitle(it) }
+            remoteMessage.body?.let { setContentText(it) }
+            setAutoCancel(true)
+        }
     }
 
     companion object {
         internal const val TAG = "SN FB Notifications"
+        private val notificationDescription = NotificationDescription(
+            channel = NotificationChannelDescription(
+                id = "scripture now push",
+                name = "Push Notifications",
+                description = "Scripture Now Push Notifications",
+            ),
+            notificationId = 1,
+        ) {
+            setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            setCategory(NotificationCompat.CATEGORY_PROMO)
+        }
     }
 }

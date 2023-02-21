@@ -14,9 +14,9 @@ public class AuthRepositoryImpl(
     configBuilder: BallastViewModelConfiguration.Builder,
     inputHandler: AuthRepositoryInputHandler,
 ) : BasicViewModel<
-    AuthRepositoryContract.Inputs,
-    AuthRepositoryContract.Events,
-    AuthRepositoryContract.State>(
+        AuthRepositoryContract.Inputs,
+        AuthRepositoryContract.Events,
+        AuthRepositoryContract.State>(
     coroutineScope = coroutineScope,
     config = configBuilder
         .apply {
@@ -44,5 +44,13 @@ public class AuthRepositoryImpl(
 
     override fun signOut() {
         trySend(AuthRepositoryContract.Inputs.RequestSignOut)
+    }
+
+    override fun firebaseTokenUpdated(token: String) {
+        trySend(AuthRepositoryContract.Inputs.FirebaseTokenUpdated(token))
+    }
+
+    override fun firebaseInstallationIdUpdated(firebaseInstallationId: String) {
+        trySend(AuthRepositoryContract.Inputs.FirebaseInstallationIdUpdated(firebaseInstallationId))
     }
 }
