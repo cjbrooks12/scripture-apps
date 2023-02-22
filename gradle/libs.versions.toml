@@ -61,7 +61,6 @@ firebase-auth = { module = "com.google.firebase:firebase-auth-ktx" }
 firebase-auth-ui = { module = "com.firebaseui:firebase-ui-auth", version = "7.2.0" }
 
 multiplatformSettings-core = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
-multiplatformSettings-noArg = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatformSettings" }
 multiplatformSettings-test = { module = "com.russhwolf:multiplatform-settings-test", version.ref = "multiplatformSettings" }
 
 benasher44-uuid = { module = "com.benasher44:uuid", version = "0.6.0" }

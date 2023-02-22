@@ -22,7 +22,6 @@ kotlin {
                 api(libs.ballast.repository)
 
                 api(libs.multiplatformSettings.core)
-                api(libs.multiplatformSettings.noArg)
 
                 api(libs.ktor.client.core)
                 implementation(libs.ktor.client.logging)
