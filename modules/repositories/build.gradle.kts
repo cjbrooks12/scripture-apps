@@ -34,7 +34,9 @@ kotlin {
 
         // Android JVM Sourcesets
         val androidMain by getting {
-            dependencies { }
+            dependencies {
+                implementation(libs.androidx.core)
+            }
         }
         val androidUnitTest by getting {
             dependencies { }

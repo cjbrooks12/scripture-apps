@@ -1,10 +1,7 @@
 package com.caseyjbrooks.scripturenow.notifications
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
-import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -36,19 +33,7 @@ fun NotificationDescription.showNotification(
     deepLinkPath: String,
     configure: NotificationCompat.Builder.() -> Unit = { },
 ) {
-    // create the notification channel
-    applicationContext
-        .getSystemService(NOTIFICATION_SERVICE)
-        .let { it as NotificationManager }
-        .createNotificationChannel(
-            NotificationChannel(
-                channel.id,
-                channel.name,
-                NotificationManager.IMPORTANCE_DEFAULT,
-            ).apply { description = channel.description }
-        )
 
-    // show the notification in that channel
     NotificationManagerCompat
         .from(applicationContext)
         .notify(

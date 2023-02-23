@@ -3,7 +3,6 @@ package com.caseyjbrooks.app.di
 import com.caseyjbrooks.scripturenow.appwidgets.memory.MemoryVerseWidgetInterceptor
 import com.caseyjbrooks.scripturenow.appwidgets.votd.VerseOfTheDayWidgetInterceptor
 import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
-import com.caseyjbrooks.scripturenow.notifications.memory.MemoryVerseNotificationInterceptor
 import com.caseyjbrooks.scripturenow.repositories.AndroidAssetsFormLoader
 import com.caseyjbrooks.scripturenow.repositories.RepositoriesInjector
 import com.caseyjbrooks.scripturenow.repositories.auth.AuthRepository
@@ -12,6 +11,10 @@ import com.caseyjbrooks.scripturenow.repositories.auth.AuthRepositoryInputHandle
 import com.caseyjbrooks.scripturenow.repositories.memory.MemoryVerseRepository
 import com.caseyjbrooks.scripturenow.repositories.memory.MemoryVerseRepositoryImpl
 import com.caseyjbrooks.scripturenow.repositories.memory.MemoryVerseRepositoryInputHandler
+import com.caseyjbrooks.scripturenow.repositories.notifications.AndroidNotificationsEventHandler
+import com.caseyjbrooks.scripturenow.repositories.notifications.NotificationsRepository
+import com.caseyjbrooks.scripturenow.repositories.notifications.NotificationsRepositoryImpl
+import com.caseyjbrooks.scripturenow.repositories.notifications.NotificationsRepositoryInputHandler
 import com.caseyjbrooks.scripturenow.repositories.prayer.PrayerRepository
 import com.caseyjbrooks.scripturenow.repositories.prayer.PrayerRepositoryImpl
 import com.caseyjbrooks.scripturenow.repositories.prayer.PrayerRepositoryInputHandler
@@ -51,53 +54,53 @@ class RepositoriesInjectorImpl(
             }
     }
 
-    private val _authRepository: AuthRepository by lazy {
-        AuthRepositoryImpl(
-            coroutineScope = appInjector.appCoroutineScope,
-            configBuilder = getRepositoryBuilder(),
-            inputHandler = AuthRepositoryInputHandler(
-                session = dataSourcesInjector.getSession(),
-                preferences = dataSourcesInjector.getAppPreferences(),
-            ),
-        )
-    }
-    private val _memoryVerseRepository: MemoryVerseRepository by lazy {
-        MemoryVerseRepositoryImpl(
-            coroutineScope = appInjector.appCoroutineScope,
-            configBuilder = getRepositoryBuilder()
-                .apply {
-                    this += MemoryVerseWidgetInterceptor(appInjector.applicationContext)
-                    this += MemoryVerseNotificationInterceptor(appInjector.applicationContext)
-                },
-            inputHandler = MemoryVerseRepositoryInputHandler(
-                db = dataSourcesInjector.getMemoryVerseDb(),
-                verseOfTheDayToMemoryVerseConverter = VerseOfTheDayToMemoryVerseConverterImpl(),
-            ),
-            memoryVerseFormLoader = AndroidAssetsFormLoader(appInjector.applicationContext, "memory"),
-        )
-    }
-    private val _prayerRepository: PrayerRepository by lazy {
-        PrayerRepositoryImpl(
-            coroutineScope = appInjector.appCoroutineScope,
-            configBuilder = getRepositoryBuilder(),
-            inputHandler = PrayerRepositoryInputHandler(dataSourcesInjector.getPrayerDb()),
-            prayerFormLoader = AndroidAssetsFormLoader(appInjector.applicationContext, "prayer"),
-        )
-    }
     private lateinit var _router: Router<ScriptureNowRoute>
-    private val _verseOfTheDayRepository: VerseOfTheDayRepository by lazy {
-        VerseOfTheDayRepositoryImpl(
-            coroutineScope = appInjector.appCoroutineScope,
-            configBuilder = getRepositoryBuilder()
-                .apply {
-                    this += VerseOfTheDayWidgetInterceptor(appInjector.applicationContext)
-                },
-            inputHandler = VerseOfTheDayRepositoryInputHandler(
-                api = dataSourcesInjector.getVerseOfTheDayApi(),
-                db = dataSourcesInjector.getVerseOfTheDayDb(),
-            ),
-        )
-    }
+
+    private val _authRepository: AuthRepository = AuthRepositoryImpl(
+        coroutineScope = appInjector.appCoroutineScope,
+        configBuilder = getRepositoryBuilder(),
+        inputHandler = AuthRepositoryInputHandler(
+            session = dataSourcesInjector.getSession(),
+            preferences = dataSourcesInjector.getAppPreferences(),
+        ),
+    )
+    private val _memoryVerseRepository: MemoryVerseRepository = MemoryVerseRepositoryImpl(
+        coroutineScope = appInjector.appCoroutineScope,
+        configBuilder = getRepositoryBuilder()
+            .apply {
+                this += MemoryVerseWidgetInterceptor(appInjector.applicationContext)
+            },
+        inputHandler = MemoryVerseRepositoryInputHandler(
+            db = dataSourcesInjector.getMemoryVerseDb(),
+            verseOfTheDayToMemoryVerseConverter = VerseOfTheDayToMemoryVerseConverterImpl(),
+        ),
+        memoryVerseFormLoader = AndroidAssetsFormLoader(appInjector.applicationContext, "memory"),
+    )
+    private val _notificationsRepository: NotificationsRepository = NotificationsRepositoryImpl(
+        coroutineScope = appInjector.appCoroutineScope,
+        configBuilder = getRepositoryBuilder(),
+        inputHandler = NotificationsRepositoryInputHandler(
+            memoryVerseRepository = _memoryVerseRepository,
+        ),
+        eventHandler = AndroidNotificationsEventHandler(appInjector.applicationContext),
+    )
+    private val _prayerRepository: PrayerRepository = PrayerRepositoryImpl(
+        coroutineScope = appInjector.appCoroutineScope,
+        configBuilder = getRepositoryBuilder(),
+        inputHandler = PrayerRepositoryInputHandler(dataSourcesInjector.getPrayerDb()),
+        prayerFormLoader = AndroidAssetsFormLoader(appInjector.applicationContext, "prayer"),
+    )
+    private val _verseOfTheDayRepository: VerseOfTheDayRepository = VerseOfTheDayRepositoryImpl(
+        coroutineScope = appInjector.appCoroutineScope,
+        configBuilder = getRepositoryBuilder()
+            .apply {
+                this += VerseOfTheDayWidgetInterceptor(appInjector.applicationContext)
+            },
+        inputHandler = VerseOfTheDayRepositoryInputHandler(
+            api = dataSourcesInjector.getVerseOfTheDayApi(),
+            db = dataSourcesInjector.getVerseOfTheDayDb(),
+        ),
+    )
 
     override fun getAuthRepository(): AuthRepository {
         return _authRepository
@@ -148,6 +151,10 @@ class RepositoriesInjectorImpl(
 
     override fun getVerseOfTheDayRepository(): VerseOfTheDayRepository {
         return _verseOfTheDayRepository
+    }
+
+    override fun getNotificationsRepository(): NotificationsRepository {
+        return _notificationsRepository
     }
 
     private var backstackEmptiedCallbacks = mutableMapOf<Any, () -> Unit>()

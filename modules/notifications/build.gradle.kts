@@ -19,7 +19,6 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":modules:repositories"))
-                api(libs.androidx.core)
             }
         }
         val commonTest by getting {
@@ -41,6 +40,7 @@ kotlin {
                 implementation(libs.firebase.cloudMessaging)
                 implementation(libs.firebase.inAppMessaging)
                 implementation(libs.androidx.startup)
+                implementation(libs.androidx.core)
             }
         }
         val androidUnitTest by getting {

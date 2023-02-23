@@ -2,6 +2,7 @@ package com.caseyjbrooks.scripturenow.repositories
 
 import com.caseyjbrooks.scripturenow.repositories.auth.AuthRepositoryProvider
 import com.caseyjbrooks.scripturenow.repositories.memory.MemoryVerseRepositoryProvider
+import com.caseyjbrooks.scripturenow.repositories.notifications.NotificationsRepositoryProvider
 import com.caseyjbrooks.scripturenow.repositories.prayer.PrayerRepositoryProvider
 import com.caseyjbrooks.scripturenow.repositories.routing.ScriptureNowRouterProvider
 import com.caseyjbrooks.scripturenow.repositories.votd.VerseOfTheDayRepositoryProvider
@@ -11,7 +12,8 @@ public interface RepositoriesInjector :
     MemoryVerseRepositoryProvider,
     PrayerRepositoryProvider,
     ScriptureNowRouterProvider,
-    VerseOfTheDayRepositoryProvider {
+    VerseOfTheDayRepositoryProvider,
+    NotificationsRepositoryProvider {
 
     public fun registerBackstackEmptiedCallback(owner: Any, block: () -> Unit)
     public fun unregisterBackstackEmptiedCallback(owner: Any)
