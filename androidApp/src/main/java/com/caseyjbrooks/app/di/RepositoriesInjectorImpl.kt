@@ -81,6 +81,7 @@ class RepositoriesInjectorImpl(
         configBuilder = getRepositoryBuilder(),
         inputHandler = NotificationsRepositoryInputHandler(
             memoryVerseRepository = _memoryVerseRepository,
+            appPreferences = dataSourcesInjector.getAppPreferences(),
         ),
         eventHandler = AndroidNotificationsEventHandler(appInjector.applicationContext),
     )

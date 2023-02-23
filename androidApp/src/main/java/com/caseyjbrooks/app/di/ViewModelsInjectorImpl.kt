@@ -106,6 +106,7 @@ class ViewModelsInjectorImpl(
                     initialState = SettingsContract.State(),
                     inputHandler = SettingsInputHandler(
                         authRepository = repositories.getAuthRepository(),
+                        appPreferences = dataSourcesInjector.getAppPreferences(),
                     ),
                     name = "Settings"
                 )

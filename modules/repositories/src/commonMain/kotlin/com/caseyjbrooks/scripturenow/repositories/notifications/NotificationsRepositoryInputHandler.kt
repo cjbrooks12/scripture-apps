@@ -1,5 +1,6 @@
 package com.caseyjbrooks.scripturenow.repositories.notifications
 
+import com.caseyjbrooks.scripturenow.db.preferences.AppPreferences
 import com.caseyjbrooks.scripturenow.models.notifications.BasicNotification
 import com.caseyjbrooks.scripturenow.models.notifications.MemoryVerseNotification
 import com.caseyjbrooks.scripturenow.models.notifications.PushNotification
@@ -12,12 +13,13 @@ import com.copperleaf.ballast.navigation.routing.build
 import com.copperleaf.ballast.navigation.routing.directions
 import com.copperleaf.ballast.navigation.routing.path
 import com.copperleaf.ballast.observeFlows
+import com.copperleaf.ballast.postInput
 import com.copperleaf.ballast.repository.cache.getCachedOrNull
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 public class NotificationsRepositoryInputHandler(
     private val memoryVerseRepository: MemoryVerseRepository,
+    private val appPreferences: AppPreferences,
 ) : InputHandler<
         NotificationsRepositoryContract.Inputs,
         NotificationsRepositoryContract.Events,
@@ -33,16 +35,31 @@ public class NotificationsRepositoryInputHandler(
                 "memory verse",
                 memoryVerseRepository
                     .getMainVerse(false)
-                    .map { it.getCachedOrNull() }
-                    .distinctUntilChanged()
-                    .map {
-                        if (it != null) {
-                            NotificationsRepositoryContract.Inputs.ShowMemoryVerseNotification(it)
-                        } else {
-                            NotificationsRepositoryContract.Inputs.HideMemoryVerseNotification
-                        }
-                    },
+                    .map { NotificationsRepositoryContract.Inputs.MemoryVerseChanged(it) },
+                appPreferences
+                    .getShowMainVerse()
+                    .map { NotificationsRepositoryContract.Inputs.ShowMemoryVerseNotificationSettingChanged(it) },
             )
+        }
+
+        is NotificationsRepositoryContract.Inputs.MemoryVerseChanged -> {
+            val currentState = updateStateAndGet { it.copy(memoryVerse = input.memoryVerse) }
+            val memoryVerse = currentState.memoryVerse.getCachedOrNull()
+            if (memoryVerse != null && currentState.showMemoryVerse) {
+                postInput(NotificationsRepositoryContract.Inputs.ShowMemoryVerseNotification(memoryVerse))
+            } else {
+                postInput(NotificationsRepositoryContract.Inputs.HideMemoryVerseNotification)
+            }
+        }
+
+        is NotificationsRepositoryContract.Inputs.ShowMemoryVerseNotificationSettingChanged -> {
+            val currentState = updateStateAndGet { it.copy(showMemoryVerse = input.showMemoryVerse) }
+            val memoryVerse = currentState.memoryVerse.getCachedOrNull()
+            if (memoryVerse != null && currentState.showMemoryVerse) {
+                postInput(NotificationsRepositoryContract.Inputs.ShowMemoryVerseNotification(memoryVerse))
+            } else {
+                postInput(NotificationsRepositoryContract.Inputs.HideMemoryVerseNotification)
+            }
         }
 
         is NotificationsRepositoryContract.Inputs.ShowMemoryVerseNotification -> {

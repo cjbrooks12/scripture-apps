@@ -1,8 +1,8 @@
 package com.caseyjbrooks.scripturenow.ui.screens.settings
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Switch
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -32,9 +32,21 @@ public fun SettingsScreen(
         title = { Text("Settings") },
     ) {
         ScrollableContent {
-            Card(modifier = Modifier.fillMaxWidth().padding()) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding()
+                    .clickable { postInput(SettingsContract.Inputs.ToggleShowMainVerse) }
+            ) {
                 Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-                    Text("Welcome to Scripture Now!")
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        Text("Show Main Verse")
+
+                        Switch(
+                            checked = state.showMainVerse,
+                            onCheckedChange = null
+                        )
+                    }
                 }
             }
         }

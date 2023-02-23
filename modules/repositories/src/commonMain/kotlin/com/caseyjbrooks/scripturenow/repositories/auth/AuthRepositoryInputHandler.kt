@@ -55,12 +55,12 @@ public class AuthRepositoryInputHandler(
 
         is AuthRepositoryContract.Inputs.FirebaseTokenUpdated -> {
             sideJob("save firebase token") {
-                preferences.firebaseToken = input.token
+                preferences.setFirebaseToken(input.token)
             }
         }
         is AuthRepositoryContract.Inputs.FirebaseInstallationIdUpdated -> {
             sideJob("save firebase installation ID") {
-                preferences.firebaseInstallationId = input.firebaseInstallationId
+                preferences.setFirebaseInstallationId(input.firebaseInstallationId)
             }
         }
     }

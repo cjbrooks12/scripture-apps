@@ -1,5 +1,6 @@
 package com.caseyjbrooks.scripturenow.viewmodel.settings
 
+import com.caseyjbrooks.scripturenow.db.preferences.AppPreferences
 import com.caseyjbrooks.scripturenow.repositories.auth.AuthRepository
 import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.map
 
 public class SettingsInputHandler(
     private val authRepository: AuthRepository,
+    private val appPreferences: AppPreferences,
 ) : InputHandler<
         SettingsContract.Inputs,
         SettingsContract.Events,
@@ -33,7 +35,10 @@ public class SettingsInputHandler(
                 "auth state",
                 authRepository
                     .getAuthState(input.forceRefresh)
-                    .map { SettingsContract.Inputs.AuthStateChanged(it) }
+                    .map { SettingsContract.Inputs.AuthStateChanged(it) },
+                appPreferences
+                    .getShowMainVerse()
+                    .map { SettingsContract.Inputs.ShowMainVerseChanged(it) },
             )
         }
 
@@ -97,6 +102,17 @@ public class SettingsInputHandler(
 
         is SettingsContract.Inputs.UpdateAppButtonClicked -> {
             postEvent(SettingsContract.Events.RequestNativeAppUpdate)
+        }
+
+        is SettingsContract.Inputs.ShowMainVerseChanged -> {
+            updateState { it.copy(showMainVerse = input.showMainVerse) }
+        }
+
+        is SettingsContract.Inputs.ToggleShowMainVerse -> {
+            val currentState = getCurrentState()
+            sideJob("ToggleShowMainVerse") {
+                appPreferences.setShowMainVerse(!currentState.showMainVerse)
+            }
         }
     }
 }

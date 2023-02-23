@@ -18,6 +18,9 @@ public object SettingsContract {
         val updateIsAvailable: Boolean = false,
         val currentVersion: String = "",
         val latestVersion: String = "",
+
+        // preferences
+        val showMainVerse: Boolean = false,
     )
 
     public sealed class Inputs {
@@ -43,6 +46,10 @@ public object SettingsContract {
         // updates
         public data class AppVersionsChanged(val currentVersion: String, val latestVersion: String) : Inputs()
         public object UpdateAppButtonClicked : Inputs()
+
+        // preferences
+        public data class ShowMainVerseChanged(val showMainVerse: Boolean) : Inputs()
+        public object ToggleShowMainVerse : Inputs()
     }
 
     public sealed class Events {

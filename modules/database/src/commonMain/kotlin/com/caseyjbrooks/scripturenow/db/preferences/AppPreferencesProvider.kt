@@ -1,10 +1,10 @@
 package com.caseyjbrooks.scripturenow.db.preferences
 
-import com.russhwolf.settings.Settings
+import com.russhwolf.settings.ObservableSettings
 
 public object AppPreferencesProvider {
     public fun get(
-        settings: Settings,
+        settings: ObservableSettings,
     ): AppPreferences {
         return AppPreferencesImpl(
             settings = settings
