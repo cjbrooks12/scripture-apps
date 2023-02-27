@@ -43,23 +43,13 @@ public class NotificationsRepositoryInputHandler(
         }
 
         is NotificationsRepositoryContract.Inputs.MemoryVerseChanged -> {
-            val currentState = updateStateAndGet { it.copy(memoryVerse = input.memoryVerse) }
-            val memoryVerse = currentState.memoryVerse.getCachedOrNull()
-            if (memoryVerse != null && currentState.showMemoryVerse) {
-                postInput(NotificationsRepositoryContract.Inputs.ShowMemoryVerseNotification(memoryVerse))
-            } else {
-                postInput(NotificationsRepositoryContract.Inputs.HideMemoryVerseNotification)
-            }
+            updateState { it.copy(memoryVerse = input.memoryVerse) }
+            updateMainVerse()
         }
 
         is NotificationsRepositoryContract.Inputs.ShowMemoryVerseNotificationSettingChanged -> {
-            val currentState = updateStateAndGet { it.copy(showMemoryVerse = input.showMemoryVerse) }
-            val memoryVerse = currentState.memoryVerse.getCachedOrNull()
-            if (memoryVerse != null && currentState.showMemoryVerse) {
-                postInput(NotificationsRepositoryContract.Inputs.ShowMemoryVerseNotification(memoryVerse))
-            } else {
-                postInput(NotificationsRepositoryContract.Inputs.HideMemoryVerseNotification)
-            }
+            updateState { it.copy(showMemoryVerse = input.showMemoryVerse) }
+            updateMainVerse()
         }
 
         is NotificationsRepositoryContract.Inputs.ShowMemoryVerseNotification -> {
@@ -105,6 +95,22 @@ public class NotificationsRepositoryInputHandler(
 //            postEvent(
 //                NotificationsContract.Events.ShowNotification()
 //            )
+        }
+    }
+
+// Utils
+// ---------------------------------------------------------------------------------------------------------------------
+
+    private suspend fun InputHandlerScope<
+            NotificationsRepositoryContract.Inputs,
+            NotificationsRepositoryContract.Events,
+            NotificationsRepositoryContract.State>.updateMainVerse() {
+        val currentState = getCurrentState()
+        val memoryVerse = currentState.memoryVerse.getCachedOrNull()
+        if (memoryVerse != null && currentState.showMemoryVerse) {
+            postInput(NotificationsRepositoryContract.Inputs.ShowMemoryVerseNotification(memoryVerse))
+        } else {
+            postInput(NotificationsRepositoryContract.Inputs.HideMemoryVerseNotification)
         }
     }
 }

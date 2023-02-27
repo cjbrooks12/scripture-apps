@@ -14,7 +14,7 @@ internal class AppPreferencesImpl(
     private val verseOfTheDayService = EnumSettingsProperty(
         settings,
         "verseOfTheDayService",
-        VerseOfTheDayService.OurManna,
+        VerseOfTheDayService.Default,
         VerseOfTheDayService::valueOf,
     )
     private val firebaseInstallationId = StringSettingsProperty(settings, "firebaseInstallationId")

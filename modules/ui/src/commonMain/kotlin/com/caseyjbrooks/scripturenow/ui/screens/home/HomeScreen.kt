@@ -69,6 +69,7 @@ public fun HomeScreen(
                     state.verseOfTheDay.getCachedOrNull()?.let {
                         Text(it.text)
                         Text(it.reference.referenceText)
+                        Text(it.notice)
                     }
                 }
             }

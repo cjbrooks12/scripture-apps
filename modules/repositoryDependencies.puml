@@ -1,0 +1,35 @@
+@startuml
+
+database "Data Sources" {
+    [Session]
+    [AppPreferences]
+    [MemoryVerseDb]
+    [PrayerDb]
+    [VerseOfTheDayApi]
+    [VerseOfTheDayDb]
+}
+
+node {
+    [AuthRepository]
+    [MemoryVerseRepository]
+    [NotificationsRepository]
+    [PrayerRepository]
+    [VerseOfTheDayRepository]
+    [Router]
+}
+
+Session --> AuthRepository
+AppPreferences --> AuthRepository
+
+MemoryVerseDb --> MemoryVerseRepository
+
+MemoryVerseRepository --> NotificationsRepository
+AppPreferences --> NotificationsRepository
+
+PrayerDb --> PrayerRepository
+
+AppPreferences --> VerseOfTheDayRepository
+VerseOfTheDayApi --> VerseOfTheDayRepository
+VerseOfTheDayDb --> VerseOfTheDayRepository
+
+@enduml

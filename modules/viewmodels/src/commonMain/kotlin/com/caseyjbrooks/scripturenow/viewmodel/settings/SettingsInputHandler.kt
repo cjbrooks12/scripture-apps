@@ -39,6 +39,9 @@ public class SettingsInputHandler(
                 appPreferences
                     .getShowMainVerse()
                     .map { SettingsContract.Inputs.ShowMainVerseChanged(it) },
+                appPreferences
+                    .getVerseOfTheDayServiceAsFlow()
+                    .map { SettingsContract.Inputs.VerseOfTheDayServiceChanged(it) },
             )
         }
 
@@ -112,6 +115,17 @@ public class SettingsInputHandler(
             val currentState = getCurrentState()
             sideJob("ToggleShowMainVerse") {
                 appPreferences.setShowMainVerse(!currentState.showMainVerse)
+            }
+        }
+
+        is SettingsContract.Inputs.VerseOfTheDayServiceChanged -> {
+            updateState { it.copy(verseOfTheDayService = input.verseOfTheDayService) }
+        }
+
+        is SettingsContract.Inputs.SetVerseOfTheDayServicePreference -> {
+            val currentState = updateStateAndGet { it.copy(verseOfTheDayService = input.verseOfTheDayService) }
+            sideJob("SetVerseOfTheDayServicePreference") {
+                appPreferences.setVerseOfTheDayService(currentState.verseOfTheDayService)
             }
         }
     }

@@ -20,6 +20,7 @@ import com.caseyjbrooks.scripturenow.repositories.prayer.PrayerRepositoryImpl
 import com.caseyjbrooks.scripturenow.repositories.prayer.PrayerRepositoryInputHandler
 import com.caseyjbrooks.scripturenow.repositories.routing.ScriptureNowRouter
 import com.caseyjbrooks.scripturenow.repositories.votd.VerseOfTheDayRepository
+import com.caseyjbrooks.scripturenow.repositories.votd.VerseOfTheDayRepositoryContract
 import com.caseyjbrooks.scripturenow.repositories.votd.VerseOfTheDayRepositoryImpl
 import com.caseyjbrooks.scripturenow.repositories.votd.VerseOfTheDayRepositoryInputHandler
 import com.caseyjbrooks.scripturenow.utils.models.votd.VerseOfTheDayToMemoryVerseConverterImpl
@@ -96,9 +97,11 @@ class RepositoriesInjectorImpl(
         configBuilder = getRepositoryBuilder()
             .apply {
                 this += VerseOfTheDayWidgetInterceptor(appInjector.applicationContext)
+                this += BootstrapInterceptor { VerseOfTheDayRepositoryContract.Inputs.Initialize }
             },
         inputHandler = VerseOfTheDayRepositoryInputHandler(
-            api = dataSourcesInjector.getVerseOfTheDayApi(),
+            appPreferences = dataSourcesInjector.getAppPreferences(),
+            api = dataSourcesInjector::getVerseOfTheDayApi,
             db = dataSourcesInjector.getVerseOfTheDayDb(),
         ),
     )

@@ -66,9 +66,9 @@ class DataSourcesInjectorImpl(
         return PrayerDbProvider.get(sqlDatabase)
     }
 
-    public fun getVerseOfTheDayApi(): VerseOfTheDayApi {
+    public fun getVerseOfTheDayApi(service: VerseOfTheDayService): VerseOfTheDayApi {
         return VerseOfTheDayApiProvider.get(
-            service = VerseOfTheDayService.OurManna,
+            service = service,
             config = localAppConfig,
             client = httpClient,
         )

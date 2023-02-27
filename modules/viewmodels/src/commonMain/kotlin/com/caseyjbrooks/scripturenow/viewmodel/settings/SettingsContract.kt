@@ -1,6 +1,7 @@
 package com.caseyjbrooks.scripturenow.viewmodel.settings
 
 import com.caseyjbrooks.scripturenow.models.auth.AuthState
+import com.caseyjbrooks.scripturenow.models.votd.VerseOfTheDayService
 
 public object SettingsContract {
     public data class State(
@@ -21,6 +22,7 @@ public object SettingsContract {
 
         // preferences
         val showMainVerse: Boolean = false,
+        val verseOfTheDayService: VerseOfTheDayService = VerseOfTheDayService.Default,
     )
 
     public sealed class Inputs {
@@ -50,6 +52,9 @@ public object SettingsContract {
         // preferences
         public data class ShowMainVerseChanged(val showMainVerse: Boolean) : Inputs()
         public object ToggleShowMainVerse : Inputs()
+
+        public data class VerseOfTheDayServiceChanged(val verseOfTheDayService: VerseOfTheDayService) : Inputs()
+        public data class SetVerseOfTheDayServicePreference(val verseOfTheDayService: VerseOfTheDayService) : Inputs()
     }
 
     public sealed class Events {

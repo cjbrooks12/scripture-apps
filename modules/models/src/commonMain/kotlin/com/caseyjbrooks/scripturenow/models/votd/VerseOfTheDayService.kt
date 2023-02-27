@@ -8,5 +8,9 @@ public enum class VerseOfTheDayService(
     VerseOfTheDayDotCom(true, true, false),
     BibleGateway(true, false, false),
     OurManna(true, false, true),
-    TheySaidSo(true, false, true),
+    TheySaidSo(true, false, true);
+
+    public companion object {
+        public val Default: VerseOfTheDayService get() = VerseOfTheDayDotCom
+    }
 }
