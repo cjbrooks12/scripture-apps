@@ -1,7 +1,6 @@
 package com.caseyjbrooks.scripturenow.viewmodel.settings
 
-import com.caseyjbrooks.scripturenow.db.preferences.AppPreferences
-import com.caseyjbrooks.scripturenow.repositories.auth.AuthRepository
+import com.caseyjbrooks.scripturenow.repositories.global.GlobalRepository
 import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
 import com.copperleaf.ballast.observeFlows
@@ -9,8 +8,7 @@ import com.copperleaf.ballast.postEventWithState
 import kotlinx.coroutines.flow.map
 
 public class SettingsInputHandler(
-    private val authRepository: AuthRepository,
-    private val appPreferences: AppPreferences,
+    private val globalRepository: GlobalRepository,
 ) : InputHandler<
         SettingsContract.Inputs,
         SettingsContract.Events,
@@ -33,15 +31,9 @@ public class SettingsInputHandler(
 
             observeFlows(
                 "auth state",
-                authRepository
-                    .getAuthState(input.forceRefresh)
-                    .map { SettingsContract.Inputs.AuthStateChanged(it) },
-                appPreferences
-                    .getShowMainVerse()
-                    .map { SettingsContract.Inputs.ShowMainVerseChanged(it) },
-                appPreferences
-                    .getVerseOfTheDayServiceAsFlow()
-                    .map { SettingsContract.Inputs.VerseOfTheDayServiceChanged(it) },
+                globalRepository
+                    .getGlobalState()
+                    .map { SettingsContract.Inputs.GlobalStateChanged(it) },
             )
         }
 
@@ -50,8 +42,8 @@ public class SettingsInputHandler(
         }
 
         // authentication
-        is SettingsContract.Inputs.AuthStateChanged -> {
-            updateState { it.copy(authState = input.authState) }
+        is SettingsContract.Inputs.GlobalStateChanged -> {
+            updateState { it.copy(globalState = input.globalState) }
         }
 
         is SettingsContract.Inputs.SignIn -> {
@@ -60,7 +52,7 @@ public class SettingsInputHandler(
 
         is SettingsContract.Inputs.SignOut -> {
             sideJob("sign out") {
-                authRepository.signOut()
+                globalRepository.signOut()
             }
         }
 
@@ -107,25 +99,16 @@ public class SettingsInputHandler(
             postEvent(SettingsContract.Events.RequestNativeAppUpdate)
         }
 
-        is SettingsContract.Inputs.ShowMainVerseChanged -> {
-            updateState { it.copy(showMainVerse = input.showMainVerse) }
-        }
-
         is SettingsContract.Inputs.ToggleShowMainVerse -> {
             val currentState = getCurrentState()
             sideJob("ToggleShowMainVerse") {
-                appPreferences.setShowMainVerse(!currentState.showMainVerse)
+                globalRepository.setShowMainVerse(!currentState.globalState.appPreferences.showMainVerse)
             }
         }
 
-        is SettingsContract.Inputs.VerseOfTheDayServiceChanged -> {
-            updateState { it.copy(verseOfTheDayService = input.verseOfTheDayService) }
-        }
-
         is SettingsContract.Inputs.SetVerseOfTheDayServicePreference -> {
-            val currentState = updateStateAndGet { it.copy(verseOfTheDayService = input.verseOfTheDayService) }
             sideJob("SetVerseOfTheDayServicePreference") {
-                appPreferences.setVerseOfTheDayService(currentState.verseOfTheDayService)
+                globalRepository.setVerseOfTheDayService(input.verseOfTheDayService)
             }
         }
     }

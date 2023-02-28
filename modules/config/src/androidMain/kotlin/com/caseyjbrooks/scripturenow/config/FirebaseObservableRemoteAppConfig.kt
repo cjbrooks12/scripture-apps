@@ -3,12 +3,16 @@ package com.caseyjbrooks.scripturenow.config
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
-import kotlin.coroutines.resume
-import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
-public actual object RemoteAppConfigProvider {
-    public actual suspend fun get(localAppConfig: LocalAppConfig): RemoteAppConfig {
-        return suspendCancellableCoroutine { cont ->
+class FirebaseObservableRemoteAppConfig : ObservableRemoteConfig {
+    override fun getRemoteConfig(): Flow<RemoteAppConfig> {
+        return callbackFlow {
+            // eagerly send the initial value with hardcoded defaults
+            trySend(RemoteAppConfig.Defaults)
+
             Firebase.remoteConfig.setConfigSettingsAsync(
                 remoteConfigSettings {
                     minimumFetchIntervalInSeconds = 3600
@@ -16,14 +20,18 @@ public actual object RemoteAppConfigProvider {
             )
 
             // activate in background, and publish the update when they're available
-            Firebase.remoteConfig
+            val handle = Firebase.remoteConfig
                 .fetchAndActivate()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        cont.resume(RemoteAppConfigImpl())
+                        trySend(RemoteAppConfigImpl())
                     } else {
                     }
                 }
+
+            awaitClose {
+                // TODO: how ot unregister from the fetch task
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
 package com.caseyjbrooks.scripturenow.config
 
-public expect object RemoteAppConfigProvider {
-    public suspend fun get(localAppConfig: LocalAppConfig): RemoteAppConfig
+public interface RemoteAppConfigProvider {
+    public fun getRemoteConfig(localAppConfig: LocalAppConfig): ObservableRemoteConfig
 }

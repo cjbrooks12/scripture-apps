@@ -1,10 +1,10 @@
 package com.caseyjbrooks.scripturenow.repositories.notifications
 
-import com.caseyjbrooks.scripturenow.db.preferences.AppPreferences
 import com.caseyjbrooks.scripturenow.models.notifications.BasicNotification
 import com.caseyjbrooks.scripturenow.models.notifications.MemoryVerseNotification
 import com.caseyjbrooks.scripturenow.models.notifications.PushNotification
 import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
+import com.caseyjbrooks.scripturenow.repositories.global.GlobalRepository
 import com.caseyjbrooks.scripturenow.repositories.memory.MemoryVerseRepository
 import com.caseyjbrooks.scripturenow.utils.referenceText
 import com.copperleaf.ballast.InputHandler
@@ -15,11 +15,12 @@ import com.copperleaf.ballast.navigation.routing.path
 import com.copperleaf.ballast.observeFlows
 import com.copperleaf.ballast.postInput
 import com.copperleaf.ballast.repository.cache.getCachedOrNull
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 public class NotificationsRepositoryInputHandler(
+    private val globalRepository: GlobalRepository,
     private val memoryVerseRepository: MemoryVerseRepository,
-    private val appPreferences: AppPreferences,
 ) : InputHandler<
         NotificationsRepositoryContract.Inputs,
         NotificationsRepositoryContract.Events,
@@ -33,12 +34,14 @@ public class NotificationsRepositoryInputHandler(
         is NotificationsRepositoryContract.Inputs.Initialize -> {
             observeFlows(
                 "memory verse",
+                globalRepository
+                    .getGlobalState()
+                    .map { it.appPreferences.showMainVerse }
+                    .distinctUntilChanged()
+                    .map { NotificationsRepositoryContract.Inputs.ShowMemoryVerseNotificationSettingChanged(it) },
                 memoryVerseRepository
                     .getMainVerse(false)
                     .map { NotificationsRepositoryContract.Inputs.MemoryVerseChanged(it) },
-                appPreferences
-                    .getShowMainVerse()
-                    .map { NotificationsRepositoryContract.Inputs.ShowMemoryVerseNotificationSettingChanged(it) },
             )
         }
 

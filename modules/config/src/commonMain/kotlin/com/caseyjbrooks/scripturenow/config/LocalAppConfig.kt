@@ -13,8 +13,17 @@ public interface LocalAppConfig {
     public val logViewModels: Boolean
 
     public companion object {
-        public fun get(): LocalAppConfig {
-            return LocalAppConfigImpl()
-        }
+        public val Defaults: LocalAppConfig
+            get() = LocalAppConfigImpl(
+                verseOfTheDayDotComBaseUrl = "",
+                bibleGatewayApiBaseUrl = "",
+                ourMannaApiBaseUrl = "",
+                theySaidSoApiBaseUrl = "",
+                logPrefix = "",
+                logApiCalls = false,
+                logDbQueries = false,
+                logRepositories = false,
+                logViewModels = false,
+            )
     }
 }

@@ -9,7 +9,7 @@ class ScriptureNowFirebaseNotificationService : FirebaseMessagingService() {
         get() = (applicationContext as RepositoriesInjectorProvider).getRepositoriesInjector()
 
     override fun onNewToken(token: String) {
-        injector.getAuthRepository().firebaseTokenUpdated(token)
+        injector.getGlobalRepository().setFirebaseToken(token)
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {

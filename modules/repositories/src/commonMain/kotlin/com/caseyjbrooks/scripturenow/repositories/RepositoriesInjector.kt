@@ -1,6 +1,6 @@
 package com.caseyjbrooks.scripturenow.repositories
 
-import com.caseyjbrooks.scripturenow.repositories.auth.AuthRepositoryProvider
+import com.caseyjbrooks.scripturenow.repositories.global.GlobalRepositoryProvider
 import com.caseyjbrooks.scripturenow.repositories.memory.MemoryVerseRepositoryProvider
 import com.caseyjbrooks.scripturenow.repositories.notifications.NotificationsRepositoryProvider
 import com.caseyjbrooks.scripturenow.repositories.prayer.PrayerRepositoryProvider
@@ -8,7 +8,7 @@ import com.caseyjbrooks.scripturenow.repositories.routing.ScriptureNowRouterProv
 import com.caseyjbrooks.scripturenow.repositories.votd.VerseOfTheDayRepositoryProvider
 
 public interface RepositoriesInjector :
-    AuthRepositoryProvider,
+    GlobalRepositoryProvider,
     MemoryVerseRepositoryProvider,
     PrayerRepositoryProvider,
     ScriptureNowRouterProvider,

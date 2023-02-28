@@ -9,7 +9,7 @@ database "Data Sources" {
     [VerseOfTheDayDb]
 }
 
-node {
+node "Repository Layer" {
     [AuthRepository]
     [MemoryVerseRepository]
     [NotificationsRepository]
@@ -17,6 +17,14 @@ node {
     [VerseOfTheDayRepository]
     [Router]
 }
+
+node "UI Layer" {
+    [HomeViewModel]
+    [SettingsViewModel]
+}
+
+' Data Sources --> Repositories
+' ----------------------------------------------------------------------------------------------------------------------
 
 Session --> AuthRepository
 AppPreferences --> AuthRepository
@@ -31,5 +39,14 @@ PrayerDb --> PrayerRepository
 AppPreferences --> VerseOfTheDayRepository
 VerseOfTheDayApi --> VerseOfTheDayRepository
 VerseOfTheDayDb --> VerseOfTheDayRepository
+
+' Repositories --> ViewModels
+' ----------------------------------------------------------------------------------------------------------------------
+
+VerseOfTheDayRepository ---> HomeViewModel
+MemoryVerseRepository ---> HomeViewModel
+
+AuthRepository ---> SettingsViewModel
+AppPreferences ---> SettingsViewModel
 
 @enduml

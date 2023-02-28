@@ -7,14 +7,14 @@ import com.caseyjbrooks.scripturenow.api.auth.Session
 import com.caseyjbrooks.scripturenow.api.auth.SessionProvider
 import com.caseyjbrooks.scripturenow.api.votd.VerseOfTheDayApi
 import com.caseyjbrooks.scripturenow.api.votd.VerseOfTheDayApiProvider
-import com.caseyjbrooks.scripturenow.config.LocalAppConfig
+import com.caseyjbrooks.scripturenow.config.*
 import com.caseyjbrooks.scripturenow.db.impl.sql.SqlDbProvider
 import com.caseyjbrooks.scripturenow.db.memory.MemoryVerseDb
 import com.caseyjbrooks.scripturenow.db.memory.MemoryVerseDbProvider
 import com.caseyjbrooks.scripturenow.db.prayer.PrayerDb
 import com.caseyjbrooks.scripturenow.db.prayer.PrayerDbProvider
-import com.caseyjbrooks.scripturenow.db.preferences.AppPreferences
 import com.caseyjbrooks.scripturenow.db.preferences.AppPreferencesProvider
+import com.caseyjbrooks.scripturenow.db.preferences.ObservableSettingsAppPreferences
 import com.caseyjbrooks.scripturenow.db.votd.VerseOfTheDayDb
 import com.caseyjbrooks.scripturenow.db.votd.VerseOfTheDayDbProvider
 import com.caseyjbrooks.scripturenow.models.auth.SessionService
@@ -26,8 +26,8 @@ import io.ktor.client.engine.okhttp.*
 
 class DataSourcesInjectorImpl(
     private val appInjector: AppInjector,
-) {
-    public val localAppConfig = LocalAppConfig.get()
+) : LocalAppConfigProvider,
+    RemoteAppConfigProvider {
 
     private val sqlDriver: SqlDriver = AndroidSqliteDriver(
         ScriptureNowDatabase.Schema,
@@ -36,9 +36,9 @@ class DataSourcesInjectorImpl(
     )
     private val sqlDatabase = SqlDbProvider.getDatabase(
         driver = sqlDriver,
-        config = localAppConfig,
+        config = getLocalAppConfig(),
     )
-    private val httpClient = HttpClientProvider.get(OkHttp, localAppConfig)
+    private val httpClient = HttpClientProvider.get(OkHttp, getLocalAppConfig())
     private val appPreferences = AppPreferencesProvider.get(
         SharedPreferencesSettings(
             delegate = appInjector
@@ -51,11 +51,15 @@ class DataSourcesInjectorImpl(
     )
 
     public fun getSession(): Session {
-        return SessionProvider.get(SessionService.Firebase, localAppConfig, httpClient)
+        return SessionProvider.get(SessionService.Firebase, getLocalAppConfig(), httpClient)
     }
 
-    public fun getAppPreferences(): AppPreferences {
+    public fun getAppPreferences(): ObservableSettingsAppPreferences {
         return appPreferences
+    }
+
+    override fun getRemoteConfig(localAppConfig: LocalAppConfig): ObservableRemoteConfig {
+        return FirebaseObservableRemoteAppConfig()
     }
 
     public fun getMemoryVerseDb(): MemoryVerseDb {
@@ -69,7 +73,7 @@ class DataSourcesInjectorImpl(
     public fun getVerseOfTheDayApi(service: VerseOfTheDayService): VerseOfTheDayApi {
         return VerseOfTheDayApiProvider.get(
             service = service,
-            config = localAppConfig,
+            config = getLocalAppConfig(),
             client = httpClient,
         )
     }

@@ -5,8 +5,8 @@ import com.russhwolf.settings.ObservableSettings
 public object AppPreferencesProvider {
     public fun get(
         settings: ObservableSettings,
-    ): AppPreferences {
-        return AppPreferencesImpl(
+    ): ObservableSettingsAppPreferences {
+        return ObservableSettingsAppPreferences(
             settings = settings
         )
     }

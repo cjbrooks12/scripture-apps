@@ -11,12 +11,12 @@ class FirebaseInstallationIdInitializer : Initializer<Unit> {
         val mainInjector = (context.applicationContext as RepositoriesInjectorProvider).getRepositoriesInjector()
         FirebaseInstallations.getInstance().id.addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                mainInjector.getAuthRepository().firebaseInstallationIdUpdated(task.result)
+                mainInjector.getGlobalRepository().setFirebaseInstallationId(task.result)
             }
         }
         FirebaseInstallations.getInstance().getToken(false).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                mainInjector.getAuthRepository().firebaseTokenUpdated(task.result.token)
+                mainInjector.getGlobalRepository().setFirebaseToken(task.result.token)
             }
         }
     }

@@ -1,18 +1,20 @@
 package com.caseyjbrooks.scripturenow.db.preferences
 
 import com.caseyjbrooks.scripturenow.models.votd.VerseOfTheDayService
-import kotlinx.coroutines.flow.Flow
 
 public interface AppPreferences {
-    public fun getVerseOfTheDayServiceAsFlow(): Flow<VerseOfTheDayService>
-    public suspend fun setVerseOfTheDayService(value: VerseOfTheDayService)
+    public val verseOfTheDayService: VerseOfTheDayService
+    public val firebaseInstallationId: String
+    public val firebaseToken: String
+    public val showMainVerse: Boolean
 
-    public fun getFirebaseInstallationIdAsFlow(): Flow<String>
-    public suspend fun setFirebaseInstallationId(value: String)
-
-    public fun getFirebaseTokenAsFlow(): Flow<String>
-    public suspend fun setFirebaseToken(value: String)
-
-    public fun getShowMainVerse(): Flow<Boolean>
-    public suspend fun setShowMainVerse(value: Boolean)
+    public companion object {
+        public val Defaults: AppPreferences
+            get() = AppPreferencesImpl(
+                verseOfTheDayService = VerseOfTheDayService.Default,
+                firebaseInstallationId = "",
+                firebaseToken = "",
+                showMainVerse = false,
+            )
+    }
 }

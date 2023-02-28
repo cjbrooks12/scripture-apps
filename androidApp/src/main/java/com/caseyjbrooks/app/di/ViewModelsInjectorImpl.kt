@@ -66,10 +66,10 @@ class ViewModelsInjectorImpl(
                 interceptorDispatcher = Dispatchers.Default
             )
             .apply {
-                if (dataSourcesInjector.localAppConfig.logViewModels) {
+                if (dataSourcesInjector.getLocalAppConfig().logViewModels) {
                     this += LoggingInterceptor()
                 }
-                logger = { AndroidLogger("${dataSourcesInjector.localAppConfig.logPrefix} - $it") }
+                logger = { AndroidLogger("${dataSourcesInjector.getLocalAppConfig().logPrefix} - $it") }
             }
     }
 
@@ -105,14 +105,13 @@ class ViewModelsInjectorImpl(
                 .withViewModel(
                     initialState = SettingsContract.State(),
                     inputHandler = SettingsInputHandler(
-                        authRepository = repositories.getAuthRepository(),
-                        appPreferences = dataSourcesInjector.getAppPreferences(),
+                        globalRepository = repositories.getGlobalRepository(),
                     ),
                     name = "Settings"
                 )
                 .apply {
                     this += BootstrapInterceptor {
-                        SettingsContract.Inputs.Initialize(false)
+                        SettingsContract.Inputs.Initialize
                     }
                 }
                 .build(),

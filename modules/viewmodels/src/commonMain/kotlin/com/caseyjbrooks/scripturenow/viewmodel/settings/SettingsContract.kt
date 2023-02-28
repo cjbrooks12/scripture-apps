@@ -1,12 +1,12 @@
 package com.caseyjbrooks.scripturenow.viewmodel.settings
 
-import com.caseyjbrooks.scripturenow.models.auth.AuthState
 import com.caseyjbrooks.scripturenow.models.votd.VerseOfTheDayService
+import com.caseyjbrooks.scripturenow.repositories.global.GlobalRepositoryContract
 
 public object SettingsContract {
     public data class State(
-        // authentication
-        val authState: AuthState = AuthState.SignedOut,
+// global state
+        val globalState: GlobalRepositoryContract.State = GlobalRepositoryContract.State(),
 
         // donation
         val donationAmounts: List<Int> = listOf(1, 5, 10, 25),
@@ -19,18 +19,14 @@ public object SettingsContract {
         val updateIsAvailable: Boolean = false,
         val currentVersion: String = "",
         val latestVersion: String = "",
-
-        // preferences
-        val showMainVerse: Boolean = false,
-        val verseOfTheDayService: VerseOfTheDayService = VerseOfTheDayService.Default,
     )
 
     public sealed class Inputs {
-        public data class Initialize(val forceRefresh: Boolean) : Inputs()
+        public object Initialize : Inputs()
         public object GoBack : Inputs()
 
         // authentication
-        public data class AuthStateChanged(val authState: AuthState) : Inputs()
+        public data class GlobalStateChanged(val globalState: GlobalRepositoryContract.State) : Inputs()
         public object SignIn : Inputs()
         public object SignOut : Inputs()
 
@@ -50,10 +46,7 @@ public object SettingsContract {
         public object UpdateAppButtonClicked : Inputs()
 
         // preferences
-        public data class ShowMainVerseChanged(val showMainVerse: Boolean) : Inputs()
         public object ToggleShowMainVerse : Inputs()
-
-        public data class VerseOfTheDayServiceChanged(val verseOfTheDayService: VerseOfTheDayService) : Inputs()
         public data class SetVerseOfTheDayServicePreference(val verseOfTheDayService: VerseOfTheDayService) : Inputs()
     }
 

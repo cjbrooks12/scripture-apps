@@ -5,9 +5,9 @@ import com.caseyjbrooks.scripturenow.appwidgets.votd.VerseOfTheDayWidgetIntercep
 import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
 import com.caseyjbrooks.scripturenow.repositories.AndroidAssetsFormLoader
 import com.caseyjbrooks.scripturenow.repositories.RepositoriesInjector
-import com.caseyjbrooks.scripturenow.repositories.auth.AuthRepository
-import com.caseyjbrooks.scripturenow.repositories.auth.AuthRepositoryImpl
-import com.caseyjbrooks.scripturenow.repositories.auth.AuthRepositoryInputHandler
+import com.caseyjbrooks.scripturenow.repositories.global.GlobalRepository
+import com.caseyjbrooks.scripturenow.repositories.global.GlobalRepositoryImpl
+import com.caseyjbrooks.scripturenow.repositories.global.GlobalRepositoryInputHandler
 import com.caseyjbrooks.scripturenow.repositories.memory.MemoryVerseRepository
 import com.caseyjbrooks.scripturenow.repositories.memory.MemoryVerseRepositoryImpl
 import com.caseyjbrooks.scripturenow.repositories.memory.MemoryVerseRepositoryInputHandler
@@ -48,21 +48,22 @@ class RepositoriesInjectorImpl(
                 interceptorDispatcher = Dispatchers.Default
             )
             .apply {
-                if (dataSourcesInjector.localAppConfig.logRepositories) {
+                if (dataSourcesInjector.getLocalAppConfig().logRepositories) {
                     this += LoggingInterceptor()
                 }
-                logger = { AndroidLogger("${dataSourcesInjector.localAppConfig.logPrefix} - $it") }
+                logger = { AndroidLogger("${dataSourcesInjector.getLocalAppConfig().logPrefix} - $it") }
             }
     }
 
     private lateinit var _router: Router<ScriptureNowRoute>
 
-    private val _authRepository: AuthRepository = AuthRepositoryImpl(
+    private val _globalRepository: GlobalRepository = GlobalRepositoryImpl(
         coroutineScope = appInjector.appCoroutineScope,
         configBuilder = getRepositoryBuilder(),
-        inputHandler = AuthRepositoryInputHandler(
+        inputHandler = GlobalRepositoryInputHandler(
             session = dataSourcesInjector.getSession(),
-            preferences = dataSourcesInjector.getAppPreferences(),
+            observableAppPreferences = dataSourcesInjector.getAppPreferences(),
+            observableRemoteConfig = dataSourcesInjector.getRemoteConfig(dataSourcesInjector.getLocalAppConfig())
         ),
     )
     private val _memoryVerseRepository: MemoryVerseRepository = MemoryVerseRepositoryImpl(
@@ -82,7 +83,7 @@ class RepositoriesInjectorImpl(
         configBuilder = getRepositoryBuilder(),
         inputHandler = NotificationsRepositoryInputHandler(
             memoryVerseRepository = _memoryVerseRepository,
-            appPreferences = dataSourcesInjector.getAppPreferences(),
+            globalRepository = _globalRepository,
         ),
         eventHandler = AndroidNotificationsEventHandler(appInjector.applicationContext),
     )
@@ -100,14 +101,14 @@ class RepositoriesInjectorImpl(
                 this += BootstrapInterceptor { VerseOfTheDayRepositoryContract.Inputs.Initialize }
             },
         inputHandler = VerseOfTheDayRepositoryInputHandler(
-            appPreferences = dataSourcesInjector.getAppPreferences(),
+            globalRepository = _globalRepository,
             api = dataSourcesInjector::getVerseOfTheDayApi,
             db = dataSourcesInjector.getVerseOfTheDayDb(),
         ),
     )
 
-    override fun getAuthRepository(): AuthRepository {
-        return _authRepository
+    override fun getGlobalRepository(): GlobalRepository {
+        return _globalRepository
     }
 
     override fun getMemoryVerseRepository(): MemoryVerseRepository {

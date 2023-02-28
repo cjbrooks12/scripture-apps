@@ -45,7 +45,7 @@ public fun SettingsScreen(
                         Text("Show Main Verse")
 
                         Switch(
-                            checked = state.showMainVerse,
+                            checked = state.globalState.appPreferences.showMainVerse,
                             onCheckedChange = null
                         )
                     }
@@ -73,7 +73,7 @@ public fun SettingsScreen(
                                 Text(service.name)
 
                                 RadioButton(
-                                    selected = state.verseOfTheDayService == service,
+                                    selected = state.globalState.appPreferences.verseOfTheDayService == service,
                                     onClick = null,
                                 )
                             }
