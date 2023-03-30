@@ -1,0 +1,19 @@
+{
+  "ownKey": "pages",
+  "childrenPages": {"privacy-policy": {
+    "ownKey": "privacy-policy",
+    "ownPages": [{
+      "reference": {
+        "path": "",
+        "baseUrl": "https://cjbrooks12.github.io/scripture-apps",
+        "fileName": "privacy-policy",
+        "extension": "html",
+        "usePrettyUrl": true,
+        "link": "https://cjbrooks12.github.io/scripture-apps/privacy-policy"
+      },
+      "description": "",
+      "title": "Privacy Policy",
+      "content": "<h1 id=\"privacy-policy\"><a href=\"#privacy-policy\" id=\"privacy-policy\" class=\"anchor\"><\/a>Privacy Policy<\/h1>\n<p>This is a temporary privacy policy, so I can get the app back up on the Play Store.<\/p>\n"
+    }]
+  }}
+}

@@ -1,0 +1,31 @@
+{
+  "ownKey": "home",
+  "ownPages": [
+    {
+      "reference": {
+        "path": "",
+        "baseUrl": "https://cjbrooks12.github.io/scripture-apps",
+        "fileName": "",
+        "extension": "html",
+        "usePrettyUrl": true,
+        "link": "https://cjbrooks12.github.io/scripture-apps"
+      },
+      "description": "",
+      "title": "Home",
+      "content": "<h1 id=\"scripture-now\"><a href=\"#scripture-now\" id=\"scripture-now\" class=\"anchor\"><\/a>Scripture Now<\/h1>\n"
+    },
+    {
+      "reference": {
+        "path": "",
+        "baseUrl": "https://cjbrooks12.github.io/scripture-apps",
+        "fileName": "404",
+        "extension": "html",
+        "usePrettyUrl": false,
+        "link": "https://cjbrooks12.github.io/scripture-apps/404.html"
+      },
+      "description": "",
+      "title": "Not Found",
+      "content": ""
+    }
+  ]
+}

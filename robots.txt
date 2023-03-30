@@ -1,0 +1,8 @@
+User-agent: *
+
+Disallow: /
+
+
+
+Sitemap: https://cjbrooks12.github.io/scripture-apps/sitemap.xml
+
