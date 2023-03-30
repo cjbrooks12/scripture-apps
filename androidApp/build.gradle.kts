@@ -1,4 +1,5 @@
 @file:Suppress("UnstableApiUsage")
+
 import com.google.firebase.appdistribution.gradle.AppDistributionExtension
 
 plugins {
@@ -14,6 +15,8 @@ plugins {
 }
 
 android {
+    namespace = "com.caseyjbrooks.app"
+
     defaultConfig {
         val projectVersion = Config.projectVersion(project)
         versionName = projectVersion.projectVersion
@@ -27,7 +30,6 @@ android {
     signingConfigs {
         val publishConfiguration = Config.publishConfiguration(project)
         getByName("debug") {
-
         }
         create("scriptureMemoryRelease") {
             storeFile = file("../release.keystore")

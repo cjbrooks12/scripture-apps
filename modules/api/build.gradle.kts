@@ -12,6 +12,13 @@ plugins {
 
 kotlin {
     sourceSets {
+        all {
+            languageSettings {
+                optIn("kotlinx.serialization.ExperimentalSerializationApi")
+                optIn("nl.adaptivity.xmlutil.ExperimentalXmlUtilApi")
+            }
+        }
+
         // Common Sourcesets
         val commonMain by getting {
             dependencies {
@@ -46,7 +53,7 @@ kotlin {
             dependencies {
                 api(libs.ktor.client.okhttp)
 
-                implementation(project.dependencies.platform(libs.firebase.bom))
+                api(project.dependencies.platform(libs.firebase.bom))
                 api(libs.firebase.auth)
             }
         }
@@ -74,4 +81,7 @@ dependencies {
             add(kspTarget, kspLib)
         }
     }
+}
+android {
+    namespace = "com.caseyjbrooks.scripturenow.api"
 }

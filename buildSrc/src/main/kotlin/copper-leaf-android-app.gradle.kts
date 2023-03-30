@@ -1,8 +1,6 @@
 @file:Suppress("UnstableApiUsage", "UNUSED_VARIABLE")
 
 import org.gradle.accessors.dm.LibrariesForLibs
-import org.gradle.api.JavaVersion
-import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 plugins {
     id("com.android.application")
@@ -32,10 +30,6 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
-
-        freeCompilerArgs = listOf(
-            "-opt-in=kotlin.RequiresOptIn",
-        )
     }
 
     buildTypes {
@@ -53,8 +47,10 @@ android {
         }
     }
     lint {
-        disable += listOf("GradleDependency")
-//        isAbortOnError = false
+        disable += listOf(
+            "GradleDependency",
+            "UnusedResources"
+        )
     }
 }
 

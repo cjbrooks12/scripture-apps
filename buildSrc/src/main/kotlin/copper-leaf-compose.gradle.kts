@@ -1,9 +1,6 @@
-@file:Suppress("UNUSED_VARIABLE")
+@file:Suppress("UNUSED_VARIABLE", "OPT_IN_IS_NOT_ENABLED")
 
 import org.gradle.accessors.dm.LibrariesForLibs
-import org.gradle.kotlin.dsl.getValue
-import org.gradle.kotlin.dsl.getting
-import org.gradle.kotlin.dsl.kotlin
 import org.jetbrains.compose.ExperimentalComposeLibrary
 
 plugins {

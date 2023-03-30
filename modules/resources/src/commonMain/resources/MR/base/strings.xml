@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="howdy">Howdy</string>
+    <string name="app_name">Scripture Now!</string>
+    <string name="back">Back</string>
+    <string name="close">Close</string>
+    <string name="template">Template</string>
+</resources>

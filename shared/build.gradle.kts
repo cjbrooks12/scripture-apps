@@ -6,6 +6,9 @@ plugins {
     `copper-leaf-testing`
     `copper-leaf-lint`
 }
+android {
+    namespace = "com.caseyjbrooks.scripturenow.shared"
+}
 
 kotlin {
     sourceSets {

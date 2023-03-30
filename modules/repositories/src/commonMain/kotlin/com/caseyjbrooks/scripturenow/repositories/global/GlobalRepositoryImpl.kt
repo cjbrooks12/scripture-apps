@@ -56,4 +56,8 @@ public class GlobalRepositoryImpl(
     override fun setShowMainVerse(value: Boolean) {
         trySend(GlobalRepositoryContract.Inputs.UpdateShowMainVerse(value))
     }
+
+    override fun checkForUpdates() {
+        trySend(GlobalRepositoryContract.Inputs.CheckForUpdates)
+    }
 }

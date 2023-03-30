@@ -3,6 +3,7 @@ package com.caseyjbrooks.app.di
 import com.caseyjbrooks.scripturenow.appwidgets.memory.MemoryVerseWidgetInterceptor
 import com.caseyjbrooks.scripturenow.appwidgets.votd.VerseOfTheDayWidgetInterceptor
 import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
+import com.caseyjbrooks.scripturenow.models.votd.VerseOfTheDayToMemoryVerseConverterImpl
 import com.caseyjbrooks.scripturenow.repositories.AndroidAssetsFormLoader
 import com.caseyjbrooks.scripturenow.repositories.RepositoriesInjector
 import com.caseyjbrooks.scripturenow.repositories.global.GlobalRepository
@@ -23,7 +24,6 @@ import com.caseyjbrooks.scripturenow.repositories.votd.VerseOfTheDayRepository
 import com.caseyjbrooks.scripturenow.repositories.votd.VerseOfTheDayRepositoryContract
 import com.caseyjbrooks.scripturenow.repositories.votd.VerseOfTheDayRepositoryImpl
 import com.caseyjbrooks.scripturenow.repositories.votd.VerseOfTheDayRepositoryInputHandler
-import com.caseyjbrooks.scripturenow.utils.models.votd.VerseOfTheDayToMemoryVerseConverterImpl
 import com.copperleaf.ballast.*
 import com.copperleaf.ballast.core.AndroidLogger
 import com.copperleaf.ballast.core.BasicViewModel
@@ -48,10 +48,10 @@ class RepositoriesInjectorImpl(
                 interceptorDispatcher = Dispatchers.Default
             )
             .apply {
-                if (dataSourcesInjector.getLocalAppConfig().logRepositories) {
+                if (appInjector.configInjector.getLocalAppConfig().logRepositories) {
                     this += LoggingInterceptor()
                 }
-                logger = { AndroidLogger("${dataSourcesInjector.getLocalAppConfig().logPrefix} - $it") }
+                logger = { AndroidLogger("${appInjector.configInjector.getLocalAppConfig().logPrefix} - $it") }
             }
     }
 
@@ -63,7 +63,7 @@ class RepositoriesInjectorImpl(
         inputHandler = GlobalRepositoryInputHandler(
             session = dataSourcesInjector.getSession(),
             observableAppPreferences = dataSourcesInjector.getAppPreferences(),
-            observableRemoteConfig = dataSourcesInjector.getRemoteConfig(dataSourcesInjector.getLocalAppConfig())
+            observableRemoteConfig = appInjector.configInjector.getRemoteConfig(),
         ),
     )
     private val _memoryVerseRepository: MemoryVerseRepository = MemoryVerseRepositoryImpl(

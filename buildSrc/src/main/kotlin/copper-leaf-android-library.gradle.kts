@@ -2,7 +2,6 @@
 
 import gradle.kotlin.dsl.accessors._7d598b3cc797789a1092079676947f3b.coreLibraryDesugaring
 import org.gradle.accessors.dm.LibrariesForLibs
-import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 plugins {
     id("com.android.library")
@@ -34,7 +33,10 @@ android {
         }
     }
     lint {
-        disable += listOf("GradleDependency")
+        disable += listOf(
+            "GradleDependency",
+            "UnusedResources"
+        )
     }
     publishing {
         multipleVariants {

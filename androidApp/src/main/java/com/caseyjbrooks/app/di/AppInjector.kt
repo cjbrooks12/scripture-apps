@@ -8,6 +8,8 @@ public class AppInjector(
     public val applicationContext: Application,
     public val appCoroutineScope: CoroutineScope,
 ) {
+    val configInjector = ConfigModuleProviderImpl()
+
     val dataSourcesInjector: DataSourcesInjectorImpl by lazy {
         DataSourcesInjectorImpl(this@AppInjector)
     }

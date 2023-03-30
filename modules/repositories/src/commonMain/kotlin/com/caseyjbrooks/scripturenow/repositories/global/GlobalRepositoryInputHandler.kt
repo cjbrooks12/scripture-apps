@@ -1,7 +1,7 @@
 package com.caseyjbrooks.scripturenow.repositories.global
 
 import com.caseyjbrooks.scripturenow.api.auth.Session
-import com.caseyjbrooks.scripturenow.config.ObservableRemoteConfig
+import com.caseyjbrooks.scripturenow.config.remote.ObservableRemoteConfig
 import com.caseyjbrooks.scripturenow.db.preferences.ObservableSettingsAppPreferences
 import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
@@ -76,6 +76,12 @@ public class GlobalRepositoryInputHandler(
         is GlobalRepositoryContract.Inputs.RequestSignOut -> {
             sideJob("RequestSignOut") {
                 session.signOut()
+            }
+        }
+
+        is GlobalRepositoryContract.Inputs.CheckForUpdates -> {
+            sideJob("CheckForUpdates") {
+                observableRemoteConfig.checkForUpdates(force = true)
             }
         }
     }

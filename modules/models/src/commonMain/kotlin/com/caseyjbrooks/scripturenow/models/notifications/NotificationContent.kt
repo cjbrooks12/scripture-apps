@@ -7,4 +7,3 @@ public data class BasicNotification(
     val message: String,
     val deepLink: String?
 ) : NotificationContent
-

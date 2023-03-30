@@ -53,6 +53,30 @@ public class IntSettingsProperty(
     override fun convertToStorage(value: Int): String? = value.toString()
 }
 
+public class LongSettingsProperty(
+    settings: ObservableSettings,
+    propertyName: String,
+) : SettingsProperty<Long>(settings, propertyName, 0L) {
+    override fun convertFromStorage(savedValue: String?): Long? = savedValue?.toLongOrNull()
+    override fun convertToStorage(value: Long): String? = value.toString()
+}
+
+public class DoubleSettingsProperty(
+    settings: ObservableSettings,
+    propertyName: String,
+) : SettingsProperty<Double>(settings, propertyName, 0.0) {
+    override fun convertFromStorage(savedValue: String?): Double? = savedValue?.toDoubleOrNull()
+    override fun convertToStorage(value: Double): String? = value.toString()
+}
+
+public class FloatSettingsProperty(
+    settings: ObservableSettings,
+    propertyName: String,
+) : SettingsProperty<Float>(settings, propertyName, 0F) {
+    override fun convertFromStorage(savedValue: String?): Float? = savedValue?.toFloatOrNull()
+    override fun convertToStorage(value: Float): String? = value.toString()
+}
+
 public class BooleanSettingsProperty(
     settings: ObservableSettings,
     propertyName: String,

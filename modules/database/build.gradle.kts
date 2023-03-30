@@ -7,6 +7,9 @@ plugins {
     `copper-leaf-lint`
     id("com.squareup.sqldelight")
 }
+android {
+    namespace = "com.caseyjbrooks.scripturenow.database"
+}
 
 kotlin {
     sourceSets {

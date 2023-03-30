@@ -1,7 +1,9 @@
 package com.caseyjbrooks.scripturenow.ui
 
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
 import com.caseyjbrooks.scripturenow.ui.screens.home.HomeScreen
 import com.caseyjbrooks.scripturenow.ui.screens.memory.detail.MemoryVerseDetailsScreen
@@ -19,7 +21,6 @@ import com.copperleaf.ballast.navigation.routing.renderCurrentDestination
 import com.copperleaf.ballast.navigation.routing.stringPath
 import com.copperleaf.ballast.navigation.vm.Router
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 public fun ApplicationRoot(
     router: Router<ScriptureNowRoute>,

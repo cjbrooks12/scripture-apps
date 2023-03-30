@@ -7,7 +7,6 @@ import com.caseyjbrooks.scripturenow.api.auth.Session
 import com.caseyjbrooks.scripturenow.api.auth.SessionProvider
 import com.caseyjbrooks.scripturenow.api.votd.VerseOfTheDayApi
 import com.caseyjbrooks.scripturenow.api.votd.VerseOfTheDayApiProvider
-import com.caseyjbrooks.scripturenow.config.*
 import com.caseyjbrooks.scripturenow.db.impl.sql.SqlDbProvider
 import com.caseyjbrooks.scripturenow.db.memory.MemoryVerseDb
 import com.caseyjbrooks.scripturenow.db.memory.MemoryVerseDbProvider
@@ -26,8 +25,7 @@ import io.ktor.client.engine.okhttp.*
 
 class DataSourcesInjectorImpl(
     private val appInjector: AppInjector,
-) : LocalAppConfigProvider,
-    RemoteAppConfigProvider {
+) {
 
     private val sqlDriver: SqlDriver = AndroidSqliteDriver(
         ScriptureNowDatabase.Schema,
@@ -36,9 +34,9 @@ class DataSourcesInjectorImpl(
     )
     private val sqlDatabase = SqlDbProvider.getDatabase(
         driver = sqlDriver,
-        config = getLocalAppConfig(),
+        config = appInjector.configInjector.getLocalAppConfig(),
     )
-    private val httpClient = HttpClientProvider.get(OkHttp, getLocalAppConfig())
+    private val httpClient = HttpClientProvider.get(OkHttp, appInjector.configInjector.getLocalAppConfig())
     private val appPreferences = AppPreferencesProvider.get(
         SharedPreferencesSettings(
             delegate = appInjector
@@ -51,15 +49,11 @@ class DataSourcesInjectorImpl(
     )
 
     public fun getSession(): Session {
-        return SessionProvider.get(SessionService.Firebase, getLocalAppConfig(), httpClient)
+        return SessionProvider.get(SessionService.Firebase, appInjector.configInjector.getLocalAppConfig(), httpClient)
     }
 
     public fun getAppPreferences(): ObservableSettingsAppPreferences {
         return appPreferences
-    }
-
-    override fun getRemoteConfig(localAppConfig: LocalAppConfig): ObservableRemoteConfig {
-        return FirebaseObservableRemoteAppConfig()
     }
 
     public fun getMemoryVerseDb(): MemoryVerseDb {
@@ -73,7 +67,7 @@ class DataSourcesInjectorImpl(
     public fun getVerseOfTheDayApi(service: VerseOfTheDayService): VerseOfTheDayApi {
         return VerseOfTheDayApiProvider.get(
             service = service,
-            config = getLocalAppConfig(),
+            config = appInjector.configInjector.getLocalAppConfig(),
             client = httpClient,
         )
     }

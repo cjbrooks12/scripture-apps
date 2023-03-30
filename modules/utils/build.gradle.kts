@@ -7,14 +7,21 @@ plugins {
     `copper-leaf-lint`
     kotlin("plugin.serialization")
 }
+android {
+    namespace = "com.caseyjbrooks.scripturenow.utils"
+}
 
 kotlin {
     sourceSets {
+        all {
+            languageSettings {
+                optIn("kotlinx.serialization.ExperimentalSerializationApi")
+            }
+        }
+
         // Common Sourcesets
         val commonMain by getting {
             dependencies {
-                api(project(":modules:models"))
-
                 api(libs.kotlinx.coroutines.core)
                 api(libs.kermit.core)
 

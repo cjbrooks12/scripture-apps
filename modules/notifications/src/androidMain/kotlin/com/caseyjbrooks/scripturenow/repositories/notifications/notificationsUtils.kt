@@ -6,7 +6,12 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat.IMPORTANCE_DEFAULT
 import androidx.core.net.toUri
-import com.caseyjbrooks.scripturenow.models.notifications.*
+import com.caseyjbrooks.scripturenow.models.notifications.BasicNotification
+import com.caseyjbrooks.scripturenow.models.notifications.MemoryVerseNotification
+import com.caseyjbrooks.scripturenow.models.notifications.NotificationContent
+import com.caseyjbrooks.scripturenow.models.notifications.NotificationType
+import com.caseyjbrooks.scripturenow.models.notifications.PushNotification
+import com.caseyjbrooks.scripturenow.models.notifications.VerseOfTheDayNotification
 
 val NotificationType.channelId: String
     get() = when (this) {
@@ -107,7 +112,7 @@ public fun NotificationCompat.Builder.addDeepLink(
                     0,
                     Intent(
                         Intent.ACTION_VIEW,
-                        "scripture://now${deepLinkPath}".toUri()
+                        "scripture://now$deepLinkPath".toUri()
                     ).apply {
                         addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     },

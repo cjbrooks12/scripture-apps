@@ -1,15 +1,23 @@
 package com.caseyjbrooks.scripturenow.api.votd.theysaidso
 
 import com.caseyjbrooks.scripturenow.api.HttpClientProvider
+import com.caseyjbrooks.scripturenow.api.votd.VerseOfTheDayApiProvider
 import com.caseyjbrooks.scripturenow.api.votd.impl.theysaidso.TheySaidSoApiConverterImpl
 import com.caseyjbrooks.scripturenow.api.votd.impl.theysaidso.models.TheySaidSoBibleVerseResponse
+import com.caseyjbrooks.scripturenow.config.local.LocalAppConfig
 import com.caseyjbrooks.scripturenow.models.VerseReference
+import com.caseyjbrooks.scripturenow.models.votd.VerseOfTheDayService
 import com.caseyjbrooks.scripturenow.utils.now
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import io.ktor.client.engine.okhttp.*
 import kotlinx.datetime.LocalDate
 
 public class TestTheySaidSoApi : StringSpec({
+    val localConfig = LocalAppConfig.ActualDefaults
+    val httpClientEngine = OkHttp
+    val httpClient = HttpClientProvider.get(httpClientEngine, localConfig)
+
     "test responseConverter" {
         val inputJson = """
             {
@@ -29,9 +37,8 @@ public class TestTheySaidSoApi : StringSpec({
         """.trimIndent()
         val inputParsed = HttpClientProvider.json.decodeFromString(TheySaidSoBibleVerseResponse.serializer(), inputJson)
         val now = LocalDate.now()
-        val converted = TheySaidSoApiConverterImpl().convertApiModelToRepositoryModel(
-            date = now,
-            apiModel = inputParsed,
+        val converted = TheySaidSoApiConverterImpl().convertValue(
+            now to inputParsed,
         )
 
         converted.date shouldBe now
@@ -42,9 +49,9 @@ public class TestTheySaidSoApi : StringSpec({
         converted.notice shouldBe "Powered by quotes from theysaidso.com"
     }
     "test making API call" {
-//        // this should throw and exception if something goes wrong. If it doesn't throw, the test passes
-//        VerseOfTheDayApiProvider
-//            .get(VerseOfTheDayService.TheySaidSo)
-//            .getTodaysVerseOfTheDay().providedBy shouldBe VerseOfTheDayService.TheySaidSo
+        // this should throw and exception if something goes wrong. If it doesn't throw, the test passes
+        VerseOfTheDayApiProvider
+            .get(VerseOfTheDayService.TheySaidSo, localConfig, httpClient)
+            .getTodaysVerseOfTheDay().providedBy shouldBe VerseOfTheDayService.TheySaidSo
     }
 })

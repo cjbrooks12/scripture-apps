@@ -2,6 +2,7 @@ package com.caseyjbrooks.scripturenow.api.votd.sql
 
 import com.benasher44.uuid.uuid4
 import com.caseyjbrooks.scripturenow.ScriptureNowDatabase
+import com.caseyjbrooks.scripturenow.config.local.LocalAppConfig
 import com.caseyjbrooks.scripturenow.db.impl.sql.SqlDbProvider
 import com.caseyjbrooks.scripturenow.db.votd.VerseOfTheDayDbProvider
 import com.caseyjbrooks.scripturenow.models.VerseReference
@@ -18,11 +19,13 @@ import kotlinx.datetime.LocalDate
 
 class TestVerseOfTheDaySqlDb : StringSpec({
     "test making DB calls" {
+        val localConfig = LocalAppConfig.Defaults
         val verseOfTheDayDatabase = VerseOfTheDayDbProvider.get(
             SqlDbProvider.getDatabase(
                 JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY).also {
                     ScriptureNowDatabase.Schema.create(it)
-                }
+                },
+                localConfig
             )
         )
 

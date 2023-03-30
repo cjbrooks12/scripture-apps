@@ -23,9 +23,6 @@ public class SettingsInputHandler(
             updateState {
                 it.copy(
                     showReviewPrompt = true,
-                    updateIsAvailable = true,
-                    currentVersion = "0.1.0",
-                    latestVersion = "0.2.1",
                 )
             }
 
@@ -91,12 +88,13 @@ public class SettingsInputHandler(
         }
 
         // updates
-        is SettingsContract.Inputs.AppVersionsChanged -> {
-            updateState { it.copy(currentVersion = input.currentVersion, latestVersion = input.latestVersion) }
-        }
-
         is SettingsContract.Inputs.UpdateAppButtonClicked -> {
             postEvent(SettingsContract.Events.RequestNativeAppUpdate)
+        }
+        is SettingsContract.Inputs.CheckForUpdates -> {
+            sideJob("CheckForUpdates") {
+                globalRepository.checkForUpdates()
+            }
         }
 
         is SettingsContract.Inputs.ToggleShowMainVerse -> {

@@ -7,12 +7,17 @@ plugins {
     `copper-leaf-lint`
     id("com.github.gmazzo.buildconfig")
 }
+android {
+    namespace = "com.caseyjbrooks.scripturenow.config"
+}
 
 kotlin {
     sourceSets {
         // Common Sourcesets
         val commonMain by getting {
             dependencies {
+                api(project(":modules:models"))
+                api(project(":modules:resources"))
                 api(project(":modules:utils"))
             }
         }
@@ -50,14 +55,23 @@ buildConfig {
         topLevelConstants = true
     }
 
-    buildConfigField("String", "BASEURL_VERSEOFTHEDAYDOTCOM", "\"https://www.verseoftheday.com/\"")
-    buildConfigField("String", "BASEURL_BIBLEGATEWAY", "\"https://www.biblegateway.com/\"")
-    buildConfigField("String", "BASEURL_OURMANNA", "\"https://beta.ourmanna.com/api/v1/\"")
-    buildConfigField("String", "BASEURL_THEYSAIDSO", "\"https://quotes.rest/\"")
+    infix fun String.field(value: String) {
+        buildConfigField("String", this, "\"$value\"")
+    }
 
-    buildConfigField("String", "LOG_PREFIX", "\"SN\"")
-    buildConfigField("boolean", "LOG_API_CALLS", "false")
-    buildConfigField("boolean", "LOG_DB_QUERIES", "false")
-    buildConfigField("boolean", "LOG_REPOSITORIES", "true")
-    buildConfigField("boolean", "LOG_VIEWMODELS", "true")
+    infix fun String.field(value: Boolean) {
+        buildConfigField("boolean", this, value.toString())
+    }
+
+    "APP_VERSION" field project.version.toString()
+    "BASEURL_VERSEOFTHEDAYDOTCOM" field "https://www.verseoftheday.com/"
+    "BASEURL_BIBLEGATEWAY" field "https://www.biblegateway.com/"
+    "BASEURL_OURMANNA" field "https://beta.ourmanna.com/api/v1/"
+    "BASEURL_THEYSAIDSO" field "https://quotes.rest/"
+
+    "LOG_PREFIX" field "SN"
+    "LOG_API_CALLS" field false
+    "LOG_DB_QUERIES" field false
+    "LOG_REPOSITORIES" field true
+    "LOG_VIEWMODELS" field true
 }

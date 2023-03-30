@@ -51,7 +51,7 @@ public class TestCachedSerializer : StringSpec({
         val fDecoded = Json.decodeFromString(serializer, fEncoded)
         val gDecoded = Json.decodeFromString(serializer, gEncoded)
 
-        infix fun <T: Any> Cached<T>.isEquivalentTo(other: Cached<T>) {
+        infix fun <T : Any> Cached<T>.isEquivalentTo(other: Cached<T>) {
             this::class shouldBe other::class
             this.getCachedOrNull() shouldBe other.getCachedOrNull()
         }
@@ -73,4 +73,3 @@ public class TestCachedSerializer : StringSpec({
         gDecoded shouldNotBeSameInstanceAs g
     }
 })
-

@@ -48,7 +48,7 @@ fun NotificationDescription.showNotification(
                             0,
                             Intent(
                                 Intent.ACTION_VIEW,
-                                "scripture://now${deepLinkPath}".toUri()
+                                "scripture://now$deepLinkPath".toUri()
                             ).apply {
                                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                             },

@@ -14,6 +14,7 @@ multiplatformSettings = "1.0.0"
 sqldelight = "1.5.5"
 coil = "2.2.0"
 jsonForms = "0.7.0"
+mokoResources = "0.20.1"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -98,3 +99,6 @@ kotest-dataTest = { module = "io.kotest:kotest-framework-datatest", version.ref 
 kotest-propertyTest = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 
 jsoup = { module = "org.jsoup:jsoup", version = "1.15.3" }
+
+mokoResources-core = { module = "dev.icerock.moko:resources", version.ref = "mokoResources" }
+mokoResources-test = { module = "dev.icerock.moko:resources-test", version.ref = "mokoResources" }

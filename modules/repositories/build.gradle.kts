@@ -6,9 +6,18 @@ plugins {
     `copper-leaf-testing`
     `copper-leaf-lint`
 }
+android {
+    namespace = "com.caseyjbrooks.scripturenow.repositories"
+}
 
 kotlin {
     sourceSets {
+        all {
+            languageSettings {
+                optIn("kotlin.time.ExperimentalTime")
+            }
+        }
+
         // Common Sourcesets
         val commonMain by getting {
             dependencies {

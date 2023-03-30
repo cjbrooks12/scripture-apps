@@ -1,6 +1,5 @@
 package com.caseyjbrooks.scripturenow.ui.screens.memory.list
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -22,7 +21,6 @@ public fun MemoryVerseListScreen() {
     MemoryVerseListScreen(vmState) { vm.trySend(it) }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 public fun MemoryVerseListScreen(
     state: MemoryVerseListContract.State,

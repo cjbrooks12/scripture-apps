@@ -7,11 +7,16 @@ plugins {
     `copper-leaf-lint`
     `copper-leaf-compose`
 }
+android {
+    namespace = "com.caseyjbrooks.scripturenow.ui"
+}
 
 kotlin {
     sourceSets {
         all {
-            languageSettings.apply {
+            languageSettings {
+                optIn("androidx.compose.foundation.ExperimentalFoundationApi")
+                optIn("androidx.compose.animation.ExperimentalAnimationApi")
                 optIn("androidx.compose.material3.ExperimentalMaterial3Api")
             }
         }

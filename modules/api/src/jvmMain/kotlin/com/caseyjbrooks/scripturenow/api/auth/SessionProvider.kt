@@ -1,6 +1,6 @@
 package com.caseyjbrooks.scripturenow.api.auth
 
-import com.caseyjbrooks.scripturenow.config.LocalAppConfig
+import com.caseyjbrooks.scripturenow.config.local.LocalAppConfig
 import com.caseyjbrooks.scripturenow.models.auth.SessionService
 import io.ktor.client.*
 

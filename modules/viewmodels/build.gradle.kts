@@ -6,6 +6,9 @@ plugins {
     `copper-leaf-testing`
     `copper-leaf-lint`
 }
+android {
+    namespace = "com.caseyjbrooks.scripturenow.viewmodels"
+}
 
 kotlin {
     sourceSets {

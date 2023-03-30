@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.caseyjbrooks.scripturenow.models.routing.ScriptureNowRoute
 import com.caseyjbrooks.scripturenow.ui.LocalRouter
 import com.caseyjbrooks.scripturenow.ui.theme.BrandIcons
-import com.caseyjbrooks.scripturenow.ui.widgets.backHandler
+import com.caseyjbrooks.scripturenow.ui.widgets.OnBackPressed
 import com.copperleaf.ballast.navigation.routing.RouterContract
 import com.copperleaf.ballast.navigation.routing.build
 import com.copperleaf.ballast.navigation.routing.currentRouteOrNull
@@ -34,7 +34,7 @@ public fun BottomBarLayout(
     title: @Composable () -> Unit,
     backHandler: @Composable () -> Unit = {
         val router = LocalRouter.current
-        backHandler { router.trySend(RouterContract.Inputs.GoBack()) }
+        OnBackPressed { router.trySend(RouterContract.Inputs.GoBack()) }
     },
     content: @Composable PaddingValues.() -> Unit,
 ) {

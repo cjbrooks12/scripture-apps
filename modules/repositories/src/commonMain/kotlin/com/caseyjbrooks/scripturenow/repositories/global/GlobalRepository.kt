@@ -13,4 +13,6 @@ public interface GlobalRepository {
     public fun setFirebaseInstallationId(value: String)
     public fun setFirebaseToken(value: String)
     public fun setShowMainVerse(value: Boolean)
+
+    public fun checkForUpdates()
 }

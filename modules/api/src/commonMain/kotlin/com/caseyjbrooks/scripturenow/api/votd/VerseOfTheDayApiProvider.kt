@@ -8,7 +8,7 @@ import com.caseyjbrooks.scripturenow.api.votd.impl.ourmanna.OurMannaApiConverter
 import com.caseyjbrooks.scripturenow.api.votd.impl.ourmanna.OurMannaApiImpl
 import com.caseyjbrooks.scripturenow.api.votd.impl.theysaidso.TheySaidSoApiConverterImpl
 import com.caseyjbrooks.scripturenow.api.votd.impl.theysaidso.TheySaidSoApiImpl
-import com.caseyjbrooks.scripturenow.config.LocalAppConfig
+import com.caseyjbrooks.scripturenow.config.local.LocalAppConfig
 import com.caseyjbrooks.scripturenow.models.votd.VerseOfTheDayService
 import de.jensklingenberg.ktorfit.Ktorfit
 import io.ktor.client.*

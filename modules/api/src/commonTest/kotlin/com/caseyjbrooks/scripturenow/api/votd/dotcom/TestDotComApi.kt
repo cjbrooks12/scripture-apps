@@ -4,14 +4,20 @@ import com.caseyjbrooks.scripturenow.api.HttpClientProvider
 import com.caseyjbrooks.scripturenow.api.votd.VerseOfTheDayApiProvider
 import com.caseyjbrooks.scripturenow.api.votd.impl.dotcom.DotComApiConverterImpl
 import com.caseyjbrooks.scripturenow.api.votd.impl.dotcom.models.DotComVotdResponse
+import com.caseyjbrooks.scripturenow.config.local.LocalAppConfig
 import com.caseyjbrooks.scripturenow.models.VerseReference
 import com.caseyjbrooks.scripturenow.models.votd.VerseOfTheDayService
 import com.caseyjbrooks.scripturenow.utils.now
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import io.ktor.client.engine.okhttp.*
 import kotlinx.datetime.LocalDate
 
 public class TestDotComApi : StringSpec({
+    val localConfig = LocalAppConfig.ActualDefaults
+    val httpClientEngine = OkHttp
+    val httpClient = HttpClientProvider.get(httpClientEngine, localConfig)
+
     "test responseConverter" {
         val inputHtml = """
             <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -56,9 +62,8 @@ public class TestDotComApi : StringSpec({
         """.trimIndent()
         val inputParsed = HttpClientProvider.html.decodeFromString(DotComVotdResponse.serializer(), inputHtml)
         val now = LocalDate.now()
-        val converted = DotComApiConverterImpl().convertApiModelToRepositoryModel(
-            date = now,
-            apiModel = inputParsed,
+        val converted = DotComApiConverterImpl().convertValue(
+            now to inputParsed,
         )
 
         converted.date shouldBe now
@@ -71,7 +76,7 @@ public class TestDotComApi : StringSpec({
     "test making API call" {
         // this should throw and exception if something goes wrong. If it doesn't throw, the test passes
         VerseOfTheDayApiProvider
-            .get(VerseOfTheDayService.VerseOfTheDayDotCom)
+            .get(VerseOfTheDayService.VerseOfTheDayDotCom, localConfig, httpClient)
             .getTodaysVerseOfTheDay().providedBy shouldBe VerseOfTheDayService.VerseOfTheDayDotCom
     }
 })

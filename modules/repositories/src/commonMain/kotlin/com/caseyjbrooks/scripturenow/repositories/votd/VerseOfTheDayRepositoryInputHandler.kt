@@ -42,7 +42,6 @@ public class VerseOfTheDayRepositoryInputHandler(
             )
         }
 
-
         is VerseOfTheDayRepositoryContract.Inputs.VerseOfTheDayServiceUpdated -> {
             val previousState = getAndUpdateState {
                 it.copy(

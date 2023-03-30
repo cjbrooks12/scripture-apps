@@ -1,6 +1,6 @@
 package com.caseyjbrooks.scripturenow.api.auth
 
-import com.caseyjbrooks.scripturenow.config.LocalAppConfig
+import com.caseyjbrooks.scripturenow.config.local.LocalAppConfig
 import com.caseyjbrooks.scripturenow.models.auth.SessionService
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase

@@ -7,6 +7,9 @@ plugins {
     `copper-leaf-lint`
     `copper-leaf-compose`
 }
+android {
+    namespace = "com.caseyjbrooks.scripturenow.analytics"
+}
 
 kotlin {
     sourceSets {

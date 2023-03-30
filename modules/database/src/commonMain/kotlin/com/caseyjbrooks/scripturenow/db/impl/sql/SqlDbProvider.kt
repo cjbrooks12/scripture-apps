@@ -2,7 +2,7 @@ package com.caseyjbrooks.scripturenow.db.impl.sql
 
 import co.touchlab.kermit.Logger
 import com.caseyjbrooks.scripturenow.ScriptureNowDatabase
-import com.caseyjbrooks.scripturenow.config.LocalAppConfig
+import com.caseyjbrooks.scripturenow.config.local.LocalAppConfig
 import com.caseyjbrooks.scripturenow.db.LocalDateAdapter
 import com.caseyjbrooks.scripturenow.db.LocalDateTimeAdapter
 import com.caseyjbrooks.scripturenow.db.UuidAdapter

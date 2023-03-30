@@ -1,7 +1,7 @@
 package com.caseyjbrooks.scripturenow.repositories.memory
 
 import com.caseyjbrooks.scripturenow.db.memory.MemoryVerseDb
-import com.caseyjbrooks.scripturenow.utils.models.votd.VerseOfTheDayToMemoryVerseConverter
+import com.caseyjbrooks.scripturenow.models.votd.VerseOfTheDayToMemoryVerseConverter
 import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
 import com.copperleaf.ballast.postInput

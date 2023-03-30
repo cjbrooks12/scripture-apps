@@ -4,14 +4,20 @@ import com.caseyjbrooks.scripturenow.api.HttpClientProvider
 import com.caseyjbrooks.scripturenow.api.votd.VerseOfTheDayApiProvider
 import com.caseyjbrooks.scripturenow.api.votd.impl.ourmanna.OurMannaApiConverterImpl
 import com.caseyjbrooks.scripturenow.api.votd.impl.ourmanna.models.OurMannaVotdResponse
+import com.caseyjbrooks.scripturenow.config.local.LocalAppConfig
 import com.caseyjbrooks.scripturenow.models.VerseReference
 import com.caseyjbrooks.scripturenow.models.votd.VerseOfTheDayService
 import com.caseyjbrooks.scripturenow.utils.now
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import io.ktor.client.engine.okhttp.*
 import kotlinx.datetime.LocalDate
 
 public class TestOurMannaApi : StringSpec({
+    val localConfig = LocalAppConfig.ActualDefaults
+    val httpClientEngine = OkHttp
+    val httpClient = HttpClientProvider.get(httpClientEngine, localConfig)
+
     "test responseConverter" {
         val inputJson = """
             {
@@ -28,9 +34,8 @@ public class TestOurMannaApi : StringSpec({
         """.trimIndent()
         val inputParsed = HttpClientProvider.json.decodeFromString(OurMannaVotdResponse.serializer(), inputJson)
         val now = LocalDate.now()
-        val converted = OurMannaApiConverterImpl().convertApiModelToRepositoryModel(
-            date = now,
-            apiModel = inputParsed,
+        val converted = OurMannaApiConverterImpl().convertValue(
+            now to inputParsed,
         )
 
         converted.date shouldBe now
@@ -44,7 +49,7 @@ public class TestOurMannaApi : StringSpec({
     "test making API call" {
         // this should throw and exception if something goes wrong. If it doesn't throw, the test passes
         VerseOfTheDayApiProvider
-            .get(VerseOfTheDayService.OurManna)
+            .get(VerseOfTheDayService.OurManna, localConfig, httpClient)
             .getTodaysVerseOfTheDay().providedBy shouldBe VerseOfTheDayService.OurManna
     }
 })

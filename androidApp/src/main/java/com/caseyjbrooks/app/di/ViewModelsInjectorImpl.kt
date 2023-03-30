@@ -54,7 +54,6 @@ import kotlinx.coroutines.Dispatchers
 class ViewModelsInjectorImpl(
     private val appInjector: AppInjector,
 ) : ViewModelsInjector {
-    private val dataSourcesInjector: DataSourcesInjectorImpl = appInjector.dataSourcesInjector
     private val repositories: RepositoriesInjector = appInjector.repositoriesInjector
 
     private fun getViewModelBuilder(): BallastViewModelConfiguration.Builder {
@@ -66,10 +65,10 @@ class ViewModelsInjectorImpl(
                 interceptorDispatcher = Dispatchers.Default
             )
             .apply {
-                if (dataSourcesInjector.getLocalAppConfig().logViewModels) {
+                if (appInjector.configInjector.getLocalAppConfig().logViewModels) {
                     this += LoggingInterceptor()
                 }
-                logger = { AndroidLogger("${dataSourcesInjector.getLocalAppConfig().logPrefix} - $it") }
+                logger = { AndroidLogger("${appInjector.configInjector.getLocalAppConfig().logPrefix} - $it") }
             }
     }
 

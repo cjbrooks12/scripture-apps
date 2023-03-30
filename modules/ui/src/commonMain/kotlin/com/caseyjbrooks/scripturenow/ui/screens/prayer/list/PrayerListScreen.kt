@@ -1,6 +1,5 @@
 package com.caseyjbrooks.scripturenow.ui.screens.prayer.list
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -21,7 +20,6 @@ public fun PrayerListScreen() {
     PrayerListScreen(vmState) { vm.trySend(it) }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 public fun PrayerListScreen(
     state: PrayerListContract.State,

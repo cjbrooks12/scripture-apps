@@ -55,7 +55,7 @@ class MemoryVerseWidget : ScriptureNowAppWidget<Cached<MemoryVerse>>() {
                     actionStartActivity(
                         Intent(
                             Intent.ACTION_VIEW,
-                            "scripture://now${deepLinkPath}".toUri()
+                            "scripture://now$deepLinkPath".toUri()
                         )
                     )
                 )
