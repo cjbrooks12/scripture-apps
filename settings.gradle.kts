@@ -20,26 +20,16 @@ includeBuild(conventionDir)
 
 rootProject.name = "scripture-now"
 
-//include(":modules:models")
-//include(":modules:resources")
-//include(":modules:utils")
+include(":core:database")
+include(":core:routing")
 
-//include(":modules:config")
+include(":features:bible")
+include(":features:prayer")
+include(":features:scriptureMemory")
+include(":features:topicalBible")
 
-//include(":modules:api")
-//include(":modules:database")
-
-//include(":modules:repositories")
-
-//include(":modules:viewmodels")
-//include(":modules:notifications")
-//include(":modules:widgets")
-//include(":modules:jobs")
-//include(":modules:ui")
-
-//include(":modules:analytics")
-
-//include(":shared")
+include(":shared")
 
 include(":composeApp")
+
 //include(":site")

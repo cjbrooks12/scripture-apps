@@ -12,12 +12,21 @@ kotlin {
         // Common Sourcesets
         val commonMain by getting {
             dependencies {
-                api(project(":core:routing"))
-
-                api(project(":features:bible"))
-                api(project(":features:prayer"))
-                api(project(":features:scriptureMemory"))
-                api(project(":features:topicalBible"))
+//                api(project(":modules:utils"))
+//                api(project(":modules:models"))
+//
+//                api(project(":modules:config"))
+//
+//                api(project(":modules:api"))
+//                api(project(":modules:database"))
+//                api(project(":modules:repositories"))
+//
+//                api(project(":modules:viewmodels"))
+//                api(project(":modules:ui"))
+//                api(project(":modules:notifications"))
+//                api(project(":modules:widgets"))
+//                api(project(":modules:analytics"))
+//                api(project(":modules:jobs"))
             }
         }
         val commonTest by getting {
