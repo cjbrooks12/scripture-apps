@@ -15,8 +15,10 @@ kotlin {
                 api(project(":core:routing"))
 
                 api(project(":features:bible"))
+                api(project(":features:foryou"))
                 api(project(":features:prayer"))
                 api(project(":features:scriptureMemory"))
+                api(project(":features:settings"))
                 api(project(":features:topicalBible"))
             }
         }

@@ -13,16 +13,17 @@ import com.copperleaf.ballast.navigation.routing.build
 import com.copperleaf.ballast.navigation.routing.currentDestinationOrNull
 import com.copperleaf.ballast.navigation.routing.directions
 
-public data class MainNavigationItem(
+public data class NavigationItem(
     val route: ScriptureNowScreen,
     val iconFilled: ImageVector,
     val iconOutlined: ImageVector,
     val label: String,
+    val order: Int,
 )
 
 @Composable
 public fun MainNavigationRail(
-    navigationItems: List<MainNavigationItem>,
+    navigationItems: List<NavigationItem>,
 ) {
     val router = LocalRouter.current
     val currentListPaneDestination = currentListBackstack().currentDestinationOrNull
@@ -54,7 +55,7 @@ public fun MainNavigationRail(
 
 @Composable
 public fun MainNavigationBar(
-    navigationItems: List<MainNavigationItem>,
+    navigationItems: List<NavigationItem>,
 ) {
     val router = LocalRouter.current
     val currentListPaneDestination = currentListBackstack().currentDestinationOrNull

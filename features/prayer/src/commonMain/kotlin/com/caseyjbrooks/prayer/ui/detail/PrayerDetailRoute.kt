@@ -8,7 +8,6 @@ import com.caseyjbrooks.prayer.ui.form.PrayerFormRoute
 import com.caseyjbrooks.prayer.ui.list.PrayerListRoute
 import com.caseyjbrooks.prayer.ui.timer.PrayerTimerRoute
 import com.caseyjbrooks.routing.DetailPane
-import com.caseyjbrooks.routing.PrayerRoute
 import com.caseyjbrooks.routing.ScriptureNowScreen
 import com.copperleaf.ballast.navigation.routing.Destination
 import com.copperleaf.ballast.navigation.routing.RouteAnnotation
@@ -20,7 +19,7 @@ import com.copperleaf.ballast.navigation.routing.stringPath
 
 public object PrayerDetailRoute : ScriptureNowScreen {
     override val matcher: RouteMatcher = RouteMatcher.create("/prayer/view/{prayerId}")
-    override val annotations: Set<RouteAnnotation> = setOf(PrayerRoute, DetailPane)
+    override val annotations: Set<RouteAnnotation> = setOf(DetailPane)
 
     public object Directions {
         public fun list(): String {

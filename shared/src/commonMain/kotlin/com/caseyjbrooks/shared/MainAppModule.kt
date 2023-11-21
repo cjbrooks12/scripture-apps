@@ -1,18 +1,20 @@
 package com.caseyjbrooks.shared
 
+import com.caseyjbrooks.bible.BibleModule
+import com.caseyjbrooks.di.CombinedFeatureModule
+import com.caseyjbrooks.foryou.ForYouModule
 import com.caseyjbrooks.prayer.PrayerModule
-import com.caseyjbrooks.prayer.ui.list.PrayerListRoute
-import com.caseyjbrooks.routing.MainNavigationItem
-import com.caseyjbrooks.routing.ScriptureNowScreen
+import com.caseyjbrooks.scripturememory.ScriptureMemoryModule
+import com.caseyjbrooks.settings.SettingsModule
+import com.caseyjbrooks.topicalbible.TopicalBibleModule
 
-public object MainAppModule {
-    public val allRoutes: List<ScriptureNowScreen> = listOf(
-        PrayerModule.routes(),
-    ).flatten()
+public class MainAppModule : CombinedFeatureModule(
+    ForYouModule(),
+    ScriptureMemoryModule(),
+    PrayerModule(),
+    SettingsModule(),
+    TopicalBibleModule(),
+    BibleModule(),
 
-    public val initialRoute: ScriptureNowScreen = PrayerListRoute
-
-    public val mainNavigationItems: List<MainNavigationItem> = listOf(
-        PrayerModule.mainNavigationItem,
-    )
-}
+    initialRoute = ForYouModule().initialRoute,
+)

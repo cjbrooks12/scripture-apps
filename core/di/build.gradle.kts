@@ -12,6 +12,7 @@ kotlin {
         // Common Sourcesets
         val commonMain by getting {
             dependencies {
+                api(project(":core:routing"))
                 api(libs.benasher44.uuid)
             }
         }

@@ -25,8 +25,10 @@ include(":core:di")
 include(":core:routing")
 
 include(":features:bible")
+include(":features:foryou")
 include(":features:prayer")
 include(":features:scriptureMemory")
+include(":features:settings")
 include(":features:topicalBible")
 
 include(":shared")

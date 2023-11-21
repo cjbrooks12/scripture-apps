@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.caseyjbrooks.di.FeatureModule
 import com.caseyjbrooks.routing.LocalRouter
 import com.caseyjbrooks.routing.LocalSizeClass
 import com.caseyjbrooks.routing.MainNavigationBar
@@ -28,13 +29,13 @@ import com.copperleaf.ballast.navigation.routing.renderCurrentDestination
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
-public fun MainCommonApplication() {
+public fun MainCommonApplication(featureModule: FeatureModule = MainAppModule()) {
     val coroutineScope = rememberCoroutineScope()
     val router = remember(coroutineScope) {
         RouterViewModel(
             viewModelCoroutineScope = coroutineScope,
-            initialRoute = MainAppModule.initialRoute,
-            allRoutes = MainAppModule.allRoutes,
+            initialRoute = featureModule.initialRoute!!,
+            allRoutes = featureModule.routes,
         )
     }
 
@@ -47,22 +48,25 @@ public fun MainCommonApplication() {
             WindowWidthSizeClass.Compact,
             WindowWidthSizeClass.Medium,
             -> {
-                PhoneLayout()
+                PhoneLayout(featureModule)
             }
 
             WindowWidthSizeClass.Expanded -> {
-                DesktopLayout()
+                DesktopLayout(featureModule)
             }
         }
     }
 }
 
 @Composable
-private fun DesktopLayout() {
+private fun DesktopLayout(featureModule: FeatureModule) {
     Column {
         Row {
             Column(Modifier.wrapContentWidth()) {
-                MainNavigationRail(MainAppModule.mainNavigationItems)
+                MainNavigationRail(
+                    (featureModule.mainNavigationItems + featureModule.secondaryNavigationItems)
+                        .sortedBy { it.order },
+                )
             }
             Column(Modifier.width(240.dp)) {
                 currentListBackstack().renderCurrentDestination(
@@ -85,11 +89,14 @@ private fun DesktopLayout() {
 }
 
 @Composable
-private fun PhoneLayout() {
+private fun PhoneLayout(featureModule: FeatureModule) {
     Scaffold(
         topBar = { },
         bottomBar = {
-            MainNavigationBar(MainAppModule.mainNavigationItems)
+            MainNavigationBar(
+                featureModule.mainNavigationItems
+                    .sortedBy { it.order },
+            )
         },
     ) {
         Column(Modifier.padding(it)) {

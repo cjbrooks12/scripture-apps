@@ -5,7 +5,6 @@ import androidx.compose.runtime.key
 import com.caseyjbrooks.prayer.models.PrayerId
 import com.caseyjbrooks.prayer.ui.list.PrayerListRoute
 import com.caseyjbrooks.routing.DetailPane
-import com.caseyjbrooks.routing.PrayerRoute
 import com.caseyjbrooks.routing.ScriptureNowScreen
 import com.copperleaf.ballast.navigation.routing.Destination
 import com.copperleaf.ballast.navigation.routing.RouteAnnotation
@@ -16,7 +15,7 @@ import com.copperleaf.ballast.navigation.routing.stringPath
 
 public object PrayerTimerRoute : ScriptureNowScreen {
     override val matcher: RouteMatcher = RouteMatcher.create("/prayer/prayNow/{prayerId}")
-    override val annotations: Set<RouteAnnotation> = setOf(PrayerRoute, DetailPane)
+    override val annotations: Set<RouteAnnotation> = setOf(DetailPane)
 
     public object Directions {
         public fun list(): String {
