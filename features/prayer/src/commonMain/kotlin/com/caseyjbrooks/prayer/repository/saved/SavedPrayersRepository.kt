@@ -39,7 +39,7 @@ public interface SavedPrayersRepository {
      */
     public fun getPrayers(
         archiveStatus: ArchiveStatus,
-        tags: List<PrayerTag>,
+        tags: Set<PrayerTag>,
     ): Flow<List<SavedPrayer>>
 
     /**

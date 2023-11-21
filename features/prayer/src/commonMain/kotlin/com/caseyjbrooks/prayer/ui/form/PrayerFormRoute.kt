@@ -1,10 +1,13 @@
 package com.caseyjbrooks.prayer.ui.form
 
 import androidx.compose.runtime.Composable
-import com.caseyjbrooks.prayer.models.PrayerRoute
+import androidx.compose.runtime.key
+import com.caseyjbrooks.prayer.models.PrayerId
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.ui.detail.PrayerDetailRoute
 import com.caseyjbrooks.prayer.ui.list.PrayerListRoute
+import com.caseyjbrooks.routing.DetailPane
+import com.caseyjbrooks.routing.PrayerRoute
 import com.caseyjbrooks.routing.ScriptureNowScreen
 import com.copperleaf.ballast.navigation.routing.Destination
 import com.copperleaf.ballast.navigation.routing.RouteAnnotation
@@ -15,8 +18,8 @@ import com.copperleaf.ballast.navigation.routing.optionalStringPath
 import com.copperleaf.ballast.navigation.routing.pathParameter
 
 public object PrayerFormRoute : ScriptureNowScreen {
-    override val matcher: RouteMatcher = RouteMatcher.create("/prayer/{prayerId?}/form")
-    override val annotations: Set<RouteAnnotation> = setOf(PrayerRoute)
+    override val matcher: RouteMatcher = RouteMatcher.create("/prayer/form/{prayerId?}")
+    override val annotations: Set<RouteAnnotation> = setOf(PrayerRoute, DetailPane)
 
     public object Directions {
         public fun list(): String {
@@ -36,6 +39,8 @@ public object PrayerFormRoute : ScriptureNowScreen {
     @Composable
     override fun Content(destination: Destination.Match<ScriptureNowScreen>) {
         val prayerId: String? by destination.optionalStringPath()
-        PrayerFormUi.Content()
+        key(prayerId) {
+            PrayerFormUi.Content(prayerId?.let { PrayerId(it) })
+        }
     }
 }

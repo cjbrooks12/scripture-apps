@@ -49,11 +49,11 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
             clock = clock,
         )
 
-        savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptyList()).first() shouldBe emptyList()
+        savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptySet()).first() shouldBe emptyList()
 
         // add the daily verse to the user's collection
         useCase()
-        savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptyList()).first() shouldBe listOf(
+        savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptySet()).first() shouldBe listOf(
             SavedPrayer(
                 uuid = PrayerId("1"),
                 text = "Hardcoded Daily Prayer",
@@ -69,7 +69,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
         // don't add a new verse, don't update the existing one. It's already there
         clock.advanceTime()
         useCase()
-        savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptyList()).first() shouldBe listOf(
+        savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptySet()).first() shouldBe listOf(
             SavedPrayer(
                 uuid = PrayerId("1"),
                 text = "Hardcoded Daily Prayer",
@@ -106,11 +106,11 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
             clock = clock,
         )
 
-        savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptyList()).first() shouldBe emptyList()
+        savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptySet()).first() shouldBe emptyList()
 
         // add the daily verse to the user's collection
         useCase()
-        savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptyList()).first() shouldBe listOf(
+        savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptySet()).first() shouldBe listOf(
             SavedPrayer(
                 uuid = PrayerId("1"),
                 text = "Hardcoded Daily Prayer",
@@ -147,11 +147,11 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
             clock = clock,
         )
 
-        savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptyList()).first() shouldBe emptyList()
+        savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptySet()).first() shouldBe emptyList()
 
         // add the daily verse to the user's collection
         useCase()
-        savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptyList()).first() shouldBe listOf(
+        savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptySet()).first() shouldBe listOf(
             SavedPrayer(
                 uuid = PrayerId("1"),
                 text = "Hardcoded Daily Prayer",
@@ -191,11 +191,11 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
             clock = clock,
         )
 
-        savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptyList()).first() shouldBe emptyList()
+        savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptySet()).first() shouldBe emptyList()
 
         // add the daily verse to the user's collection
         useCase()
-        savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptyList()).first() shouldBe listOf(
+        savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptySet()).first() shouldBe listOf(
             SavedPrayer(
                 uuid = PrayerId("1"),
                 text = "Hardcoded Daily Prayer",

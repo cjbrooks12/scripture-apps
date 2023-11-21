@@ -23,6 +23,6 @@ public interface QueryPrayersUseCase {
      */
     public operator fun invoke(
         archiveStatus: ArchiveStatus,
-        tags: List<PrayerTag>,
+        tags: Set<PrayerTag>,
     ): Flow<Cached<List<SavedPrayer>>>
 }

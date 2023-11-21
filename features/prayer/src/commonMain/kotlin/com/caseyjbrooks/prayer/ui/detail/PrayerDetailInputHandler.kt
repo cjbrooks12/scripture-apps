@@ -3,7 +3,9 @@ package com.caseyjbrooks.prayer.ui.detail
 import com.caseyjbrooks.prayer.domain.getbyid.GetPrayerByIdUseCase
 import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
-import kotlinx.coroutines.delay
+import com.copperleaf.ballast.observeFlows
+import com.copperleaf.ballast.repository.cache.getCachedOrNull
+import kotlinx.coroutines.flow.map
 
 internal class PrayerDetailInputHandler(
     private val getByIdUseCase: GetPrayerByIdUseCase,
@@ -19,14 +21,62 @@ internal class PrayerDetailInputHandler(
             >.handleInput(
         input: PrayerDetailContract.Inputs,
     ): Unit = when (input) {
-        is PrayerDetailContract.Inputs.Initialize -> {
-            updateState { it.copy(loading = true) }
-            delay(1000)
-            updateState { it.copy(loading = false) }
+        is PrayerDetailContract.Inputs.ObservePrayer -> {
+            val currentState = updateStateAndGet { it.copy(prayerId = input.prayerId) }
+            observeFlows(
+                "ObservePrayer",
+                getByIdUseCase(currentState.prayerId)
+                    .map { PrayerDetailContract.Inputs.PrayerUpdated(it) },
+            )
+        }
+
+        is PrayerDetailContract.Inputs.PrayerUpdated -> {
+            updateState { it.copy(cachedPrayer = input.cachedPrayers) }
+        }
+
+        is PrayerDetailContract.Inputs.NavigateUp -> {
+            postEvent(
+                PrayerDetailContract.Events.NavigateTo(
+                    PrayerDetailRoute.Directions.list(),
+                    replaceTop = true,
+                ),
+            )
         }
 
         is PrayerDetailContract.Inputs.GoBack -> {
-            postEvent(PrayerDetailContract.Events.NavigateUp)
+            postEvent(
+                PrayerDetailContract.Events.NavigateBack,
+            )
+        }
+
+        is PrayerDetailContract.Inputs.Edit -> {
+            val currentPrayer = getCurrentState().cachedPrayer.getCachedOrNull()
+
+            if (currentPrayer != null) {
+                postEvent(
+                    PrayerDetailContract.Events.NavigateTo(
+                        PrayerDetailRoute.Directions.edit(currentPrayer),
+                        replaceTop = false,
+                    ),
+                )
+            } else {
+                noOp()
+            }
+        }
+
+        is PrayerDetailContract.Inputs.PrayNow -> {
+            val currentPrayer = getCurrentState().cachedPrayer.getCachedOrNull()
+
+            if (currentPrayer != null) {
+                postEvent(
+                    PrayerDetailContract.Events.NavigateTo(
+                        PrayerDetailRoute.Directions.timer(currentPrayer),
+                        replaceTop = false,
+                    ),
+                )
+            } else {
+                noOp()
+            }
         }
     }
 }

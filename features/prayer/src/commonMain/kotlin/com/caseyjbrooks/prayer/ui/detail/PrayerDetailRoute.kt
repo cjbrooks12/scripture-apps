@@ -1,11 +1,14 @@
 package com.caseyjbrooks.prayer.ui.detail
 
 import androidx.compose.runtime.Composable
-import com.caseyjbrooks.prayer.models.PrayerRoute
+import androidx.compose.runtime.key
+import com.caseyjbrooks.prayer.models.PrayerId
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.ui.form.PrayerFormRoute
 import com.caseyjbrooks.prayer.ui.list.PrayerListRoute
 import com.caseyjbrooks.prayer.ui.timer.PrayerTimerRoute
+import com.caseyjbrooks.routing.DetailPane
+import com.caseyjbrooks.routing.PrayerRoute
 import com.caseyjbrooks.routing.ScriptureNowScreen
 import com.copperleaf.ballast.navigation.routing.Destination
 import com.copperleaf.ballast.navigation.routing.RouteAnnotation
@@ -16,8 +19,8 @@ import com.copperleaf.ballast.navigation.routing.pathParameter
 import com.copperleaf.ballast.navigation.routing.stringPath
 
 public object PrayerDetailRoute : ScriptureNowScreen {
-    override val matcher: RouteMatcher = RouteMatcher.create("/prayer/{prayerId}")
-    override val annotations: Set<RouteAnnotation> = setOf(PrayerRoute)
+    override val matcher: RouteMatcher = RouteMatcher.create("/prayer/view/{prayerId}")
+    override val annotations: Set<RouteAnnotation> = setOf(PrayerRoute, DetailPane)
 
     public object Directions {
         public fun list(): String {
@@ -44,6 +47,9 @@ public object PrayerDetailRoute : ScriptureNowScreen {
     @Composable
     override fun Content(destination: Destination.Match<ScriptureNowScreen>) {
         val prayerId: String by destination.stringPath()
-        PrayerDetailUi.Content()
+
+        key(prayerId) {
+            PrayerDetailUi.Content(PrayerId(prayerId))
+        }
     }
 }

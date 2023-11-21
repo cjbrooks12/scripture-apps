@@ -17,14 +17,14 @@ public class InMemorySavedPrayersRepositoryTest : StringSpec({
         val repo: SavedPrayersRepository = InMemorySavedPrayersRepository()
 
         // check initial state
-        repo.getPrayers(ArchiveStatus.FullCollection, emptyList()).first() shouldBe emptyList()
+        repo.getPrayers(ArchiveStatus.FullCollection, emptySet()).first() shouldBe emptyList()
 
         // add some prayers to the DB
         repo.createPrayer(getPrayer("1", "prayer one"))
         repo.createPrayer(getPrayer("2", "prayer two"))
 
         // check they got saved
-        repo.getPrayers(ArchiveStatus.FullCollection, emptyList()).first() shouldBe listOf(
+        repo.getPrayers(ArchiveStatus.FullCollection, emptySet()).first() shouldBe listOf(
             getPrayer("1", "prayer one"),
             getPrayer("2", "prayer two"),
         )
@@ -43,7 +43,7 @@ public class InMemorySavedPrayersRepositoryTest : StringSpec({
         repo.updatePrayer(getPrayer("2", "Updated prayer two text"))
 
         // check those changes were also saved
-        repo.getPrayers(ArchiveStatus.FullCollection, emptyList()).first() shouldBe listOf(
+        repo.getPrayers(ArchiveStatus.FullCollection, emptySet()).first() shouldBe listOf(
             getPrayer("2", "Updated prayer two text"),
         )
         repo.getPrayerById(PrayerId("2")).first() shouldBe getPrayer("2", "Updated prayer two text")

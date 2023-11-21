@@ -1,12 +1,12 @@
 package com.caseyjbrooks.prayer.domain
 
+import com.caseyjbrooks.prayer.domain.query.QueryPrayersUseCase
+import com.caseyjbrooks.prayer.domain.query.QueryPrayersUseCaseImpl
 import com.caseyjbrooks.prayer.models.ArchiveStatus
 import com.caseyjbrooks.prayer.models.PrayerTag
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.repository.saved.InMemorySavedPrayersRepository
 import com.caseyjbrooks.prayer.repository.saved.SavedPrayersRepository
-import com.caseyjbrooks.prayer.domain.query.QueryPrayersUseCase
-import com.caseyjbrooks.prayer.domain.query.QueryPrayersUseCaseImpl
 import com.caseyjbrooks.prayer.utils.getPrayer
 import com.copperleaf.ballast.repository.cache.Cached
 import com.copperleaf.ballast.repository.cache.getCachedOrNull
@@ -43,7 +43,7 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
         val results = useCase(
             archiveStatus = ArchiveStatus.NotArchived,
-            tags = emptyList(),
+            tags = emptySet(),
         ).take(2).toList()
 
         results[0].shouldBeInstanceOf<Cached.Fetching<List<SavedPrayer>>>()
@@ -67,7 +67,7 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
         val results = useCase(
             archiveStatus = ArchiveStatus.NotArchived,
-            tags = listOf(PrayerTag("one")),
+            tags = setOf(PrayerTag("one")),
         ).take(2).toList()
 
         results[0].shouldBeInstanceOf<Cached.Fetching<List<SavedPrayer>>>()
@@ -88,7 +88,7 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
         val results = useCase(
             archiveStatus = ArchiveStatus.NotArchived,
-            tags = listOf(PrayerTag("one"), PrayerTag("two")),
+            tags = setOf(PrayerTag("one"), PrayerTag("two")),
         ).take(2).toList()
 
         results[0].shouldBeInstanceOf<Cached.Fetching<List<SavedPrayer>>>()
@@ -106,7 +106,7 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
         val results = useCase(
             archiveStatus = ArchiveStatus.Archived,
-            tags = emptyList(),
+            tags = emptySet(),
         ).take(2).toList()
 
         results[0].shouldBeInstanceOf<Cached.Fetching<List<SavedPrayer>>>()
@@ -125,7 +125,7 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
         val results = useCase(
             archiveStatus = ArchiveStatus.Archived,
-            tags = listOf(PrayerTag("one")),
+            tags = setOf(PrayerTag("one")),
         ).take(2).toList()
 
         results[0].shouldBeInstanceOf<Cached.Fetching<List<SavedPrayer>>>()
@@ -143,7 +143,7 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
         val results = useCase(
             archiveStatus = ArchiveStatus.Archived,
-            tags = listOf(PrayerTag("one"), PrayerTag("two")),
+            tags = setOf(PrayerTag("one"), PrayerTag("two")),
         ).take(2).toList()
 
         results[0].shouldBeInstanceOf<Cached.Fetching<List<SavedPrayer>>>()
@@ -160,7 +160,7 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
         val results = useCase(
             archiveStatus = ArchiveStatus.FullCollection,
-            tags = emptyList(),
+            tags = emptySet(),
         ).take(2).toList()
 
         results[0].shouldBeInstanceOf<Cached.Fetching<List<SavedPrayer>>>()
@@ -187,7 +187,7 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
         val results = useCase(
             archiveStatus = ArchiveStatus.FullCollection,
-            tags = listOf(PrayerTag("one")),
+            tags = setOf(PrayerTag("one")),
         ).take(2).toList()
 
         results[0].shouldBeInstanceOf<Cached.Fetching<List<SavedPrayer>>>()
@@ -210,7 +210,7 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
         val results = useCase(
             archiveStatus = ArchiveStatus.FullCollection,
-            tags = listOf(PrayerTag("one"), PrayerTag("two")),
+            tags = setOf(PrayerTag("one"), PrayerTag("two")),
         ).take(2).toList()
 
         results[0].shouldBeInstanceOf<Cached.Fetching<List<SavedPrayer>>>()
@@ -229,7 +229,7 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
         val results = useCase(
             archiveStatus = ArchiveStatus.FullCollection,
-            tags = listOf(PrayerTag("three")),
+            tags = setOf(PrayerTag("three")),
         ).take(2).toList()
 
         results[0].shouldBeInstanceOf<Cached.Fetching<List<SavedPrayer>>>()

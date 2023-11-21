@@ -1,8 +1,11 @@
 package com.caseyjbrooks.prayer.ui.timer
 
 import androidx.compose.runtime.Composable
-import com.caseyjbrooks.prayer.models.PrayerRoute
+import androidx.compose.runtime.key
+import com.caseyjbrooks.prayer.models.PrayerId
 import com.caseyjbrooks.prayer.ui.list.PrayerListRoute
+import com.caseyjbrooks.routing.DetailPane
+import com.caseyjbrooks.routing.PrayerRoute
 import com.caseyjbrooks.routing.ScriptureNowScreen
 import com.copperleaf.ballast.navigation.routing.Destination
 import com.copperleaf.ballast.navigation.routing.RouteAnnotation
@@ -12,8 +15,8 @@ import com.copperleaf.ballast.navigation.routing.directions
 import com.copperleaf.ballast.navigation.routing.stringPath
 
 public object PrayerTimerRoute : ScriptureNowScreen {
-    override val matcher: RouteMatcher = RouteMatcher.create("/prayer/{prayerId}/now")
-    override val annotations: Set<RouteAnnotation> = setOf(PrayerRoute)
+    override val matcher: RouteMatcher = RouteMatcher.create("/prayer/prayNow/{prayerId}")
+    override val annotations: Set<RouteAnnotation> = setOf(PrayerRoute, DetailPane)
 
     public object Directions {
         public fun list(): String {
@@ -26,6 +29,8 @@ public object PrayerTimerRoute : ScriptureNowScreen {
     @Composable
     override fun Content(destination: Destination.Match<ScriptureNowScreen>) {
         val prayerId: String by destination.stringPath()
-        PrayerTimerUi.Content()
+        key(prayerId) {
+            PrayerTimerUi.Content(PrayerId(prayerId))
+        }
     }
 }

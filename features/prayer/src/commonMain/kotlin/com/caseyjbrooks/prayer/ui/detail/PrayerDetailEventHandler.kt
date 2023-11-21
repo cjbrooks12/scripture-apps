@@ -1,19 +1,35 @@
 package com.caseyjbrooks.prayer.ui.detail
 
+import com.caseyjbrooks.routing.ScriptureNowScreen
 import com.copperleaf.ballast.EventHandler
 import com.copperleaf.ballast.EventHandlerScope
+import com.copperleaf.ballast.navigation.routing.RouterContract
+import com.copperleaf.ballast.navigation.vm.Router
 
-internal class PrayerDetailEventHandler : EventHandler<
+internal class PrayerDetailEventHandler(
+    private val router: Router<ScriptureNowScreen>,
+) : EventHandler<
         PrayerDetailContract.Inputs,
         PrayerDetailContract.Events,
-        PrayerDetailContract.State,> {
+        PrayerDetailContract.State,
+        > {
     override suspend fun EventHandlerScope<
             PrayerDetailContract.Inputs,
             PrayerDetailContract.Events,
-            PrayerDetailContract.State,>.handleEvent(
+            PrayerDetailContract.State,
+            >.handleEvent(
         event: PrayerDetailContract.Events,
     ): Unit = when (event) {
-        is PrayerDetailContract.Events.NavigateUp -> {
+        is PrayerDetailContract.Events.NavigateTo -> {
+            if (event.replaceTop) {
+                router.send(RouterContract.Inputs.ReplaceTopDestination(event.destination))
+            } else {
+                router.send(RouterContract.Inputs.GoToDestination(event.destination))
+            }
+        }
+
+        is PrayerDetailContract.Events.NavigateBack -> {
+            router.send(RouterContract.Inputs.GoBack())
         }
     }
 }

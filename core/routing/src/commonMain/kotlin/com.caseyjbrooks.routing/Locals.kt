@@ -1,5 +1,6 @@
 package com.caseyjbrooks.routing
 
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.copperleaf.ballast.BallastViewModelConfiguration
@@ -19,6 +20,11 @@ import kotlinx.coroutines.CoroutineScope
 public val LocalRouter: ProvidableCompositionLocal<Router<ScriptureNowScreen>> =
     staticCompositionLocalOf<Router<ScriptureNowScreen>> {
         error("LocalRouter not provided")
+    }
+
+public val LocalSizeClass: ProvidableCompositionLocal<WindowWidthSizeClass> =
+    staticCompositionLocalOf<WindowWidthSizeClass> {
+        error("LocalSizeClass not provided")
     }
 
 public fun RouterViewModel(

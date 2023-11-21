@@ -21,6 +21,7 @@ includeBuild(conventionDir)
 rootProject.name = "scripture-now"
 
 include(":core:database")
+include(":core:di")
 include(":core:routing")
 
 include(":features:bible")
@@ -31,5 +32,3 @@ include(":features:topicalBible")
 include(":shared")
 
 include(":composeApp")
-
-//include(":site")

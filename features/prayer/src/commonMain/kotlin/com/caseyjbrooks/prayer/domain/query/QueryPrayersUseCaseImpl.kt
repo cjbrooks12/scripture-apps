@@ -17,7 +17,7 @@ public class QueryPrayersUseCaseImpl(
 
     override operator fun invoke(
         archiveStatus: ArchiveStatus,
-        tags: List<PrayerTag>,
+        tags: Set<PrayerTag>,
     ): Flow<Cached<List<SavedPrayer>>> {
         return flow {
             emit(Cached.Fetching(null))
