@@ -3,6 +3,7 @@ package com.caseyjbrooks.prayer.domain.query
 import com.caseyjbrooks.prayer.models.ArchiveStatus
 import com.caseyjbrooks.prayer.models.PrayerTag
 import com.caseyjbrooks.prayer.models.SavedPrayer
+import com.caseyjbrooks.prayer.models.SavedPrayerType
 import com.copperleaf.ballast.repository.cache.Cached
 import kotlinx.coroutines.flow.Flow
 
@@ -23,6 +24,7 @@ public interface QueryPrayersUseCase {
      */
     public operator fun invoke(
         archiveStatus: ArchiveStatus,
+        prayerType: Set<SavedPrayerType>,
         tags: Set<PrayerTag>,
     ): Flow<Cached<List<SavedPrayer>>>
 }

@@ -28,6 +28,7 @@ internal class PrayerListInputHandler(
                 queryPrayersUseCase
                     .invoke(
                         currentState.archiveStatus,
+                        currentState.prayerTypeFilter,
                         currentState.tagFilter,
                     )
                     .map { PrayerListContract.Inputs.PrayersUpdated(it) },

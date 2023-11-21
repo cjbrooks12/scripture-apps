@@ -61,27 +61,48 @@ public class InMemorySavedPrayersRepository(
 
     override fun getPrayers(
         archiveStatus: ArchiveStatus,
+        prayerTypes: Set<SavedPrayerType>,
         tags: Set<PrayerTag>,
     ): Flow<List<SavedPrayer>> {
         return _db.asStateFlow()
             .map { allPrayers ->
-                val prayersFilteredByStatus = when (archiveStatus) {
-                    ArchiveStatus.NotArchived -> allPrayers.filter { !it.archived }
-                    ArchiveStatus.Archived -> allPrayers.filter { it.archived }
-                    ArchiveStatus.FullCollection -> allPrayers
-                }
-                val prayersFilteredByStatusAndTag = if (tags.isNotEmpty()) {
-                    prayersFilteredByStatus.filter { filteredPrayer ->
-                        tags.all { tag ->
-                            filteredPrayer.tags.contains(tag)
-                        }
-                    }
-                } else {
-                    prayersFilteredByStatus
-                }
-
-                prayersFilteredByStatusAndTag
+                allPrayers
+                    .filterByArchiveStatus(archiveStatus)
+                    .filterByPrayerType(prayerTypes)
+                    .filterByTag(tags)
             }
+    }
+
+    private fun List<SavedPrayer>.filterByArchiveStatus(archiveStatus: ArchiveStatus): List<SavedPrayer> {
+        return when (archiveStatus) {
+            ArchiveStatus.NotArchived -> this.filter { !it.archived }
+            ArchiveStatus.Archived -> this.filter { it.archived }
+            ArchiveStatus.FullCollection -> this
+        }
+    }
+
+    private fun List<SavedPrayer>.filterByPrayerType(prayerTypes: Set<SavedPrayerType>): List<SavedPrayer> {
+        return if (prayerTypes.isNotEmpty()) {
+            this.filter { filteredPrayer ->
+                prayerTypes.any { prayerType ->
+                    filteredPrayer.prayerType::class == prayerType::class
+                }
+            }
+        } else {
+            this
+        }
+    }
+
+    private fun List<SavedPrayer>.filterByTag(tags: Set<PrayerTag>): List<SavedPrayer> {
+        return if (tags.isNotEmpty()) {
+            this.filter { filteredPrayer ->
+                tags.all { tag ->
+                    filteredPrayer.tags.contains(tag)
+                }
+            }
+        } else {
+            this
+        }
     }
 
     override fun getPrayerById(uuid: PrayerId): Flow<SavedPrayer?> {

@@ -4,6 +4,7 @@ import com.caseyjbrooks.prayer.models.ArchiveStatus
 import com.caseyjbrooks.prayer.models.PrayerId
 import com.caseyjbrooks.prayer.models.PrayerTag
 import com.caseyjbrooks.prayer.models.SavedPrayer
+import com.caseyjbrooks.prayer.models.SavedPrayerType
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -39,6 +40,7 @@ public interface SavedPrayersRepository {
      */
     public fun getPrayers(
         archiveStatus: ArchiveStatus,
+        prayerTypes: Set<SavedPrayerType>,
         tags: Set<PrayerTag>,
     ): Flow<List<SavedPrayer>>
 

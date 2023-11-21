@@ -3,6 +3,7 @@ package com.caseyjbrooks.prayer.ui.list
 import com.caseyjbrooks.prayer.models.ArchiveStatus
 import com.caseyjbrooks.prayer.models.PrayerTag
 import com.caseyjbrooks.prayer.models.SavedPrayer
+import com.caseyjbrooks.prayer.models.SavedPrayerType
 import com.copperleaf.ballast.repository.cache.Cached
 import com.copperleaf.ballast.repository.cache.map
 
@@ -10,6 +11,7 @@ internal object PrayerListContract {
     internal data class State(
         val cachedPrayers: Cached<List<SavedPrayer>> = Cached.NotLoaded(),
         val archiveStatus: ArchiveStatus = ArchiveStatus.NotArchived,
+        val prayerTypeFilter: Set<SavedPrayerType> = emptySet(),
         val tagFilter: Set<PrayerTag> = emptySet(),
     ) {
         val allTags: Cached<List<PrayerTag>> = cachedPrayers.map { prayers ->

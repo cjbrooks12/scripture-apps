@@ -13,6 +13,8 @@ import com.caseyjbrooks.prayer.repository.config.InMemoryPrayerConfig
 import com.caseyjbrooks.prayer.repository.saved.InMemorySavedPrayersRepository
 import com.caseyjbrooks.prayer.repository.user.InMemoryPrayerUserRepository
 import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.Month
 
 fun getPrayer(id: String, text: String, clock: Clock = TestClock()): SavedPrayer {
     val instant = clock.now()
@@ -48,6 +50,34 @@ fun getPrayer(id: String, archived: Boolean, vararg tags: String): SavedPrayer {
         uuid = PrayerId(id),
         text = id,
         prayerType = SavedPrayerType.Persistent,
+        tags = tags.map { PrayerTag(it) },
+        archived = archived,
+        archivedAt = if (archived) instant else null,
+        createdAt = instant,
+        updatedAt = instant,
+    )
+}
+
+fun getScheduledPrayer(id: String, archived: Boolean, vararg tags: String): SavedPrayer {
+    val instant = TestClock().now()
+    return SavedPrayer(
+        uuid = PrayerId(id),
+        text = id,
+        prayerType = SavedPrayerType.ScheduledCompletable(LocalDateTime(2024, Month.JANUARY, 1, 1, 1, 1, 1)),
+        tags = tags.map { PrayerTag(it) },
+        archived = archived,
+        archivedAt = if (archived) instant else null,
+        createdAt = instant,
+        updatedAt = instant,
+    )
+}
+
+fun getScheduledPrayer(id: String, archived: Boolean, clock: Clock, completionDate: LocalDateTime, vararg tags: String): SavedPrayer {
+    val instant = clock.now()
+    return SavedPrayer(
+        uuid = PrayerId(id),
+        text = id,
+        prayerType = SavedPrayerType.ScheduledCompletable(completionDate),
         tags = tags.map { PrayerTag(it) },
         archived = archived,
         archivedAt = if (archived) instant else null,
