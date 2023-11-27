@@ -10,7 +10,4 @@ import com.caseyjbrooks.prayer.repository.config.PrayerConfig
  * If they want more, they must subscribe, or delete some other prayers. This method will throw an exception if the
  * user would exceed that limit.
  */
-public interface CreatePrayerUseCase {
-
-    public suspend operator fun invoke(prayer: SavedPrayer): SavedPrayer
-}
+public typealias CreatePrayerUseCase = suspend (prayer: SavedPrayer) -> SavedPrayer

@@ -6,6 +6,4 @@ import com.caseyjbrooks.prayer.models.SavedPrayerType
  * On a regular schedule, automatically move prayers of type [SavedPrayerType.ScheduledCompletable] to the archives if
  * if it past its scheduled time.
  */
-public interface AutoArchivePrayersUseCase {
-    public suspend operator fun invoke()
-}
+public typealias AutoArchivePrayersUseCase = suspend () -> Unit

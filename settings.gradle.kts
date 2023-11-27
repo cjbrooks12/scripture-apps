@@ -21,6 +21,7 @@ includeBuild(conventionDir)
 rootProject.name = "scripture-now"
 
 include(":core:database")
+include(":core:domain")
 include(":core:di")
 include(":core:routing")
 
