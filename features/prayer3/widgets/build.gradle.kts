@@ -13,14 +13,15 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":core:routing"))
+                api(project(":core:database"))
+                api(project(":core:di"))
 
-                api(project(":pillars:prayer4"))
+                api(project(":domain:prayer2"))
 
-                api(project(":features:bible"))
-                api(project(":features:foryou"))
-                api(project(":features:scriptureMemory"))
-                api(project(":features:settings"))
-                api(project(":features:topicalBible"))
+                api(libs.kotlinx.datetime)
+                api(libs.ballast.core)
+                api(libs.ballast.repository)
+                api(libs.benasher44.uuid)
             }
         }
         val commonTest by getting {

@@ -13,6 +13,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(libs.benasher44.uuid)
+                api(libs.koin.core)
             }
         }
         val commonTest by getting {
