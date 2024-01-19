@@ -20,6 +20,8 @@ import com.caseyjbrooks.prayer.domain.savedaily.SaveDailyPrayerUseCase
 import com.caseyjbrooks.prayer.domain.savedaily.SaveDailyPrayerUseCaseImpl
 import com.caseyjbrooks.prayer.domain.update.UpdatePrayerUseCase
 import com.caseyjbrooks.prayer.domain.update.UpdatePrayerUseCaseImpl
+import com.caseyjbrooks.prayer.models.PrayerUser
+import kotlinx.datetime.Clock
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.bind
@@ -36,4 +38,7 @@ public val prayerDomainModule: Module = module {
     factoryOf(::RestoreArchivedPrayerUseCaseImpl).bind<RestoreArchivedPrayerUseCase>()
     factoryOf(::SaveDailyPrayerUseCaseImpl).bind<SaveDailyPrayerUseCase>()
     factoryOf(::UpdatePrayerUseCaseImpl).bind<UpdatePrayerUseCase>()
+
+    single<PrayerUser?> { PrayerUser("Casey", PrayerUser.SubscriptionStatus.Free) }
+    single<Clock> { Clock.System }
 }

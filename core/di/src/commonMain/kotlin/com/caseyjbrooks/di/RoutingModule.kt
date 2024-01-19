@@ -13,10 +13,10 @@ import org.koin.dsl.module
 public val routingModule: Module = module {
     single<RouterViewModel> {
         val applicationCoroutineScope: CoroutineScope = get()
-        val initialFeatureModule: FeatureModule = get()
+        val initialPillar: Pillar = get()
 
-        val initialRoute = initialFeatureModule.initialRoute!!
-        val allRoutes = initialFeatureModule.routes
+        val initialRoute = initialPillar.initialRoute!!
+        val allRoutes = initialPillar.routes
 
         val routesSortedByWeight: List<ScriptureNowScreen> = allRoutes
             .sortedByDescending { it.matcher.weight }

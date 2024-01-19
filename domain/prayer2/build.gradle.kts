@@ -14,7 +14,7 @@ kotlin {
             dependencies {
                 api(project(":core:di"))
 
-                api(project(":data:prayer1"))
+                api(project(":data:prayer"))
 
                 api(libs.kotlinx.datetime)
                 api(libs.benasher44.uuid)

@@ -1,0 +1,15 @@
+CREATE TABLE prayer_tag (
+    prayer_uuid TEXT NOT NULL,
+    tag_uuid TEXT NOT NULL
+);
+
+createPrayerTag:
+INSERT INTO prayer_tag(prayer_uuid, tag_uuid)
+VALUES ?;
+
+removeTagFromPrayer:
+DELETE FROM
+    prayer_tag
+WHERE
+    prayer_uuid = :prayer_uuid AND
+    tag_uuid = :tag_uuid;

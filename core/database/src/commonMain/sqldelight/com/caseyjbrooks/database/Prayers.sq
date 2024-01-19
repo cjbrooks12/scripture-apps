@@ -2,14 +2,13 @@ CREATE TABLE prayer (
     uuid TEXT NOT NULL PRIMARY KEY,
     text TEXT NOT NULL,
     prayerType TEXT NOT NULL,
-    tags TEXT NOT NULL,
     archivedAt INTEGER,
     createdAt INTEGER NOT NULL,
     updatedAt INTEGER NOT NULL
 );
 
 createPrayer:
-INSERT INTO prayer(uuid, text, prayerType, tags, archivedAt, createdAt, updatedAt)
+INSERT INTO prayer(uuid, text, prayerType, archivedAt, createdAt, updatedAt)
 VALUES ?;
 
 updatePrayer:
@@ -18,7 +17,6 @@ UPDATE
 SET
     text = :text,
     prayerType = :prayerType,
-    tags = :tags,
     archivedAt = :archivedAt,
     createdAt = :createdAt,
     updatedAt = :updatedAt
