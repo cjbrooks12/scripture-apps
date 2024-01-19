@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
-public class QueryPrayersUseCaseImpl(
+internal class QueryPrayersUseCaseImpl(
     private val repository: SavedPrayersRepository,
 ) : QueryPrayersUseCase {
 

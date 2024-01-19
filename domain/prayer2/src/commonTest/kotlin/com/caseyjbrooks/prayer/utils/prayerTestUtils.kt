@@ -9,7 +9,7 @@ import com.caseyjbrooks.prayer.models.PrayerTag
 import com.caseyjbrooks.prayer.models.PrayerUser
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.models.SavedPrayerType
-import com.caseyjbrooks.prayer.repository.config.InMemoryPrayerConfig
+import com.caseyjbrooks.prayer.repository.config.FakePrayerConfig
 import com.caseyjbrooks.prayer.repository.saved.InMemorySavedPrayersRepository
 import com.caseyjbrooks.prayer.repository.user.InMemoryPrayerUserRepository
 import kotlinx.datetime.Clock
@@ -87,7 +87,7 @@ fun getScheduledPrayer(id: String, archived: Boolean, clock: Clock, completionDa
 }
 
 fun getCreatePrayerUseCase(prayerUser: PrayerUser?): CreatePrayerUseCase {
-    val config = InMemoryPrayerConfig()
+    val config = FakePrayerConfig()
     return CreatePrayerUseCaseImpl(
         savedPrayersRepository = InMemorySavedPrayersRepository(),
         prayerConfig = config,

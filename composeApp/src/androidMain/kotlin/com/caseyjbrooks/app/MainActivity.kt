@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
         intent?.data = null
 
         setContent {
-            MainCommonApplication()
+            MainCommonApplication(MainAndroidApplication.koinApplication.koin, deepLinkUrl)
         }
     }
 }

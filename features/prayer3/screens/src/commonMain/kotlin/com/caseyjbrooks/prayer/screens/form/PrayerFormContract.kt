@@ -15,6 +15,8 @@ internal object PrayerFormContract {
     internal sealed interface Inputs {
         data class ObservePrayer(val prayerId: PrayerId?) : Inputs
         data class PrayerUpdated(val cachedPrayers: Cached<SavedPrayer>) : Inputs
+        data class UpdatePrayer(val text: String) : Inputs
+        data class CreatePrayer(val text: String) : Inputs
 
         /**
          * Navigate to the hierarchical parent of the [PrayerDetailRoute], which is [PrayerListRoute]

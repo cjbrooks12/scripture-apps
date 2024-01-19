@@ -21,6 +21,7 @@ kotlin {
                 api(libs.kotlinx.datetime)
                 api(libs.ballast.core)
                 api(libs.ballast.repository)
+                api(libs.ballast.scheduler)
                 api(libs.benasher44.uuid)
             }
         }

@@ -29,7 +29,7 @@ public object PrayerTimerRoute : ScriptureNowScreen {
     override fun Content(destination: Destination.Match<ScriptureNowScreen>) {
         val prayerId: String by destination.stringPath()
         key(prayerId) {
-            PrayerTimerUi.Content(PrayerId(prayerId))
+            PrayerTimerScreen.Content(PrayerId(prayerId))
         }
     }
 }

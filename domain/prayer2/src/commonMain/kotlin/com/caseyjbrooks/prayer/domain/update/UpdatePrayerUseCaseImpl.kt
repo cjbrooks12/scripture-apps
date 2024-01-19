@@ -5,7 +5,7 @@ import com.caseyjbrooks.prayer.repository.saved.SavedPrayersRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.datetime.Clock
 
-public class UpdatePrayerUseCaseImpl(
+internal class UpdatePrayerUseCaseImpl(
     private val savedPrayersRepository: SavedPrayersRepository,
     private val clock: Clock,
 ) : UpdatePrayerUseCase {

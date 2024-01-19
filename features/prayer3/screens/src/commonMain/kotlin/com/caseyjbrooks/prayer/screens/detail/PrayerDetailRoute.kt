@@ -48,7 +48,7 @@ public object PrayerDetailRoute : ScriptureNowScreen {
         val prayerId: String by destination.stringPath()
 
         key(prayerId) {
-            PrayerDetailUi.Content(PrayerId(prayerId))
+            PrayerDetailScreen.Content(PrayerId(prayerId))
         }
     }
 }

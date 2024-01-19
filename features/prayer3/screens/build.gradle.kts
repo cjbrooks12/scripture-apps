@@ -22,6 +22,7 @@ kotlin {
                 api(libs.ballast.core)
                 api(libs.ballast.repository)
                 api(libs.benasher44.uuid)
+                api(libs.koin.core)
             }
         }
         val commonTest by getting {

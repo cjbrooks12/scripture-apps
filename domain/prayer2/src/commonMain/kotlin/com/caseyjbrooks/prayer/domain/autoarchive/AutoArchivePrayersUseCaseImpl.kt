@@ -10,11 +10,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
-/**
- * On a regular schedule, automatically move prayers of type [SavedPrayerType.ScheduledCompletable] to the archives if
- * it past its scheduled time.
- */
-public class AutoArchivePrayersUseCaseImpl(
+internal class AutoArchivePrayersUseCaseImpl(
     private val savedPrayersRepository: SavedPrayersRepository,
     private val archivePrayerUseCase: ArchivePrayerUseCase,
     private val clock: Clock,

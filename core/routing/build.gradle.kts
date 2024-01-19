@@ -15,6 +15,7 @@ kotlin {
                 api(libs.ballast.core)
                 api(libs.ballast.navigation)
                 api(libs.benasher44.uuid)
+                api(libs.koin.core)
                 api("dev.chrisbanes.material3:material3-window-size-class-multiplatform:0.3.1")
             }
         }

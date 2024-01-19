@@ -1,5 +1,6 @@
 package com.caseyjbrooks.prayer.domain.savedaily
 
+import com.caseyjbrooks.database.UuidFactory
 import com.caseyjbrooks.prayer.domain.create.CreatePrayerUseCase
 import com.caseyjbrooks.prayer.models.DailyPrayer
 import com.caseyjbrooks.prayer.models.PrayerId
@@ -8,11 +9,10 @@ import com.caseyjbrooks.prayer.models.SavedPrayerType
 import com.caseyjbrooks.prayer.repository.daily.DailyPrayerRepository
 import com.caseyjbrooks.prayer.repository.saved.SavedPrayersRepository
 import com.caseyjbrooks.prayer.repository.settings.PrayerUserSettings
-import com.caseyjbrooks.routing.UuidFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.datetime.Clock
 
-public class SaveDailyPrayerUseCaseImpl(
+internal class SaveDailyPrayerUseCaseImpl(
     private val savedPrayersRepository: SavedPrayersRepository,
     private val dailyPrayerRepository: DailyPrayerRepository,
     private val prayerUserSettings: PrayerUserSettings,

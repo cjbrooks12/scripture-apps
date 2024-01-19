@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
-public class GetPrayerByIdUseCaseImpl(
+internal class GetPrayerByIdUseCaseImpl(
     private val repository: SavedPrayersRepository,
 ) : GetPrayerByIdUseCase {
     override operator fun invoke(prayerId: PrayerId): Flow<Cached<SavedPrayer>> {

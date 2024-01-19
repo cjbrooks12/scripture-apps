@@ -30,3 +30,4 @@ public class PrayerModule : FeatureModule {
     )
     override val secondaryNavigationItems: List<NavigationItem> = listOf()
 }
+

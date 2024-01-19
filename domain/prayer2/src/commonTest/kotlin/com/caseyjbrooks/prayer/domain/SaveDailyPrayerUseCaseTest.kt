@@ -9,7 +9,7 @@ import com.caseyjbrooks.prayer.models.PrayerTag
 import com.caseyjbrooks.prayer.models.PrayerUser
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.models.SavedPrayerType
-import com.caseyjbrooks.prayer.repository.config.InMemoryPrayerConfig
+import com.caseyjbrooks.prayer.repository.config.FakePrayerConfig
 import com.caseyjbrooks.prayer.repository.config.PrayerConfig
 import com.caseyjbrooks.prayer.repository.daily.DailyPrayerRepository
 import com.caseyjbrooks.prayer.repository.daily.InMemoryDailyPrayerRepository
@@ -34,7 +34,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
             PrayerUser("user one", PrayerUser.SubscriptionStatus.Free),
         )
         val prayerUserSettings: PrayerUserSettings = InMemoryPrayerUserSettings()
-        val prayerConfig: PrayerConfig = InMemoryPrayerConfig()
+        val prayerConfig: PrayerConfig = FakePrayerConfig()
         val useCase: SaveDailyPrayerUseCase = SaveDailyPrayerUseCaseImpl(
             savedPrayersRepository = savedPrayersRepository,
             dailyPrayerRepository = dailyPrayerRepository,
@@ -91,7 +91,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
             PrayerUser("user one", PrayerUser.SubscriptionStatus.Free),
         )
         val prayerUserSettings: PrayerUserSettings = InMemoryPrayerUserSettings(saveTagsFromDailyPrayer = false)
-        val prayerConfig: PrayerConfig = InMemoryPrayerConfig()
+        val prayerConfig: PrayerConfig = FakePrayerConfig()
         val useCase: SaveDailyPrayerUseCase = SaveDailyPrayerUseCaseImpl(
             savedPrayersRepository = savedPrayersRepository,
             dailyPrayerRepository = dailyPrayerRepository,
@@ -132,7 +132,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
             PrayerUser("user one", PrayerUser.SubscriptionStatus.Free),
         )
         val prayerUserSettings: PrayerUserSettings = InMemoryPrayerUserSettings(addDefaultTagToSavedDailyPrayer = false)
-        val prayerConfig: PrayerConfig = InMemoryPrayerConfig()
+        val prayerConfig: PrayerConfig = FakePrayerConfig()
         val useCase: SaveDailyPrayerUseCase = SaveDailyPrayerUseCaseImpl(
             savedPrayersRepository = savedPrayersRepository,
             dailyPrayerRepository = dailyPrayerRepository,
@@ -176,7 +176,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
             saveTagsFromDailyPrayer = false,
             addDefaultTagToSavedDailyPrayer = false,
         )
-        val prayerConfig: PrayerConfig = InMemoryPrayerConfig()
+        val prayerConfig: PrayerConfig = FakePrayerConfig()
         val useCase: SaveDailyPrayerUseCase = SaveDailyPrayerUseCaseImpl(
             savedPrayersRepository = savedPrayersRepository,
             dailyPrayerRepository = dailyPrayerRepository,

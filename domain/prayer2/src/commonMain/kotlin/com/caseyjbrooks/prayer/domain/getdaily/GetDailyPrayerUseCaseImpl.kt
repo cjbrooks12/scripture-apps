@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
-public class GetDailyPrayerUseCaseImpl(
+internal class GetDailyPrayerUseCaseImpl(
     private val repository: DailyPrayerRepository,
 ) : GetDailyPrayerUseCase {
     override operator fun invoke(): Flow<Cached<DailyPrayer>> {

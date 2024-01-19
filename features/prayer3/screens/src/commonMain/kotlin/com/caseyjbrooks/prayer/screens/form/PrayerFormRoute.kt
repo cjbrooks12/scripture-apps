@@ -39,7 +39,7 @@ public object PrayerFormRoute : ScriptureNowScreen {
     override fun Content(destination: Destination.Match<ScriptureNowScreen>) {
         val prayerId: String? by destination.optionalStringPath()
         key(prayerId) {
-            PrayerFormUi.Content(prayerId?.let { PrayerId(it) })
+            PrayerFormScreen.Content(prayerId?.let { PrayerId(it) })
         }
     }
 }

@@ -13,7 +13,8 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":core:routing"))
-                api(libs.benasher44.uuid)
+                api(libs.koin.core)
+                api(libs.koin.coroutines)
             }
         }
         val commonTest by getting {

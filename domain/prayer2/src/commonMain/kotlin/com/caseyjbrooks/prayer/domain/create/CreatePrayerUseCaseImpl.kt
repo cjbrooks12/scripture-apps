@@ -9,7 +9,7 @@ import com.caseyjbrooks.prayer.repository.user.PrayerUserRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.datetime.Clock
 
-public class CreatePrayerUseCaseImpl(
+internal class CreatePrayerUseCaseImpl(
     private val savedPrayersRepository: SavedPrayersRepository,
     private val prayerConfig: PrayerConfig,
     private val prayerUserRepository: PrayerUserRepository,

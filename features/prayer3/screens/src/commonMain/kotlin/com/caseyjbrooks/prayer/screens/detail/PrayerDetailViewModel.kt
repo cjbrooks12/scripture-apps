@@ -23,38 +23,3 @@ internal typealias PrayerDetailViewModel = BallastViewModel<
         PrayerDetailContract.Events,
         PrayerDetailContract.State,
         >
-
-internal fun PrayerDetailViewModel(
-    viewModelCoroutineScope: CoroutineScope,
-    getByIdUseCase: GetPrayerByIdUseCase,
-    router: Router<ScriptureNowScreen>,
-    prayerId: PrayerId,
-): PrayerDetailViewModel {
-    return BasicViewModel(
-        coroutineScope = viewModelCoroutineScope,
-        config = BallastViewModelConfiguration.Builder()
-            .withViewModel(
-                initialState = com.caseyjbrooks.prayer.screens.detail.PrayerDetailContract.State(prayerId = prayerId),
-                inputHandler = PrayerDetailInputHandler(getByIdUseCase),
-                name = "Prayer Detail",
-            )
-            .apply {
-                inputStrategy = FifoInputStrategy.typed()
-
-                logger = ::PrintlnLogger
-                this += LoggingInterceptor()
-
-                this += BootstrapInterceptor {
-                    PrayerDetailContract.Inputs.ObservePrayer(prayerId)
-                }
-            }
-            .dispatchers(
-                inputsDispatcher = Dispatchers.Main,
-                eventsDispatcher = Dispatchers.Main,
-                sideJobsDispatcher = Dispatchers.Default,
-                interceptorDispatcher = Dispatchers.Default,
-            )
-            .build(),
-        eventHandler = PrayerDetailEventHandler(router),
-    )
-}

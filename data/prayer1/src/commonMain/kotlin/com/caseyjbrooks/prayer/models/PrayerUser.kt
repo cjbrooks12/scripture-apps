@@ -15,6 +15,7 @@ public data class PrayerUser(
     val subscription: SubscriptionStatus,
 ) {
     public enum class SubscriptionStatus {
-        Free, Subscribed
+        Free,
+        Subscribed,
     }
 }

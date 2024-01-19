@@ -49,6 +49,6 @@ public object PrayerListRoute : ScriptureNowScreen {
 
     @Composable
     override fun Content(destination: Destination.Match<ScriptureNowScreen>) {
-        PrayerListUi.Content()
+        PrayerListScreen.Content()
     }
 }

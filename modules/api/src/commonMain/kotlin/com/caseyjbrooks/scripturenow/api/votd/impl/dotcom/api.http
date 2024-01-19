@@ -1,7 +1,0 @@
-### Get and scrape the webpage from verseoftheday.com to get today's verse
-GET https://www.verseoftheday.com/
-accept: text/html
-
-### Get and scrape the webpage from verseoftheday.com to get historical verses
-GET https://www.verseoftheday.com/en/09302022/
-accept: text/html
