@@ -10,7 +10,13 @@ import kotlinx.coroutines.flow.toList
 
 public class FakeDailyPrayerRepositoryTest : StringSpec({
     "test" {
-        val repository: DailyPrayerRepository = FakeDailyPrayerRepository()
+        val repository: DailyPrayerRepository = FakeDailyPrayerRepository(
+            DailyPrayer(
+                text = "Hardcoded Daily Prayer",
+                attribution = "Scripture Now!",
+                tags = listOf(PrayerTag("Hardcoded")),
+            )
+        )
 
         val responseList = repository.getTodaysDailyPrayer().toList()
 

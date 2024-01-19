@@ -1,7 +1,7 @@
 package com.caseyjbrooks.shared
 
-import com.caseyjbrooks.database.databaseModule
 import com.caseyjbrooks.database.jvmDatabaseModule
+import com.caseyjbrooks.database.realDatabaseModule
 import com.caseyjbrooks.prayer.pillars.prayerPillarModule
 import com.caseyjbrooks.prayer.repository.fakePrayerRepositoryModule
 import com.caseyjbrooks.prayer.repository.realPrayerRepositoryModule
@@ -10,7 +10,7 @@ import org.koin.dsl.module
 
 public val realJvmApplicationModule: Module = module {
     includes(
-        databaseModule,
+        realDatabaseModule,
         jvmDatabaseModule,
         realPrayerRepositoryModule,
         prayerPillarModule,
@@ -19,7 +19,7 @@ public val realJvmApplicationModule: Module = module {
 
 public val fakeJvmApplicationModule: Module = module {
     includes(
-        databaseModule,
+        realDatabaseModule,
         jvmDatabaseModule,
         fakePrayerRepositoryModule,
         prayerPillarModule,

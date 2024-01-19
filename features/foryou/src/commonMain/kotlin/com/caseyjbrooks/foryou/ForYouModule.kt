@@ -8,19 +8,16 @@ import com.caseyjbrooks.foryou.ui.foryou.ForYouRoute
 import com.caseyjbrooks.routing.NavigationItem
 import com.caseyjbrooks.routing.ScriptureNowScreen
 
-public class ForYouModule : Pillar {
+public object ForYouModule : Pillar {
     override val routes: List<ScriptureNowScreen> = listOf(
         ForYouRoute,
     )
-    override val initialRoute: ScriptureNowScreen = ForYouRoute
-    override val mainNavigationItems: List<NavigationItem> = listOf(
-        NavigationItem(
-            route = ForYouRoute,
-            iconFilled = Icons.Filled.Face,
-            iconOutlined = Icons.Outlined.Face,
-            label = "For You",
-            order = 10,
-        ),
+    override val mainNavigationItem: NavigationItem = NavigationItem(
+        route = ForYouRoute,
+        iconFilled = Icons.Filled.Face,
+        iconOutlined = Icons.Outlined.Face,
+        label = "For You",
+        order = 10,
     )
     override val secondaryNavigationItems: List<NavigationItem> = listOf()
 }

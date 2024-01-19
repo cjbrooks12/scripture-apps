@@ -5,7 +5,7 @@ import kotlinx.datetime.Instant
 import kotlin.time.Duration
 
 public class TestClock(
-    var millis: Long = 0L,
+    private var millis: Long = 0L,
 ) : Clock {
 
     fun advanceTime() {

@@ -15,5 +15,5 @@ public val androidDatabaseModule: Module = module {
     single<Settings> {
         SharedPreferencesSettings.Factory(get<Context>().applicationContext).create("scriptureNow")
     }
-    single<UuidFactory> { UuidFactoryImpl() }
+    single<UuidFactory> { RealUuidFactory() }
 }

@@ -6,9 +6,15 @@ public fun interface UuidFactory {
     public fun getNewUuid(): String
 }
 
-public class UuidFactoryImpl : UuidFactory {
+public class RealUuidFactory : UuidFactory {
     override fun getNewUuid(): String {
         return uuid4().toString()
+    }
+}
+
+public class FakeUuidFactory(private val uuid: String) : UuidFactory {
+    override fun getNewUuid(): String {
+        return uuid
     }
 }
 

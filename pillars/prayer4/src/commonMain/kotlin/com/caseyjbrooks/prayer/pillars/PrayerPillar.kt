@@ -11,22 +11,19 @@ import com.caseyjbrooks.prayer.screens.timer.PrayerTimerRoute
 import com.caseyjbrooks.routing.NavigationItem
 import com.caseyjbrooks.routing.ScriptureNowScreen
 
-public class PrayerPillar : Pillar {
+public object PrayerPillar : Pillar {
     override val routes: List<ScriptureNowScreen> = listOf(
         PrayerListRoute,
         PrayerDetailRoute,
         PrayerFormRoute,
         PrayerTimerRoute,
     )
-    override val initialRoute: ScriptureNowScreen = PrayerListRoute
-    override val mainNavigationItems: List<NavigationItem> = listOf(
-        NavigationItem(
-            route = PrayerListRoute,
-            iconFilled = Icons.Filled.ThumbUp,
-            iconOutlined = Icons.Outlined.ThumbUp,
-            label = "Prayers",
-            order = 30,
-        ),
+    override val mainNavigationItem: NavigationItem = NavigationItem(
+        route = PrayerListRoute,
+        iconFilled = Icons.Filled.ThumbUp,
+        iconOutlined = Icons.Outlined.ThumbUp,
+        label = "Prayers",
+        order = 30,
     )
     override val secondaryNavigationItems: List<NavigationItem> = listOf()
 }

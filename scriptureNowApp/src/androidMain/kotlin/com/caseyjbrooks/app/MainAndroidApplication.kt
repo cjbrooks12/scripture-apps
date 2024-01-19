@@ -2,21 +2,17 @@ package com.caseyjbrooks.app
 
 import android.app.Application
 import android.content.Context
-import com.caseyjbrooks.bible.BibleModule
 import com.caseyjbrooks.database.androidDatabaseModule
-import com.caseyjbrooks.di.CombinedPillar
-import com.caseyjbrooks.di.Pillar
-import com.caseyjbrooks.foryou.ForYouModule
-import com.caseyjbrooks.prayer.pillars.PrayerPillar
-import com.caseyjbrooks.scripturememory.ScriptureMemoryModule
-import com.caseyjbrooks.settings.SettingsModule
-import com.caseyjbrooks.topicalbible.TopicalBibleModule
+import com.caseyjbrooks.di.ApplicationStructure
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import org.koin.core.KoinApplication
+import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.extension.coroutinesEngine
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.binds
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
@@ -25,6 +21,7 @@ class MainAndroidApplication : Application() {
 
     private val appCoroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
+    @OptIn(KoinExperimentalAPI::class)
     override fun onCreate() {
         super.onCreate()
 //        FirebaseApp.initializeApp(this)
@@ -37,18 +34,7 @@ class MainAndroidApplication : Application() {
                 module {
                     single { this@MainAndroidApplication }.binds(arrayOf(Context::class, Application::class))
                     single<CoroutineScope> { appCoroutineScope }
-                    single<Pillar> {
-                        CombinedPillar(
-                            ForYouModule(),
-                            ScriptureMemoryModule(),
-                            PrayerPillar(),
-                            SettingsModule(),
-                            TopicalBibleModule(),
-                            BibleModule(),
-
-                            initialRoute = ForYouModule().initialRoute,
-                        )
-                    }
+                    singleOf(::ScriptureNowApplicationStructure).bind<ApplicationStructure>()
                 }
             )
         }

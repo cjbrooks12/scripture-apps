@@ -40,4 +40,4 @@ include(":features:settings")
 include(":features:topicalBible")
 
 include(":scriptureNowApp")
-include(":topicalBibleApp")
+//include(":topicalBibleApp")

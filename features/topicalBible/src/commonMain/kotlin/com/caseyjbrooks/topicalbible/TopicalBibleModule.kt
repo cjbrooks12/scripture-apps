@@ -8,12 +8,11 @@ import com.caseyjbrooks.routing.NavigationItem
 import com.caseyjbrooks.routing.ScriptureNowScreen
 import com.caseyjbrooks.topicalbible.ui.topics.BibleTopicsRoute
 
-public class TopicalBibleModule : Pillar {
+public object TopicalBibleModule : Pillar {
     override val routes: List<ScriptureNowScreen> = listOf(
         BibleTopicsRoute,
     )
-    override val initialRoute: ScriptureNowScreen? = null
-    override val mainNavigationItems: List<NavigationItem> = listOf()
+    override val mainNavigationItem: NavigationItem? = null
     override val secondaryNavigationItems: List<NavigationItem> = listOf(
         NavigationItem(
             route = BibleTopicsRoute,

@@ -6,6 +6,12 @@ import androidx.compose.runtime.remember
 import com.caseyjbrooks.routing.LocalKoin
 import com.caseyjbrooks.routing.LocalRouter
 import com.caseyjbrooks.routing.RouterViewModel
+import com.copperleaf.ballast.navigation.routing.RouterContract
+
+@Composable
+internal expect fun OnBackPressed(
+    onBackPressed: () -> Unit,
+)
 
 @Composable
 internal fun WithRouter(
@@ -15,6 +21,11 @@ internal fun WithRouter(
     val router: RouterViewModel = remember(koin) {
         koin.get()
     }
+
+    OnBackPressed {
+        router.trySend(RouterContract.Inputs.GoBack())
+    }
+
     CompositionLocalProvider(
         LocalRouter provides router,
     ) {

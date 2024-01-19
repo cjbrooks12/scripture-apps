@@ -5,14 +5,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.caseyjbrooks.di.Pillar
+import com.caseyjbrooks.di.ApplicationStructure
 import com.caseyjbrooks.routing.MainNavigationBar
 import com.caseyjbrooks.routing.ScriptureNowScreen
 import com.caseyjbrooks.routing.currentBackstack
 import com.copperleaf.ballast.navigation.routing.renderCurrentDestination
 
 @Composable
-internal fun PhoneLayout(pillar: Pillar) {
+internal fun PhoneLayout(pillar: ApplicationStructure) {
     Scaffold(
         topBar = { },
         bottomBar = {

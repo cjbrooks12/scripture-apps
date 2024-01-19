@@ -32,7 +32,9 @@ kotlin {
 
         // Android JVM Sourcesets
         val androidMain by getting {
-            dependencies { }
+            dependencies {
+                api(libs.androidx.activityCompose)
+            }
         }
         val androidUnitTest by getting {
             dependencies { }

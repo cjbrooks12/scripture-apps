@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.caseyjbrooks.di.Pillar
+import com.caseyjbrooks.di.ApplicationStructure
 import com.caseyjbrooks.routing.MainNavigationRail
 import com.caseyjbrooks.routing.ScriptureNowScreen
 import com.caseyjbrooks.routing.currentDetailBackstack
@@ -15,7 +15,7 @@ import com.caseyjbrooks.routing.currentListBackstack
 import com.copperleaf.ballast.navigation.routing.renderCurrentDestination
 
 @Composable
-internal fun DesktopLayout(pillar: Pillar) {
+internal fun DesktopLayout(pillar: ApplicationStructure) {
     Column {
         Row {
             Column(Modifier.wrapContentWidth()) {

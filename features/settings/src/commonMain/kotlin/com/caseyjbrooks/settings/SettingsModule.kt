@@ -8,19 +8,16 @@ import com.caseyjbrooks.routing.NavigationItem
 import com.caseyjbrooks.routing.ScriptureNowScreen
 import com.caseyjbrooks.settings.ui.settings.SettingsRoute
 
-public class SettingsModule : Pillar {
+public object SettingsModule : Pillar {
     override val routes: List<ScriptureNowScreen> = listOf(
         SettingsRoute,
     )
-    override val initialRoute: ScriptureNowScreen? = null
-    override val mainNavigationItems: List<NavigationItem> = listOf(
-        NavigationItem(
-            route = SettingsRoute,
-            iconFilled = Icons.Filled.Settings,
-            iconOutlined = Icons.Outlined.Settings,
-            label = "Settings",
-            order = 40,
-        ),
+    override val mainNavigationItem: NavigationItem = NavigationItem(
+        route = SettingsRoute,
+        iconFilled = Icons.Filled.Settings,
+        iconOutlined = Icons.Outlined.Settings,
+        label = "Settings",
+        order = 40,
     )
     override val secondaryNavigationItems: List<NavigationItem> = listOf()
 }

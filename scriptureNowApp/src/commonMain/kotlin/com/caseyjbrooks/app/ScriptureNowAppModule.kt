@@ -1,6 +1,6 @@
 package com.caseyjbrooks.app
 
-import com.caseyjbrooks.database.databaseModule
+import com.caseyjbrooks.database.realDatabaseModule
 import com.caseyjbrooks.di.routingModule
 import com.caseyjbrooks.prayer.pillars.prayerPillarModule
 import com.caseyjbrooks.prayer.repository.fakePrayerRepositoryModule
@@ -11,7 +11,7 @@ import org.koin.dsl.module
 public val realScriptureNowAppModule: Module = module {
     includes(
         routingModule,
-        databaseModule,
+        realDatabaseModule,
         realPrayerRepositoryModule,
         prayerPillarModule,
     )
@@ -20,7 +20,7 @@ public val realScriptureNowAppModule: Module = module {
 public val fakeScriptureNowAppModule: Module = module {
     includes(
         routingModule,
-        databaseModule,
+        realDatabaseModule,
         fakePrayerRepositoryModule,
         prayerPillarModule,
     )
