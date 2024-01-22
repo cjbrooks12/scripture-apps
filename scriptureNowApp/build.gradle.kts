@@ -119,7 +119,8 @@ kotlin {
                 api(project(":core:ui"))
                 api(project(":core:logging"))
 
-                api(project(":pillars:prayer4"))
+                api(project(":pillars:prayerPillar"))
+                api(project(":pillars:verseOfTheDayPillar"))
 
                 api(project(":features:bible"))
                 api(project(":features:foryou"))

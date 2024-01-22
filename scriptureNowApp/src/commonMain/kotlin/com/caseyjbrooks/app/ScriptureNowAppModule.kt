@@ -3,6 +3,7 @@ package com.caseyjbrooks.app
 import com.caseyjbrooks.database.realDatabaseModule
 import com.caseyjbrooks.di.routingModule
 import com.caseyjbrooks.prayer.pillars.prayerPillarModule
+import com.caseyjbrooks.prayer.pillars.verseOfTheDayPillarModule
 import com.caseyjbrooks.prayer.repository.fakePrayerRepositoryModule
 import com.caseyjbrooks.prayer.repository.realPrayerRepositoryModule
 import org.koin.core.module.Module
@@ -14,6 +15,7 @@ public val realScriptureNowAppModule: Module = module {
         realDatabaseModule,
         realPrayerRepositoryModule,
         prayerPillarModule,
+        verseOfTheDayPillarModule,
     )
 }
 
@@ -23,5 +25,6 @@ public val fakeScriptureNowAppModule: Module = module {
         realDatabaseModule,
         fakePrayerRepositoryModule,
         prayerPillarModule,
+        verseOfTheDayPillarModule,
     )
 }
