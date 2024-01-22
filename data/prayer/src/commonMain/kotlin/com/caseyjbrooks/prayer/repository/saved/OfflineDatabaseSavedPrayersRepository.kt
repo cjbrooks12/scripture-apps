@@ -3,6 +3,7 @@ package com.caseyjbrooks.prayer.repository.saved
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOneOrNull
+import co.touchlab.kermit.Logger
 import com.caseyjbrooks.database.Prayer
 import com.caseyjbrooks.database.ScriptureNowDatabase
 import com.caseyjbrooks.prayer.models.ArchiveStatus
@@ -17,6 +18,7 @@ import kotlinx.datetime.Instant
 
 internal class OfflineDatabaseSavedPrayersRepository(
     private val database: ScriptureNowDatabase,
+    private val logger: Logger,
 ) : SavedPrayersRepository {
     override suspend fun createPrayer(prayer: SavedPrayer) {
         database.prayersQueries.createPrayer(
@@ -73,13 +75,13 @@ internal class OfflineDatabaseSavedPrayersRepository(
     }
 
     override fun getPrayerById(uuid: PrayerId): Flow<SavedPrayer?> {
-        println("Fetching prayer at ${uuid.uuid}")
+        logger.i("Fetching prayer at ${uuid.uuid}")
         return database.prayersQueries
             .getById(uuid.uuid)
             .asFlow()
             .mapToOneOrNull(Dispatchers.Default)
             .map { prayerRecord ->
-                println("mapping prayer at ${uuid.uuid}")
+                logger.i("mapping prayer at ${uuid.uuid}")
 
                 if (prayerRecord != null) {
                     SavedPrayer(
@@ -93,7 +95,7 @@ internal class OfflineDatabaseSavedPrayersRepository(
                         updatedAt = Instant.fromEpochMilliseconds(prayerRecord.updatedAt),
                     )
                 } else {
-                    println("Prayer at ${uuid.uuid} not found")
+                    logger.i("Prayer at ${uuid.uuid} not found")
                     error("Prayer at ${uuid.uuid} not found")
                 }
             }

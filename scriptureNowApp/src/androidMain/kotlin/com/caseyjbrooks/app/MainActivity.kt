@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.caseyjbrooks.di.GlobalScriptureNowKoinApplication
 import com.caseyjbrooks.ui.ApplicationRoot
 
 class MainActivity : ComponentActivity() {
@@ -16,7 +17,7 @@ class MainActivity : ComponentActivity() {
         intent?.data = null
 
         setContent {
-            ApplicationRoot(MainAndroidApplication.koinApplication.koin, deepLinkUrl)
+            ApplicationRoot(GlobalScriptureNowKoinApplication.koinApplication.koin, deepLinkUrl)
         }
     }
 }

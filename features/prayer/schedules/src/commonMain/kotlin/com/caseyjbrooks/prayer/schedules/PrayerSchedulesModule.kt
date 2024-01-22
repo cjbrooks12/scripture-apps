@@ -1,10 +1,9 @@
-package com.caseyjbrooks.prayer.screens.list
+package com.caseyjbrooks.prayer.schedules
 
 import com.copperleaf.ballast.BallastLogger
 import com.copperleaf.ballast.BallastViewModelConfiguration
 import com.copperleaf.ballast.build
 import com.copperleaf.ballast.core.BasicViewModel
-import com.copperleaf.ballast.core.BootstrapInterceptor
 import com.copperleaf.ballast.core.FifoInputStrategy
 import com.copperleaf.ballast.core.LoggingInterceptor
 import com.copperleaf.ballast.dispatchers
@@ -18,28 +17,25 @@ import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-public val prayerListScreenModule: Module = module {
-    factoryOf(::PrayerListInputHandler)
-    factoryOf(::PrayerListEventHandler)
+public val prayerSchedulesScreenModule: Module = module {
+    factoryOf(::PrayerSchedulesInputHandler)
+    factoryOf(::PrayerSchedulesEventHandler)
 
-    factory<PrayerListViewModel>(named("PrayerListViewModel")) { (viewModelCoroutineScope: CoroutineScope) ->
+    single<PrayerSchedulesViewModel>(named("PrayerSchedulesViewModel")) {
+        val applicationCoroutineScope: CoroutineScope = get()
         BasicViewModel(
-            coroutineScope = viewModelCoroutineScope,
+            coroutineScope = applicationCoroutineScope,
             config = BallastViewModelConfiguration.Builder()
                 .withViewModel(
-                    initialState = PrayerListContract.State(),
-                    inputHandler = get<PrayerListInputHandler>(),
-                    name = "Prayer List",
+                    initialState = PrayerSchedulesContract.State(),
+                    inputHandler = get<PrayerSchedulesInputHandler>(),
+                    name = "Prayer Schedules",
                 )
                 .apply {
                     inputStrategy = FifoInputStrategy.typed()
 
                     logger = { tag -> get<BallastLogger> { parametersOf(tag) } }
                     this += LoggingInterceptor()
-
-                    this += BootstrapInterceptor {
-                        PrayerListContract.Inputs.ObservePrayerList
-                    }
                 }
                 .dispatchers(
                     inputsDispatcher = Dispatchers.Main,
@@ -48,7 +44,7 @@ public val prayerListScreenModule: Module = module {
                     interceptorDispatcher = Dispatchers.Default,
                 )
                 .build(),
-            eventHandler = get<PrayerListEventHandler>(),
+            eventHandler = get<PrayerSchedulesEventHandler>(),
         )
     }
 }

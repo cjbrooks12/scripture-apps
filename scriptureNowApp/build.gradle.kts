@@ -117,6 +117,7 @@ kotlin {
             dependencies {
                 api(project(":core:routing"))
                 api(project(":core:ui"))
+                api(project(":core:logging"))
 
                 api(project(":pillars:prayer4"))
 

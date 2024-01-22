@@ -14,6 +14,7 @@ kotlin {
             dependencies {
                 api(project(":core:database"))
                 api(project(":core:di"))
+                api(project(":core:logging"))
 
                 api(libs.kotlinx.datetime)
                 api(libs.ballast.repository)

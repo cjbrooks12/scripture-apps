@@ -22,6 +22,8 @@ rootProject.name = "scripture-now"
 
 include(":core:database")
 include(":core:domain")
+include(":core:logging")
+include(":core:notifications")
 include(":core:di")
 include(":core:routing")
 include(":core:ui")

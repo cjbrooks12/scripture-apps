@@ -15,6 +15,7 @@ kotlin {
                 api(project(":core:routing"))
                 api(project(":core:database"))
                 api(project(":core:di"))
+                api(project(":core:notifications"))
 
                 api(project(":domain:prayer2"))
 
@@ -39,7 +40,9 @@ kotlin {
 
         // Android JVM Sourcesets
         val androidMain by getting {
-            dependencies { }
+            dependencies {
+                implementation("androidx.work:work-runtime-ktx:2.8.1")
+            }
         }
         val androidUnitTest by getting {
             dependencies { }
