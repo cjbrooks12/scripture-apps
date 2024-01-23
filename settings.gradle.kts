@@ -21,6 +21,7 @@ includeBuild(conventionDir)
 rootProject.name = "scripture-now"
 
 include(":core:database")
+include(":core:datetime")
 include(":core:domain")
 include(":core:logging")
 include(":core:notifications")
@@ -35,8 +36,8 @@ include(":features:prayerScreens")
 include(":features:prayerWidgets")
 include(":pillars:prayerPillar")
 
-//include(":data:verseOfTheDayData")
-//include(":domain:verseOfTheDayDomain")
+include(":data:verseOfTheDayData")
+include(":domain:verseOfTheDayDomain")
 include(":features:verseOfTheDaySchedules")
 //include(":features:verseOfTheDayScreens")
 //include(":features:verseOfTheDayWidgets")

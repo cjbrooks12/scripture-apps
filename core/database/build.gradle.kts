@@ -17,6 +17,7 @@ kotlin {
                 api(libs.koin.core)
                 api(libs.multiplatformSettings.core)
                 api(libs.sqldelight.coroutines)
+                api(libs.kotlinx.datetime)
             }
         }
         val commonTest by getting {

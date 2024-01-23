@@ -1,4 +1,4 @@
-package com.caseyjbrooks.foryou.ui.foryou
+package com.caseyjbrooks.foryou.ui.dashboard
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text

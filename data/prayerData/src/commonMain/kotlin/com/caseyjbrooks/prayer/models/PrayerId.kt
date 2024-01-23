@@ -1,5 +1,6 @@
 package com.caseyjbrooks.prayer.models
 
+import com.benasher44.uuid.Uuid
 import kotlin.jvm.JvmInline
 
 /**
@@ -7,5 +8,5 @@ import kotlin.jvm.JvmInline
  */
 @JvmInline
 public value class PrayerId(
-    public val uuid: String,
+    public val uuid: Uuid,
 )

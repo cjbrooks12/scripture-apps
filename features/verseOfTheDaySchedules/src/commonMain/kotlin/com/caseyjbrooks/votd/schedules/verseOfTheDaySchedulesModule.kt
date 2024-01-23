@@ -17,7 +17,7 @@ import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-public val votdSchedulesModule: Module = module {
+public val verseOfTheDaySchedulesModule: Module = module {
     factoryOf(::VotdSchedulesInputHandler)
     factoryOf(::VotdSchedulesEventHandler)
 

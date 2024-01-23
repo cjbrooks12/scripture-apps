@@ -1,5 +1,7 @@
-package com.caseyjbrooks.prayer.repository
+package com.caseyjbrooks.prayer
 
+import com.caseyjbrooks.prayer.models.DailyPrayer
+import com.caseyjbrooks.prayer.models.PrayerUser
 import com.caseyjbrooks.prayer.repository.config.BuildConfigPrayerConfig
 import com.caseyjbrooks.prayer.repository.config.FakePrayerConfig
 import com.caseyjbrooks.prayer.repository.config.PrayerConfig
@@ -18,7 +20,9 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-public val realPrayerRepositoryModule: Module = module {
+public val realPrayerDataModule: Module = module {
+    single<DailyPrayer?> { DailyPrayer("Daily prayer", "Hardcoded", emptyList()) }
+    single<PrayerUser?> { PrayerUser("Casey", PrayerUser.SubscriptionStatus.Free) }
     singleOf(::BuildConfigPrayerConfig).bind<PrayerConfig>()
     singleOf(::FakeDailyPrayerRepository).bind<DailyPrayerRepository>()
     singleOf(::OfflineDatabaseSavedPrayersRepository).bind<SavedPrayersRepository>()
@@ -26,7 +30,9 @@ public val realPrayerRepositoryModule: Module = module {
     singleOf(::FakePrayerUserRepository).bind<PrayerUserRepository>()
 }
 
-public val fakePrayerRepositoryModule: Module = module {
+public val fakePrayerDataModule: Module = module {
+    single<DailyPrayer?> { DailyPrayer("Daily prayer", "Hardcoded", emptyList()) }
+    single<PrayerUser?> { PrayerUser("Casey", PrayerUser.SubscriptionStatus.Free) }
     single<PrayerConfig> { FakePrayerConfig() }
     single<DailyPrayerRepository> { FakeDailyPrayerRepository(getOrNull()) }
     single<SavedPrayersRepository> { FakeSavedPrayersRepository() }

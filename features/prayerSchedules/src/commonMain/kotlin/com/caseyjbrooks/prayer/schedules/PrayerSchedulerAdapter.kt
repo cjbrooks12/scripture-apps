@@ -18,6 +18,11 @@ internal class PrayerSchedulerAdapter : SchedulerAdapter<
         val timeZone = TimeZone.currentSystemDefault()
 
         onSchedule(
+            key = "Prefetch daily prayer",
+            schedule = EveryDaySchedule(LocalTime(2, 30), timeZone = timeZone),
+            scheduledInput = { PrayerSchedulesContract.Inputs.FetchDailyPrayer }
+        )
+        onSchedule(
             key = "Auto-Archive Scheduled Prayers",
             schedule = EveryDaySchedule(LocalTime(0, 0), timeZone = timeZone),
             scheduledInput = { PrayerSchedulesContract.Inputs.ArchiveScheduledPrayers }

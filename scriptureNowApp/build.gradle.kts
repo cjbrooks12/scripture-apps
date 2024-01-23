@@ -118,6 +118,7 @@ kotlin {
                 api(project(":core:routing"))
                 api(project(":core:ui"))
                 api(project(":core:logging"))
+                api(project(":core:datetime"))
 
                 api(project(":pillars:prayerPillar"))
                 api(project(":pillars:verseOfTheDayPillar"))

@@ -17,6 +17,8 @@ kotlin {
                 api(project(":core:di"))
                 api(project(":core:notifications"))
 
+                api(project(":domain:verseOfTheDayDomain"))
+
                 api(libs.kotlinx.datetime)
                 api(libs.ballast.core)
                 api(libs.ballast.repository)

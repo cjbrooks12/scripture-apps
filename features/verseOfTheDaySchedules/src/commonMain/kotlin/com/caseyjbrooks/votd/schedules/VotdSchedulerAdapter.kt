@@ -18,7 +18,7 @@ internal class VotdSchedulerAdapter : SchedulerAdapter<
         val timeZone = TimeZone.currentSystemDefault()
 
         onSchedule(
-            key = "Fetch Verse of the day",
+            key = "Prefetch Verse of the day",
             schedule = EveryDaySchedule(LocalTime(2, 30), timeZone = timeZone),
             scheduledInput = { VotdSchedulesContract.Inputs.FetchVotd }
         )

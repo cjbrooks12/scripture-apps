@@ -5,7 +5,6 @@ import android.content.Context
 import com.caseyjbrooks.database.androidDatabaseModule
 import com.caseyjbrooks.di.ApplicationStructure
 import com.caseyjbrooks.di.GlobalScriptureNowKoinApplication
-import com.caseyjbrooks.logging.loggingModule
 import com.caseyjbrooks.ui.androidNotificationModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +32,7 @@ class MainAndroidApplication : Application() {
             modules(
                 androidDatabaseModule,
                 androidNotificationModule,
-                loggingModule,
+                commonApplicationModule,
                 realScriptureNowAppModule,
                 module {
                     single { this@MainAndroidApplication }.binds(arrayOf(Context::class, Application::class))

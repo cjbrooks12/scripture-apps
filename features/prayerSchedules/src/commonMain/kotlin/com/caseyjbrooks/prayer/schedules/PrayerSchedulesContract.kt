@@ -6,6 +6,7 @@ internal object PrayerSchedulesContract {
     )
 
     internal sealed interface Inputs {
+        data object FetchDailyPrayer : Inputs
         data object ArchiveScheduledPrayers : Inputs
         data object PrayerNotification : Inputs
     }

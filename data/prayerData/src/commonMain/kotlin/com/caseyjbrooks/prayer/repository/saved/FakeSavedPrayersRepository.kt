@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
-import kotlinx.datetime.Instant
 
 internal class FakeSavedPrayersRepository(
     initialPrayers: List<SavedPrayer> = emptyList<SavedPrayer>(),
@@ -113,62 +112,5 @@ internal class FakeSavedPrayersRepository(
     override fun getPrayerByText(prayerText: String): Flow<SavedPrayer?> {
         return _db
             .map { prayers -> prayers.singleOrNull { it.text == prayerText } }
-    }
-
-    public companion object {
-        public val INSTANCE: FakeSavedPrayersRepository = FakeSavedPrayersRepository(
-            initialPrayers = listOf(
-                SavedPrayer(
-                    PrayerId("1"),
-                    "Prayer One",
-                    SavedPrayerType.Persistent,
-                    tags = emptyList(),
-                    archived = false,
-                    archivedAt = null,
-                    createdAt = Instant.fromEpochMilliseconds(0L),
-                    updatedAt = Instant.fromEpochMilliseconds(0L),
-                ),
-                SavedPrayer(
-                    PrayerId("2"),
-                    "Prayer Two",
-                    SavedPrayerType.Persistent,
-                    tags = emptyList(),
-                    archived = false,
-                    archivedAt = null,
-                    createdAt = Instant.fromEpochMilliseconds(0L),
-                    updatedAt = Instant.fromEpochMilliseconds(0L),
-                ),
-                SavedPrayer(
-                    PrayerId("3"),
-                    "Prayer Three",
-                    SavedPrayerType.Persistent,
-                    tags = emptyList(),
-                    archived = false,
-                    archivedAt = null,
-                    createdAt = Instant.fromEpochMilliseconds(0L),
-                    updatedAt = Instant.fromEpochMilliseconds(0L),
-                ),
-                SavedPrayer(
-                    PrayerId("4"),
-                    "Prayer Four",
-                    SavedPrayerType.Persistent,
-                    tags = emptyList(),
-                    archived = false,
-                    archivedAt = null,
-                    createdAt = Instant.fromEpochMilliseconds(0L),
-                    updatedAt = Instant.fromEpochMilliseconds(0L),
-                ),
-                SavedPrayer(
-                    PrayerId("5"),
-                    "Prayer Five",
-                    SavedPrayerType.Persistent,
-                    tags = emptyList(),
-                    archived = false,
-                    archivedAt = null,
-                    createdAt = Instant.fromEpochMilliseconds(0L),
-                    updatedAt = Instant.fromEpochMilliseconds(0L),
-                ),
-            ),
-        )
     }
 }

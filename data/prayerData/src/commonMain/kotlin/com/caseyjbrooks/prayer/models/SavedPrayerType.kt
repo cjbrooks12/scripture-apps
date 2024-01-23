@@ -1,6 +1,6 @@
 package com.caseyjbrooks.prayer.models
 
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.Instant
 
 public sealed interface SavedPrayerType {
     /**
@@ -12,6 +12,6 @@ public sealed interface SavedPrayerType {
      * A prayer that will get automatically moved to the user's archives after the [completionDate] has passed.
      */
     public data class ScheduledCompletable(
-        val completionDate: LocalDateTime,
+        val completionDate: Instant,
     ) : SavedPrayerType
 }

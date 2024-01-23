@@ -1,6 +1,13 @@
+import com.benasher44.uuid.Uuid;
+
 CREATE TABLE prayer_tag (
-    prayer_uuid TEXT NOT NULL,
-    tag_uuid TEXT NOT NULL
+    prayer_uuid TEXT AS Uuid NOT NULL,
+    tag_uuid TEXT AS Uuid NOT NULL,
+
+    FOREIGN KEY (prayer_uuid) REFERENCES prayer (uuid)
+        ON DELETE CASCADE,
+    FOREIGN KEY (tag_uuid) REFERENCES tag (uuid)
+        ON DELETE CASCADE
 );
 
 createPrayerTag:
@@ -13,3 +20,17 @@ DELETE FROM
 WHERE
     prayer_uuid = :prayer_uuid AND
     tag_uuid = :tag_uuid;
+
+getPrayersForTag:
+SELECT
+    *
+FROM prayer_tag
+WHERE
+    tag_uuid = :tag_uuid;
+
+getTagsForPrayer:
+SELECT
+    *
+FROM prayer_tag
+WHERE
+    prayer_uuid = :prayer_uuid;
