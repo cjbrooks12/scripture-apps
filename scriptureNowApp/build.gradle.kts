@@ -115,10 +115,15 @@ kotlin {
 
         val commonMain by getting {
             dependencies {
+                api(project(":core:api"))
+                api(project(":core:database"))
+                api(project(":core:datetime"))
+                api(project(":core:di"))
+                api(project(":core:domain"))
+                api(project(":core:logging"))
+                api(project(":core:notifications"))
                 api(project(":core:routing"))
                 api(project(":core:ui"))
-                api(project(":core:logging"))
-                api(project(":core:datetime"))
 
                 api(project(":pillars:prayerPillar"))
                 api(project(":pillars:verseOfTheDayPillar"))

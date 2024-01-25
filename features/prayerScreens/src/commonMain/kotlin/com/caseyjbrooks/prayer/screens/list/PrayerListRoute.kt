@@ -28,21 +28,21 @@ public object PrayerListRoute : ScriptureNowScreen {
         public fun view(prayer: SavedPrayer): String {
             return PrayerDetailRoute
                 .directions()
-                .pathParameter("prayerId", prayer.uuid.uuid)
+                .pathParameter("prayerId", prayer.uuid.uuid.toString())
                 .build()
         }
 
         public fun edit(prayer: SavedPrayer): String {
             return PrayerFormRoute
                 .directions()
-                .pathParameter("prayerId", prayer.uuid.uuid)
+                .pathParameter("prayerId", prayer.uuid.uuid.toString())
                 .build()
         }
 
         public fun timer(prayer: SavedPrayer): String {
             return PrayerTimerRoute
                 .directions()
-                .pathParameter("prayerId", prayer.uuid.uuid)
+                .pathParameter("prayerId", prayer.uuid.uuid.toString())
                 .build()
         }
     }

@@ -12,12 +12,7 @@ kotlin {
         // Common Sourcesets
         val commonMain by getting {
             dependencies {
-                api(project(":core:di"))
-
                 api(project(":data:verseOfTheDayData"))
-
-                api(libs.kotlinx.datetime)
-                api(libs.benasher44.uuid)
             }
         }
         val commonTest by getting {

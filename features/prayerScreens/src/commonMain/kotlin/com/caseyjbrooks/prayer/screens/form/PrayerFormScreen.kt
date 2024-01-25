@@ -14,7 +14,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import com.caseyjbrooks.prayer.models.PrayerId
-import com.caseyjbrooks.routing.LocalKoin
+import com.caseyjbrooks.ui.koin.LocalKoin
 import com.copperleaf.ballast.repository.cache.getCachedOrNull
 import com.copperleaf.ballast.repository.cache.isLoading
 import org.koin.core.parameter.parametersOf

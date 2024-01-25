@@ -3,7 +3,7 @@ package com.caseyjbrooks.scripturememory
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
-import com.caseyjbrooks.di.Pillar
+import com.caseyjbrooks.routing.Pillar
 import com.caseyjbrooks.routing.NavigationItem
 import com.caseyjbrooks.routing.ScriptureNowScreen
 import com.caseyjbrooks.scripturememory.ui.list.SavedVersesListRoute

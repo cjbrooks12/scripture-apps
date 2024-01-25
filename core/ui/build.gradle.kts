@@ -12,10 +12,9 @@ kotlin {
         // Common Sourcesets
         val commonMain by getting {
             dependencies {
-                api(project(":core:routing"))
                 api(project(":core:di"))
-                api(libs.koin.core)
-                api(libs.koin.coroutines)
+                api(project(":core:routing"))
+                api("dev.chrisbanes.material3:material3-window-size-class-multiplatform:0.3.1")
             }
         }
         val commonTest by getting {
@@ -33,7 +32,7 @@ kotlin {
         // Android JVM Sourcesets
         val androidMain by getting {
             dependencies {
-                api(libs.androidx.activityCompose)
+                implementation(libs.androidx.activityCompose)
             }
         }
         val androidUnitTest by getting {

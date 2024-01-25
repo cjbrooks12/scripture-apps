@@ -3,7 +3,7 @@ package com.caseyjbrooks.topicalbible
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Search
-import com.caseyjbrooks.di.Pillar
+import com.caseyjbrooks.routing.Pillar
 import com.caseyjbrooks.routing.NavigationItem
 import com.caseyjbrooks.routing.ScriptureNowScreen
 import com.caseyjbrooks.topicalbible.ui.topics.BibleTopicsRoute

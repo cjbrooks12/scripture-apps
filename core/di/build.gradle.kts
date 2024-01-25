@@ -12,7 +12,6 @@ kotlin {
         // Common Sourcesets
         val commonMain by getting {
             dependencies {
-                api(project(":core:routing"))
                 api(libs.koin.core)
                 api(libs.koin.coroutines)
             }

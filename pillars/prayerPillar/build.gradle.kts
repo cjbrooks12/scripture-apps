@@ -12,18 +12,9 @@ kotlin {
         // Common Sourcesets
         val commonMain by getting {
             dependencies {
-                api(project(":core:routing"))
-                api(project(":core:database"))
-                api(project(":core:di"))
-
-                implementation(project(":features:prayerSchedules"))
+                api(project(":features:prayerSchedules"))
                 api(project(":features:prayerScreens"))
                 api(project(":features:prayerWidgets"))
-
-                api(libs.kotlinx.datetime)
-                api(libs.ballast.core)
-                api(libs.ballast.repository)
-                api(libs.benasher44.uuid)
             }
         }
         val commonTest by getting {

@@ -10,11 +10,26 @@ internal object PrayerTimerContract {
     internal data class State(
         val prayerId: PrayerId,
         val cachedPrayer: Cached<SavedPrayer> = Cached.NotLoaded(),
-    )
+
+        val totalTime: Int = 60,
+        val currentTime: Int = 0,
+        val running: Boolean = false,
+    ) {
+        val isStopped: Boolean = !running && currentTime == 0
+    }
 
     internal sealed interface Inputs {
         data class ObservePrayer(val prayerId: PrayerId) : Inputs
         data class PrayerUpdated(val cachedPrayers: Cached<SavedPrayer>) : Inputs
+
+        data object StartTimer : Inputs
+        data object PauseTimer : Inputs
+        data object ResumeTimer : Inputs
+        data object StopTimer : Inputs
+        data object ResetTimer : Inputs
+        data object TimerCompleted : Inputs
+
+        data object OnTimerTick : Inputs
 
         /**
          * Navigate to the hierarchical parent of the [PrayerDetailRoute], which is [PrayerListRoute]

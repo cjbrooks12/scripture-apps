@@ -3,7 +3,7 @@ package com.caseyjbrooks.settings
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Settings
-import com.caseyjbrooks.di.Pillar
+import com.caseyjbrooks.routing.Pillar
 import com.caseyjbrooks.routing.NavigationItem
 import com.caseyjbrooks.routing.ScriptureNowScreen
 import com.caseyjbrooks.settings.ui.settings.SettingsRoute

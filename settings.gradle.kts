@@ -20,6 +20,8 @@ includeBuild(conventionDir)
 
 rootProject.name = "scripture-now"
 
+include(":core:api")
+include(":core:ballast")
 include(":core:database")
 include(":core:datetime")
 include(":core:domain")

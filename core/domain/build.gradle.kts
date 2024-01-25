@@ -12,7 +12,7 @@ kotlin {
         // Common Sourcesets
         val commonMain by getting {
             dependencies {
-                api(libs.ballast.core)
+                api(project(":core:di"))
             }
         }
         val commonTest by getting {

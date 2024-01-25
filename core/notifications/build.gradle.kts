@@ -12,11 +12,8 @@ kotlin {
         // Common Sourcesets
         val commonMain by getting {
             dependencies {
-                api(project(":core:routing"))
                 api(project(":core:di"))
                 api(project(":core:logging"))
-                api(libs.koin.core)
-                api(libs.koin.coroutines)
             }
         }
         val commonTest by getting {

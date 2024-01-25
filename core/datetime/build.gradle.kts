@@ -12,12 +12,7 @@ kotlin {
         // Common Sourcesets
         val commonMain by getting {
             dependencies {
-                api(project(":core:routing"))
                 api(project(":core:di"))
-                api(project(":core:logging"))
-                api(libs.koin.core)
-                api(libs.koin.coroutines)
-                api(libs.koin.coroutines)
                 api(libs.kotlinx.datetime)
             }
         }
@@ -35,9 +30,7 @@ kotlin {
 
         // Android JVM Sourcesets
         val androidMain by getting {
-            dependencies {
-                api(libs.androidx.activityCompose)
-            }
+            dependencies { }
         }
         val androidUnitTest by getting {
             dependencies { }

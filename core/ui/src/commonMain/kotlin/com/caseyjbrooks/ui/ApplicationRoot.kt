@@ -1,9 +1,13 @@
 package com.caseyjbrooks.ui
 
 import androidx.compose.runtime.Composable
-import com.caseyjbrooks.di.ApplicationStructure
-import com.caseyjbrooks.di.Pillar
-import com.caseyjbrooks.routing.LocalKoin
+import com.caseyjbrooks.routing.ApplicationStructure
+import com.caseyjbrooks.ui.koin.LocalKoin
+import com.caseyjbrooks.ui.koin.WithKoinApplication
+import com.caseyjbrooks.ui.layout.DesktopLayout
+import com.caseyjbrooks.ui.layout.PhoneLayout
+import com.caseyjbrooks.ui.routing.WithRouter
+import com.caseyjbrooks.ui.sizeclass.WithSizeClass
 import org.koin.core.Koin
 
 @Composable

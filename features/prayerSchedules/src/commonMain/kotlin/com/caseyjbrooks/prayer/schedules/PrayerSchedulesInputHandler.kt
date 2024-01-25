@@ -28,5 +28,9 @@ internal class PrayerSchedulesInputHandler(
                 message = "Why don't you take a minute to pray right now?"
             )
         }
+
+        PrayerSchedulesContract.Inputs.FetchDailyPrayer -> {
+            noOp()
+        }
     }
 }

@@ -3,7 +3,7 @@ package com.caseyjbrooks.foryou
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.outlined.Face
-import com.caseyjbrooks.di.Pillar
+import com.caseyjbrooks.routing.Pillar
 import com.caseyjbrooks.foryou.ui.dashboard.ForYouRoute
 import com.caseyjbrooks.routing.NavigationItem
 import com.caseyjbrooks.routing.ScriptureNowScreen

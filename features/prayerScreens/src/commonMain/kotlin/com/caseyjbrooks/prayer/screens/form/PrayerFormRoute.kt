@@ -2,6 +2,7 @@ package com.caseyjbrooks.prayer.screens.form
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
+import com.benasher44.uuid.uuidFrom
 import com.caseyjbrooks.prayer.models.PrayerId
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.screens.detail.PrayerDetailRoute
@@ -30,7 +31,7 @@ public object PrayerFormRoute : ScriptureNowScreen {
         public fun details(prayer: SavedPrayer): String {
             return PrayerDetailRoute
                 .directions()
-                .pathParameter("prayerId", prayer.uuid.uuid)
+                .pathParameter("prayerId", prayer.uuid.uuid.toString())
                 .build()
         }
     }
@@ -39,7 +40,7 @@ public object PrayerFormRoute : ScriptureNowScreen {
     override fun Content(destination: Destination.Match<ScriptureNowScreen>) {
         val prayerId: String? by destination.optionalStringPath()
         key(prayerId) {
-            PrayerFormScreen.Content(prayerId?.let { PrayerId(it) })
+            PrayerFormScreen.Content(prayerId?.let { PrayerId(uuidFrom(it)) })
         }
     }
 }

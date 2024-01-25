@@ -13,11 +13,11 @@ kotlin {
         // Common Sourcesets
         val commonMain by getting {
             dependencies {
+                api(project(":core:di"))
+                api(project(":core:datetime"))
                 api(libs.benasher44.uuid)
-                api(libs.koin.core)
                 api(libs.multiplatformSettings.core)
                 api(libs.sqldelight.coroutines)
-                api(libs.kotlinx.datetime)
             }
         }
         val commonTest by getting {
@@ -27,7 +27,7 @@ kotlin {
         // plain JVM Sourcesets
         val jvmMain by getting {
             dependencies {
-                api(libs.sqldelight.driver.jvm)
+                implementation(libs.sqldelight.driver.jvm)
             }
         }
         val jvmTest by getting {
@@ -37,7 +37,7 @@ kotlin {
         // Android JVM Sourcesets
         val androidMain by getting {
             dependencies {
-                api(libs.sqldelight.driver.android)
+                implementation(libs.sqldelight.driver.android)
             }
         }
         val androidUnitTest by getting {

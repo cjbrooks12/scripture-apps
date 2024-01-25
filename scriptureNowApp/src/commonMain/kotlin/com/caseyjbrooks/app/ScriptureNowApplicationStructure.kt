@@ -1,11 +1,11 @@
 package com.caseyjbrooks.app
 
 import com.caseyjbrooks.bible.BibleModule
-import com.caseyjbrooks.di.ApplicationStructure
-import com.caseyjbrooks.di.Pillar
 import com.caseyjbrooks.foryou.ForYouModule
 import com.caseyjbrooks.prayer.pillars.PrayerPillar
+import com.caseyjbrooks.routing.ApplicationStructure
 import com.caseyjbrooks.routing.NavigationItem
+import com.caseyjbrooks.routing.Pillar
 import com.caseyjbrooks.routing.ScriptureNowScreen
 import com.caseyjbrooks.scripturememory.ScriptureMemoryModule
 import com.caseyjbrooks.settings.SettingsModule

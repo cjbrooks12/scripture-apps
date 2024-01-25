@@ -2,6 +2,7 @@ package com.caseyjbrooks.prayer.screens.timer
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
+import com.benasher44.uuid.uuidFrom
 import com.caseyjbrooks.prayer.models.PrayerId
 import com.caseyjbrooks.prayer.screens.list.PrayerListRoute
 import com.caseyjbrooks.routing.DetailPane
@@ -29,7 +30,7 @@ public object PrayerTimerRoute : ScriptureNowScreen {
     override fun Content(destination: Destination.Match<ScriptureNowScreen>) {
         val prayerId: String by destination.stringPath()
         key(prayerId) {
-            PrayerTimerScreen.Content(PrayerId(prayerId))
+            PrayerTimerScreen.Content(PrayerId(uuidFrom(prayerId)))
         }
     }
 }

@@ -13,12 +13,10 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":core:database"))
-                api(project(":core:di"))
                 api(project(":core:logging"))
 
-                api(libs.kotlinx.datetime)
+                // TODO: find another monad to avoid coupling this module to Ballast
                 api(libs.ballast.repository)
-                api(libs.benasher44.uuid)
             }
         }
         val commonTest by getting {

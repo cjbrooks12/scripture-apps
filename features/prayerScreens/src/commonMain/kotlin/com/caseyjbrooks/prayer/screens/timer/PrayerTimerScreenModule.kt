@@ -10,6 +10,7 @@ import com.copperleaf.ballast.core.FifoInputStrategy
 import com.copperleaf.ballast.core.LoggingInterceptor
 import com.copperleaf.ballast.dispatchers
 import com.copperleaf.ballast.plusAssign
+import com.copperleaf.ballast.scheduler.SchedulerInterceptor
 import com.copperleaf.ballast.withViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,6 +42,7 @@ public val prayerTimerScreenModule: Module = module {
                     this += BootstrapInterceptor {
                         PrayerTimerContract.Inputs.ObservePrayer(prayerId)
                     }
+                    this += SchedulerInterceptor()
                 }
                 .dispatchers(
                     inputsDispatcher = Dispatchers.Main,

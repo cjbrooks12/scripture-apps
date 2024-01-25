@@ -3,7 +3,7 @@ package com.caseyjbrooks.prayer.pillars
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.outlined.ThumbUp
-import com.caseyjbrooks.di.Pillar
+import com.caseyjbrooks.routing.Pillar
 import com.caseyjbrooks.prayer.screens.detail.PrayerDetailRoute
 import com.caseyjbrooks.prayer.screens.form.PrayerFormRoute
 import com.caseyjbrooks.prayer.screens.list.PrayerListRoute

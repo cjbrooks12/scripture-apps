@@ -2,10 +2,8 @@ package com.caseyjbrooks.app
 
 import android.app.Application
 import android.content.Context
-import com.caseyjbrooks.database.androidDatabaseModule
-import com.caseyjbrooks.di.ApplicationStructure
 import com.caseyjbrooks.di.GlobalScriptureNowKoinApplication
-import com.caseyjbrooks.ui.androidNotificationModule
+import com.caseyjbrooks.routing.ApplicationStructure
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -30,8 +28,6 @@ class MainAndroidApplication : Application() {
             coroutinesEngine()
 
             modules(
-                androidDatabaseModule,
-                androidNotificationModule,
                 commonApplicationModule,
                 realScriptureNowAppModule,
                 module {

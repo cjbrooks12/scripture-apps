@@ -1,0 +1,86 @@
+@startuml
+
+' Define components for all Gradle modules
+package ":core" {
+    component [:core:api] as coreApi
+    component [:core:ballast] as coreBallast
+    component [:core:database] as coreDatabase
+    component [:core:datetime] as coreDatetime
+    component [:core:di] as coreDi
+    component [:core:domain] as coreDomain
+    component [:core:logging] as coreLogging
+    component [:core:notifications] as coreNotifications
+    component [:core:routing] as coreRouting
+    component [:core:ui] as coreUi
+}
+
+package ":data" {
+    component [:data:prayerData] as prayerData
+    component [:data:verseOfTheDayData] as verseOfTheDayData
+}
+
+package ":domain" {
+    component [:domain:prayerDomain] as prayerDomain
+    component [:domain:verseOfTheDayDomain] as verseOfTheDayDomain
+}
+
+package ":features" {
+    'component [:features:bible] as bibleFeature
+    'component [:features:foryou] as foryouFeature
+    component [:features:prayerSchedules] as prayerSchedulesFeature
+    component [:features:prayerScreens] as prayerScreensFeature
+    'component [:features:prayerWidgets] as prayerWidgetsFeature
+    'component [:features:scriptureMemory] as scriptureMemoryFeature
+    'component [:features:settings] as settingsFeature
+    'component [:features:topicalBible] as topicalBibleFeature
+    component [:features:verseOfTheDaySchedules] as verseOfTheDaySchedulesFeature
+}
+
+package ":pillars" {
+    component [:pillars:prayerPillar] as prayerPillar
+    component [:pillars:verseOfTheDayPillar] as verseOfTheDayPillar
+}
+
+package ":apps" {
+    component [:scriptureNowApp] as scriptureNowApp
+}
+
+' Define connections between modules
+coreDi <-- coreApi
+coreDi <-- coreBallast
+coreDi <-- coreDatabase
+coreDi <-- coreDatetime
+coreDi <-- coreDomain
+coreDi <-- coreLogging
+coreDi <-- coreNotifications
+coreDi <-- coreRouting
+coreDi <-- coreUi
+coreDatetime <-- coreDatabase
+coreBallast <-- coreRouting
+coreRouting <-- coreUi
+coreLogging <-- coreBallast
+coreLogging <-- coreNotifications
+
+coreDatabase <--- prayerData
+coreLogging <--- prayerData
+coreDatabase <--- verseOfTheDayData
+coreLogging <--- verseOfTheDayData
+
+prayerData <--- prayerDomain
+verseOfTheDayData <--- verseOfTheDayDomain
+
+coreBallast <-- prayerSchedulesFeature
+coreNotifications <-- prayerSchedulesFeature
+prayerDomain <-- prayerSchedulesFeature
+
+coreBallast <-- prayerScreensFeature
+coreRouting <-- prayerScreensFeature
+coreUi <-- prayerScreensFeature
+prayerDomain <-- prayerScreensFeature
+
+prayerScreensFeature <-- prayerPillar
+prayerSchedulesFeature <-- prayerPillar
+
+prayerPillar <-- scriptureNowApp
+
+@enduml

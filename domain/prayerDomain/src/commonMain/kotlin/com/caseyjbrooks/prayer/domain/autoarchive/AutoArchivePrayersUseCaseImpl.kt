@@ -6,15 +6,11 @@ import com.caseyjbrooks.prayer.models.SavedPrayerType
 import com.caseyjbrooks.prayer.repository.saved.SavedPrayersRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
-import kotlinx.datetime.toLocalDateTime
 
 internal class AutoArchivePrayersUseCaseImpl(
     private val savedPrayersRepository: SavedPrayersRepository,
     private val archivePrayerUseCase: ArchivePrayerUseCase,
     private val clock: Clock,
-    private val timeZone: TimeZone,
 ) : AutoArchivePrayersUseCase {
     override suspend operator fun invoke() {
         val currentInstant = clock.now()
@@ -23,7 +19,7 @@ internal class AutoArchivePrayersUseCaseImpl(
                 ArchiveStatus.NotArchived,
                 setOf(
                     SavedPrayerType.ScheduledCompletable(
-                        clock.now().toLocalDateTime(timeZone),
+                        clock.now(),
                     ),
                 ),
                 emptySet(),
@@ -31,7 +27,7 @@ internal class AutoArchivePrayersUseCaseImpl(
             .first()
             .filter { prayer ->
                 check(prayer.prayerType is SavedPrayerType.ScheduledCompletable)
-                currentInstant > (prayer.prayerType as SavedPrayerType.ScheduledCompletable).completionDate.toInstant(timeZone)
+                currentInstant > (prayer.prayerType as SavedPrayerType.ScheduledCompletable).completionDate
             }
 
         prayersToArchive.forEach { prayer ->
