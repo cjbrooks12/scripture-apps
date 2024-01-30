@@ -19,3 +19,5 @@ Enable Firebase Analytics DebugView with the following command:
 adb shell setprop debug.firebase.analytics.app com.caseybrooks.scripturememory.dev
 adb shell setprop debug.firebase.analytics.app com.caseybrooks.openbible.dev
 ```
+
+## Uploading builds to Firebase

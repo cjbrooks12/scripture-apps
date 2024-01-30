@@ -46,7 +46,6 @@ internal fun WithRouter(
     }
 }
 
-
 @Composable
 public fun currentBackstack(): Backstack<ScriptureNowScreen> {
     val router = LocalRouter.current

@@ -17,7 +17,7 @@ kotlin {
                 api(project(":core:notifications"))
 
                 api(project(":domain:prayerDomain"))
-                api(libs.ballast.scheduler)
+                api(libs.ballast.schedules)
             }
         }
         val commonTest by getting {

@@ -10,6 +10,5 @@ internal object VotdSchedulesContract {
         data object VotdNotification : Inputs
     }
 
-    internal sealed interface Events {
-    }
+    internal sealed interface Events
 }

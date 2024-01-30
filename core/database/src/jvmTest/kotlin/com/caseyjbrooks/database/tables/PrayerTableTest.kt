@@ -17,7 +17,7 @@ class PrayerTableTest : StringSpec({
 
             val prayer1 = Prayer(
                 uuid = uuidFactory.getNewUuid(),
-                text  = "prayer 1",
+                text = "prayer 1",
                 autoArchiveAt = null,
                 archivedAt = null,
                 createdAt = now,
@@ -25,7 +25,7 @@ class PrayerTableTest : StringSpec({
             )
             val prayer2 = Prayer(
                 uuid = uuidFactory.getNewUuid(),
-                text  = "prayer 2",
+                text = "prayer 2",
                 autoArchiveAt = null,
                 archivedAt = null,
                 createdAt = now,
@@ -33,7 +33,7 @@ class PrayerTableTest : StringSpec({
             )
             val prayer3 = Prayer(
                 uuid = uuidFactory.getNewUuid(),
-                text  = "prayer 3",
+                text = "prayer 3",
                 autoArchiveAt = null,
                 archivedAt = null,
                 createdAt = now,
@@ -41,7 +41,7 @@ class PrayerTableTest : StringSpec({
             )
             val prayer4 = Prayer(
                 uuid = uuidFactory.getNewUuid(),
-                text  = "prayer 4",
+                text = "prayer 4",
                 autoArchiveAt = null,
                 archivedAt = null,
                 createdAt = now,

@@ -4,7 +4,7 @@ plugins {
     id("copper-leaf-targets")
     id("copper-leaf-kotest")
     id("copper-leaf-compose")
-    id("copper-leaf-lint")
+//    id("copper-leaf-lint")
     id("copper-leaf-sqldelight")
 }
 

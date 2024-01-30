@@ -103,7 +103,6 @@ internal class PrayerTimerInputHandler(
             )
         }
 
-
         is PrayerTimerContract.Inputs.StopTimer -> {
             updateState {
                 it.copy(

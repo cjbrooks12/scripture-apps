@@ -14,7 +14,6 @@ public val realBallastModule: Module = module {
     }
 }
 
-
 internal expect fun getFakePlatformBallastModule(): Module
 public val fakeBallastModule: Module = module {
     includes(getFakePlatformBallastModule())

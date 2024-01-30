@@ -18,7 +18,6 @@ internal class CreatePrayerFromTextUseCaseImpl(
             text = text,
             prayerType = SavedPrayerType.Persistent,
             tags = buildList {
-
             },
             archived = false,
             archivedAt = null,

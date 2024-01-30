@@ -5,6 +5,7 @@ plugins {
     id("copper-leaf-kotest")
     id("copper-leaf-compose")
     id("copper-leaf-lint")
+    id("copper-leaf-serialization")
 }
 
 kotlin {
@@ -13,6 +14,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":core:database"))
+                api(project(":core:api"))
                 api(project(":core:logging"))
                 api(libs.ballast.repository)
             }

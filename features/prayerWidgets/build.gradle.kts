@@ -33,7 +33,10 @@ kotlin {
 
         // Android JVM Sourcesets
         val androidMain by getting {
-            dependencies { }
+            dependencies {
+                implementation("androidx.glance:glance-appwidget:1.0.0")
+                implementation("androidx.glance:glance-material3:1.0.0")
+            }
         }
         val androidUnitTest by getting {
             dependencies { }

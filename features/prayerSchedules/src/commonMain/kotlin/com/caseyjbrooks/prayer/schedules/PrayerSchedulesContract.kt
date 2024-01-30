@@ -11,6 +11,5 @@ internal object PrayerSchedulesContract {
         data object PrayerNotification : Inputs
     }
 
-    internal sealed interface Events {
-    }
+    internal sealed interface Events
 }

@@ -1,11 +1,9 @@
 package com.caseyjbrooks.prayer.screens.list
 
 import com.caseyjbrooks.routing.RouterViewModel
-import com.caseyjbrooks.routing.ScriptureNowScreen
 import com.copperleaf.ballast.EventHandler
 import com.copperleaf.ballast.EventHandlerScope
 import com.copperleaf.ballast.navigation.routing.RouterContract
-import com.copperleaf.ballast.navigation.vm.Router
 
 internal class PrayerListEventHandler(
     private val router: RouterViewModel,

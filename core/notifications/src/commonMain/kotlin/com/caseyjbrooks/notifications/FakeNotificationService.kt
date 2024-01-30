@@ -10,6 +10,5 @@ internal class FakeNotificationService : NotificationService {
     }
 
     override fun showNotification(title: String, message: String) {
-
     }
 }

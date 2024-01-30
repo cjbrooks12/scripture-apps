@@ -13,8 +13,7 @@ internal class ForYouDashboardEventHandler : EventHandler<
             ForYouDashboardContract.State>.handleEvent(
         event: ForYouDashboardContract.Events
     ): Unit = when (event) {
-        is ForYouDashboardContract.Events.NavigateUp -> {
-
+        else -> {
         }
     }
 }

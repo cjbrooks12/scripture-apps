@@ -92,7 +92,6 @@ public class QueryPrayersUseCaseTest : StringSpec({
                 getScheduledPrayer(0L, "8", false, "one", "two"),
             )
         }
-
     }
 
     "query prayers > not archived, tag 'one'" {

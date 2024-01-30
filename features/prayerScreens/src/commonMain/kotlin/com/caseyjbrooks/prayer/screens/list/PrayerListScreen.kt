@@ -27,7 +27,6 @@ import com.caseyjbrooks.ui.koin.LocalKoin
 import com.copperleaf.ballast.repository.cache.getCachedOrEmptyList
 import com.copperleaf.ballast.repository.cache.isLoading
 import org.koin.core.parameter.parametersOf
-import org.koin.core.qualifier.named
 
 public object PrayerListScreen {
     @Composable
@@ -35,7 +34,7 @@ public object PrayerListScreen {
         val koin = LocalKoin.current
         val coroutineScope = rememberCoroutineScope()
         val viewModel: PrayerListViewModel = remember(coroutineScope, koin) {
-            koin.get(named("PrayerListViewModel")) { parametersOf(coroutineScope) }
+            koin.get { parametersOf(coroutineScope) }
         }
 
         val uiState by viewModel.observeStates().collectAsState()

@@ -69,7 +69,6 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
                 ),
             )
         }
-
     }
 
     "Test Save Daily Prayer > default tag" {

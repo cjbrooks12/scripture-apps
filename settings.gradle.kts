@@ -6,7 +6,8 @@ pluginManagement {
     }
 }
 
-val conventionDir = "./../../copperleaf/gradle-convention-plugins"
+//val conventionDir = "./../../copperleaf/gradle-convention-plugins"
+val conventionDir = ".//gradle-convention-plugins"
 
 dependencyResolutionManagement {
     versionCatalogs {
@@ -41,8 +42,8 @@ include(":pillars:prayerPillar")
 include(":data:verseOfTheDayData")
 include(":domain:verseOfTheDayDomain")
 include(":features:verseOfTheDaySchedules")
-//include(":features:verseOfTheDayScreens")
-//include(":features:verseOfTheDayWidgets")
+include(":features:verseOfTheDayScreens")
+include(":features:verseOfTheDayWidgets")
 include(":pillars:verseOfTheDayPillar")
 
 include(":features:bible")

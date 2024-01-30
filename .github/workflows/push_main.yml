@@ -16,10 +16,7 @@ jobs:
       FIREBASE_TOKEN: '${{ secrets.FIREBASE_TOKEN }}'
       KEYSTORE: '${{ secrets.KEYSTORE }}'
       KEYSTORE_PASSWORD: '${{ secrets.KEYSTORE_PASSWORD }}'
-      KEYSTORE_OB_KEY_ALIAS: '${{ secrets.KEYSTORE_OB_KEY_ALIAS }}'
-      KEYSTORE_OB_KEY_PASSWORD: '${{ secrets.KEYSTORE_OB_KEY_PASSWORD }}'
-      KEYSTORE_SM_KEY_ALIAS: '${{ secrets.KEYSTORE_SM_KEY_ALIAS }}'
-      KEYSTORE_SM_KEY_PASSWORD: '${{ secrets.KEYSTORE_SM_KEY_PASSWORD }}'
+      KEYSTORE_KEY_PASSWORD: '${{ secrets.KEYSTORE_KEY_PASSWORD }}'
     steps:
       - uses: 'actions/checkout@v3'
         with:
@@ -38,7 +35,7 @@ jobs:
       FIREBASE_TOKEN: '${{ secrets.FIREBASE_TOKEN }}'
       KEYSTORE: '${{ secrets.KEYSTORE }}'
       KEYSTORE_PASSWORD: '${{ secrets.KEYSTORE_PASSWORD }}'
-      KEYSTORE_KEY_PASSWORD: '${{ secrets.KEYSTORE_SM_KEY_PASSWORD }}'
+      KEYSTORE_KEY_PASSWORD: '${{ secrets.KEYSTORE_KEY_PASSWORD }}'
     steps:
       - uses: 'actions/checkout@v3'
         with:
@@ -56,9 +53,9 @@ jobs:
       - name: 'Check'
         run: './gradlew check -Prelease -Pvariant=scriptureNowDev'
       - name: 'Assemble Artifacts'
-        run: './gradlew :composeApp:assembleScriptureNowDevRelease -Prelease -Pvariant=scriptureNowDev'
+        run: './gradlew :scriptureNowApp:assembleQaRelease -Prelease -Pvariant=scriptureNowDev'
       - name: 'Upload Artifacts to Firebase'
-        run: './gradlew :composeApp:appDistributionUploadScriptureNowDevRelease -Prelease -Pvariant=scriptureNowDev'
+        run: './gradlew :scriptureNowApp:appDistributionUploadQaRelease -Prelease -Pvariant=scriptureNowDev'
   scriptureNowProdRelease:
     runs-on: 'macos-latest'
     env:
@@ -67,7 +64,7 @@ jobs:
       FIREBASE_TOKEN: '${{ secrets.FIREBASE_TOKEN }}'
       KEYSTORE: '${{ secrets.KEYSTORE }}'
       KEYSTORE_PASSWORD: '${{ secrets.KEYSTORE_PASSWORD }}'
-      KEYSTORE_KEY_PASSWORD: '${{ secrets.KEYSTORE_SM_KEY_PASSWORD }}'
+      KEYSTORE_KEY_PASSWORD: '${{ secrets.KEYSTORE_KEY_PASSWORD }}'
     steps:
       - uses: 'actions/checkout@v3'
         with:
@@ -85,64 +82,6 @@ jobs:
       - name: 'Assemble Artifacts'
         run: './gradlew check -Prelease -Pvariant=scriptureNowProd'
       - name: 'Assemble Artifacts'
-        run: './gradlew :composeApp:bundleScriptureNowProdRelease -Prelease -Pvariant=scriptureNowProd'
+        run: './gradlew :composeApp:bundleProdRelease -Prelease -Pvariant=scriptureNowProd'
       - name: 'Upload Artifacts to Firebase'
-        run: './gradlew :composeApp:appDistributionUploadScriptureNowProdRelease -Prelease -Pvariant=scriptureNowProd'
-  topicalBibleDevRelease:
-    runs-on: 'macos-latest'
-    env:
-      GITHUB_ACTOR: '${{ github.actor }}'
-      GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-      FIREBASE_TOKEN: '${{ secrets.FIREBASE_TOKEN }}'
-      KEYSTORE: '${{ secrets.KEYSTORE }}'
-      KEYSTORE_PASSWORD: '${{ secrets.KEYSTORE_PASSWORD }}'
-      KEYSTORE_KEY_PASSWORD: '${{ secrets.KEYSTORE_SM_KEY_PASSWORD }}'
-    steps:
-      - uses: 'actions/checkout@v3'
-        with:
-          submodules: 'recursive'
-          fetch-depth: 0 # all commit history and tags
-      - name: 'Set up JDK 17'
-        uses: 'actions/setup-java@v2'
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-      - name: 'Write keystore base64 to file'
-        run: 'echo $KEYSTORE > ./release.keystore.txt'
-      - name: 'Convert base64 keystore to binary'
-        run: 'echo $KEYSTORE | base64 -d > ./release.keystore'
-      - name: 'Assemble Artifacts'
-        run: './gradlew check -Prelease -Pvariant=topicalBibleDev'
-      - name: 'Assemble Artifacts'
-        run: './gradlew :composeApp:assembleTopicalBibleDevRelease -Prelease -Pvariant=topicalBibleDev'
-      - name: 'Upload Artifacts to Firebase'
-        run: './gradlew :composeApp:appDistributionUploadTopicalBibleDevRelease -Prelease -Pvariant=topicalBibleDev'
-  topicalBibleProdRelease:
-    runs-on: 'macos-latest'
-    env:
-      GITHUB_ACTOR: '${{ github.actor }}'
-      GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-      FIREBASE_TOKEN: '${{ secrets.FIREBASE_TOKEN }}'
-      KEYSTORE: '${{ secrets.KEYSTORE }}'
-      KEYSTORE_PASSWORD: '${{ secrets.KEYSTORE_PASSWORD }}'
-      KEYSTORE_KEY_PASSWORD: '${{ secrets.KEYSTORE_SM_KEY_PASSWORD }}'
-    steps:
-      - uses: 'actions/checkout@v3'
-        with:
-          submodules: 'recursive'
-          fetch-depth: 0 # all commit history and tags
-      - name: 'Set up JDK 17'
-        uses: 'actions/setup-java@v2'
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-      - name: 'Write keystore base64 to file'
-        run: 'echo $KEYSTORE > ./release.keystore.txt'
-      - name: 'Convert base64 keystore to binary'
-        run: 'echo $KEYSTORE | base64 -d > ./release.keystore'
-      - name: 'Assemble Artifacts'
-        run: './gradlew check -Prelease -Pvariant=topicalBibleProd'
-      - name: 'Assemble Artifacts'
-        run: './gradlew :composeApp:bundleTopicalBibleProdRelease -Prelease -Pvariant=topicalBibleProd'
-      - name: 'Upload Artifacts to Firebase'
-        run: './gradlew :composeApp:appDistributionUploadTopicalBibleProdRelease -Prelease -Pvariant=topicalBibleProd'
+        run: './gradlew :composeApp:appDistributionUploadProdRelease -Prelease -Pvariant=scriptureNowProd'

@@ -1,10 +1,14 @@
 package com.caseyjbrooks.foryou.ui.dashboard
 
+import com.caseyjbrooks.votd.domain.gettoday.GetTodaysVerseOfTheDayUseCase
 import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
-import kotlinx.coroutines.delay
+import com.copperleaf.ballast.observeFlows
+import kotlinx.coroutines.flow.map
 
-internal class ForYouDashboardInputHandler : InputHandler<
+internal class ForYouDashboardInputHandler(
+    private val getTodaysVerseOfTheDayUseCase: GetTodaysVerseOfTheDayUseCase
+) : InputHandler<
         ForYouDashboardContract.Inputs,
         ForYouDashboardContract.Events,
         ForYouDashboardContract.State> {
@@ -15,13 +19,15 @@ internal class ForYouDashboardInputHandler : InputHandler<
         input: ForYouDashboardContract.Inputs
     ): Unit = when (input) {
         is ForYouDashboardContract.Inputs.Initialize -> {
-            updateState { it.copy(loading = true) }
-            delay(1000)
-            updateState { it.copy(loading = false) }
+            observeFlows(
+                "Initialize",
+                getTodaysVerseOfTheDayUseCase()
+                    .map { ForYouDashboardContract.Inputs.VerseOfTheDayUpdated(it) }
+            )
         }
 
-        is ForYouDashboardContract.Inputs.GoBack -> {
-            postEvent(ForYouDashboardContract.Events.NavigateUp)
+        is ForYouDashboardContract.Inputs.VerseOfTheDayUpdated -> {
+            updateState { it.copy(verseOfTheDay = input.verseOfTheDay) }
         }
     }
 }

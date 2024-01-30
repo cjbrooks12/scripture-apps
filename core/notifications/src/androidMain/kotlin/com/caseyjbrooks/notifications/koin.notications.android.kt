@@ -15,6 +15,5 @@ internal actual fun getRealPlatformNotificationModule(): Module = module {
     }
 }
 
-
 internal actual fun getFakePlatformNotificationModule(): Module = module {
 }

@@ -13,6 +13,8 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":features:verseOfTheDaySchedules"))
+                api(project(":features:verseOfTheDayScreens"))
+                api(project(":features:verseOfTheDayWidgets"))
             }
         }
         val commonTest by getting {

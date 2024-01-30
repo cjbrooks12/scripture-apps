@@ -1,16 +1,17 @@
 package com.caseyjbrooks.foryou.ui.dashboard
 
+import com.caseyjbrooks.votd.models.VerseOfTheDay
+import com.copperleaf.ballast.repository.cache.Cached
+
 internal object ForYouDashboardContract {
     internal data class State(
-        val loading: Boolean = false,
+        val verseOfTheDay: Cached<VerseOfTheDay> = Cached.NotLoaded()
     )
 
     internal sealed interface Inputs {
         data object Initialize : Inputs
-        data object GoBack : Inputs
+        data class VerseOfTheDayUpdated(val verseOfTheDay: Cached<VerseOfTheDay>) : Inputs
     }
 
-    internal sealed interface Events {
-        data object NavigateUp : Events
-    }
+    internal sealed interface Events
 }

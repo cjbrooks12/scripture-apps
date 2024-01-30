@@ -13,9 +13,10 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":core:di"))
+                api(project(":core:logging"))
                 api(libs.ktor.client.core)
                 implementation(libs.ktor.client.logging)
-                implementation(libs.ktor.client.serialization)
+                api(libs.ktor.client.serialization)
                 implementation(libs.ktor.client.serialization.json)
             }
         }

@@ -15,6 +15,8 @@ kotlin {
                 api(project(":core:di"))
                 api(project(":core:logging"))
                 api(libs.ballast.core)
+                api(libs.ballast.schedules)
+                api(libs.ballast.undo)
             }
         }
         val commonTest by getting {

@@ -18,7 +18,6 @@ import com.caseyjbrooks.ui.koin.LocalKoin
 import com.copperleaf.ballast.repository.cache.getCachedOrNull
 import com.copperleaf.ballast.repository.cache.isLoading
 import org.koin.core.parameter.parametersOf
-import org.koin.core.qualifier.named
 
 public object PrayerFormScreen {
     @Composable
@@ -26,7 +25,7 @@ public object PrayerFormScreen {
         val koin = LocalKoin.current
         val coroutineScope = rememberCoroutineScope()
         val viewModel: PrayerFormViewModel = remember(coroutineScope, koin) {
-            koin.get(named("PrayerFormViewModel")) { parametersOf(coroutineScope, prayerId) }
+            koin.get { parametersOf(coroutineScope, prayerId) }
         }
 
         val uiState by viewModel.observeStates().collectAsState()

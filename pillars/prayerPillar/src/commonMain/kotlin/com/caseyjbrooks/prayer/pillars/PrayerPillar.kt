@@ -3,12 +3,12 @@ package com.caseyjbrooks.prayer.pillars
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.outlined.ThumbUp
-import com.caseyjbrooks.routing.Pillar
 import com.caseyjbrooks.prayer.screens.detail.PrayerDetailRoute
 import com.caseyjbrooks.prayer.screens.form.PrayerFormRoute
 import com.caseyjbrooks.prayer.screens.list.PrayerListRoute
 import com.caseyjbrooks.prayer.screens.timer.PrayerTimerRoute
 import com.caseyjbrooks.routing.NavigationItem
+import com.caseyjbrooks.routing.Pillar
 import com.caseyjbrooks.routing.ScriptureNowScreen
 
 public object PrayerPillar : Pillar {
@@ -27,4 +27,3 @@ public object PrayerPillar : Pillar {
     )
     override val secondaryNavigationItems: List<NavigationItem> = listOf()
 }
-

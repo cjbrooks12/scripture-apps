@@ -17,7 +17,6 @@ kotlin {
                 api(project(":core:ui"))
 
                 api(project(":domain:prayerDomain"))
-                implementation(libs.ballast.scheduler)
             }
         }
         val commonTest by getting {
