@@ -1,10 +1,10 @@
 package com.caseyjbrooks.prayer.domain
 
 import com.caseyjbrooks.prayer.domain.update.UpdatePrayerUseCase
-import com.caseyjbrooks.prayer.models.PrayerId
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.models.SavedPrayerType
 import com.caseyjbrooks.prayer.repository.saved.SavedPrayersRepository
+import com.caseyjbrooks.prayer.utils.PrayerId
 import com.caseyjbrooks.prayer.utils.TestClock
 import com.caseyjbrooks.prayer.utils.koinTest
 import io.kotest.core.spec.style.StringSpec
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.datetime.Instant
 
 public class UpdatePrayerUseCaseTest : StringSpec({
-    fun getPrayer(millis: Long, id: String, text: String): SavedPrayer {
+    fun getPrayer(millis: Long, id: Int, text: String): SavedPrayer {
         val instant = Instant.fromEpochMilliseconds(millis)
         return SavedPrayer(
             uuid = PrayerId(id),
@@ -35,11 +35,11 @@ public class UpdatePrayerUseCaseTest : StringSpec({
             val repository: SavedPrayersRepository = get()
             val useCase: UpdatePrayerUseCase = get()
 
-            val initialPrayer = getPrayer(0L, "1", "initial text")
+            val initialPrayer = getPrayer(0L, 1, "initial text")
             repository.createPrayer(initialPrayer)
             repository.getPrayerById(initialPrayer.uuid).first().let { prayer ->
                 prayer.shouldNotBeNull()
-                prayer.uuid shouldBe PrayerId("1")
+                prayer.uuid shouldBe PrayerId(1)
                 prayer.text shouldBe "initial text"
                 prayer.archived shouldBe false
                 prayer.createdAt shouldBe Instant.fromEpochMilliseconds(0L)
@@ -52,7 +52,7 @@ public class UpdatePrayerUseCaseTest : StringSpec({
             val updatedPrayer = useCase(initialPrayer.copy(text = "updated text"))
             repository.getPrayerById(initialPrayer.uuid).first().let { prayer ->
                 prayer.shouldNotBeNull()
-                prayer.uuid shouldBe PrayerId("1")
+                prayer.uuid shouldBe PrayerId(1)
                 prayer.text shouldBe "updated text"
                 prayer.archived shouldBe false
                 prayer.createdAt shouldBe Instant.fromEpochMilliseconds(0L)
@@ -65,7 +65,7 @@ public class UpdatePrayerUseCaseTest : StringSpec({
             useCase(updatedPrayer)
             repository.getPrayerById(initialPrayer.uuid).first().let { prayer ->
                 prayer.shouldNotBeNull()
-                prayer.uuid shouldBe PrayerId("1")
+                prayer.uuid shouldBe PrayerId(1)
                 prayer.text shouldBe "updated text"
                 prayer.archived shouldBe false
                 prayer.createdAt shouldBe Instant.fromEpochMilliseconds(0L)

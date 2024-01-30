@@ -6,7 +6,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.CanvasBasedWindow
-import com.caseyjbrooks.shared.MainCommonApplication
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -24,7 +23,6 @@ public fun main() {
 
         CanvasBasedWindow("Scripture Now!") {
             Box(Modifier.requiredWidth(400.dp)) {
-                MainCommonApplication()
             }
         }
     }

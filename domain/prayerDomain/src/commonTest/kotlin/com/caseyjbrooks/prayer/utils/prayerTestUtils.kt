@@ -1,11 +1,12 @@
 package com.caseyjbrooks.prayer.utils
 
+import com.caseyjbrooks.database.HardcodedUuidFactory
 import com.caseyjbrooks.database.fakeDatabaseModule
-import com.caseyjbrooks.di.routingModule
 import com.caseyjbrooks.prayer.domain.prayerDomainModule
+import com.caseyjbrooks.prayer.fakePrayerDataModule
 import com.caseyjbrooks.prayer.models.DailyPrayer
+import com.caseyjbrooks.prayer.models.PrayerId
 import com.caseyjbrooks.prayer.models.PrayerUser
-import com.caseyjbrooks.prayer.repository.fakePrayerRepositoryModule
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import org.koin.core.Koin
@@ -20,9 +21,8 @@ inline fun koinTest(
 ) {
     val koinApp = koinApplication {
         modules(
-            routingModule,
             fakeDatabaseModule,
-            fakePrayerRepositoryModule,
+            fakePrayerDataModule,
             prayerDomainModule,
             module {
                 factory<PrayerUser?> { prayerUser }
@@ -37,4 +37,10 @@ inline fun koinTest(
     } finally {
         koinApp.close()
     }
+}
+
+fun PrayerId(id: Int): PrayerId {
+    return PrayerId(
+        HardcodedUuidFactory(id).getNewUuid()
+    )
 }

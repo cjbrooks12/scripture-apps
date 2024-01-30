@@ -22,3 +22,10 @@ public class FakeUuidFactory : UuidFactory {
     }
 }
 
+public class HardcodedUuidFactory(
+    public val count: Int
+) : UuidFactory {
+    override fun getNewUuid(): Uuid {
+        return uuidFrom("00000000-0000-0000-0000-${count.toString().padStart(12, '0')}")
+    }
+}

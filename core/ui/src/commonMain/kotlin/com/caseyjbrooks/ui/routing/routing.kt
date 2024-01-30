@@ -2,6 +2,7 @@ package com.caseyjbrooks.ui.routing
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,6 +29,7 @@ internal expect fun OnBackPressed(
 
 @Composable
 internal fun WithRouter(
+    deepLinkUri: String?,
     content: @Composable () -> Unit,
 ) {
     val koin = LocalKoin.current
@@ -37,6 +39,12 @@ internal fun WithRouter(
 
     OnBackPressed {
         router.trySend(RouterContract.Inputs.GoBack())
+    }
+
+    LaunchedEffect(deepLinkUri) {
+        if (deepLinkUri != null) {
+            router.trySend(RouterContract.Inputs.RestoreBackstack(listOf(deepLinkUri)))
+        }
     }
 
     CompositionLocalProvider(

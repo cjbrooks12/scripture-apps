@@ -16,7 +16,7 @@ public fun ApplicationRoot(
     deepLinkUri: String?,
 ) {
     WithKoinApplication(koin) {
-        WithRouter {
+        WithRouter(deepLinkUri) {
             val initialPillar: ApplicationStructure = LocalKoin.current.get()
             WithSizeClass(
                 desktopContent = { DesktopLayout(initialPillar) },

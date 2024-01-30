@@ -2,11 +2,11 @@ package com.caseyjbrooks.prayer.domain
 
 import com.caseyjbrooks.prayer.domain.query.QueryPrayersUseCase
 import com.caseyjbrooks.prayer.models.ArchiveStatus
-import com.caseyjbrooks.prayer.models.PrayerId
 import com.caseyjbrooks.prayer.models.PrayerTag
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.models.SavedPrayerType
 import com.caseyjbrooks.prayer.repository.saved.SavedPrayersRepository
+import com.caseyjbrooks.prayer.utils.PrayerId
 import com.caseyjbrooks.prayer.utils.koinTest
 import com.copperleaf.ballast.repository.cache.Cached
 import com.copperleaf.ballast.repository.cache.getCachedOrNull
@@ -18,13 +18,15 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.Month
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 
 public class QueryPrayersUseCaseTest : StringSpec({
-    fun getPrayer(millis: Long, id: String, archived: Boolean, vararg tags: String): SavedPrayer {
+    fun getPrayer(millis: Long, id: Int, archived: Boolean, vararg tags: String): SavedPrayer {
         val instant = Instant.fromEpochMilliseconds(millis)
         return SavedPrayer(
             uuid = PrayerId(id),
-            text = id,
+            text = id.toString(),
             prayerType = SavedPrayerType.Persistent,
             tags = tags.map { PrayerTag(it) },
             archived = archived,
@@ -34,12 +36,15 @@ public class QueryPrayersUseCaseTest : StringSpec({
         )
     }
 
-    fun getScheduledPrayer(millis: Long, id: String, archived: Boolean, vararg tags: String): SavedPrayer {
+    fun getScheduledPrayer(millis: Long, id: Int, archived: Boolean, vararg tags: String): SavedPrayer {
         val instant = Instant.fromEpochMilliseconds(millis)
         return SavedPrayer(
             uuid = PrayerId(id),
-            text = id,
-            prayerType = SavedPrayerType.ScheduledCompletable(LocalDateTime(2024, Month.JANUARY, 1, 1, 1, 1, 1)),
+            text = id.toString(),
+            prayerType = SavedPrayerType.ScheduledCompletable(
+                LocalDateTime(2024, Month.JANUARY, 1, 1, 1, 1, 1)
+                    .toInstant(TimeZone.UTC)
+            ),
             tags = tags.map { PrayerTag(it) },
             archived = archived,
             archivedAt = if (archived) instant else null,
@@ -49,20 +54,20 @@ public class QueryPrayersUseCaseTest : StringSpec({
     }
 
     suspend fun SavedPrayersRepository.populate() {
-        createPrayer(getPrayer(0L, "1", false, "one"))
-        createPrayer(getPrayer(0L, "2", false, "one"))
-        createPrayer(getPrayer(0L, "3", false, "one"))
+        createPrayer(getPrayer(0L, 1, false, "one"))
+        createPrayer(getPrayer(0L, 2, false, "one"))
+        createPrayer(getPrayer(0L, 3, false, "one"))
 
-        createPrayer(getPrayer(0L, "4", false, "two"))
-        createPrayer(getPrayer(0L, "5", false, "two"))
-        createPrayer(getPrayer(0L, "6", false, "two"))
+        createPrayer(getPrayer(0L, 4, false, "two"))
+        createPrayer(getPrayer(0L, 5, false, "two"))
+        createPrayer(getPrayer(0L, 6, false, "two"))
 
-        createPrayer(getPrayer(0L, "7", false, "one", "two"))
-        createPrayer(getScheduledPrayer(0L, "8", false, "one", "two"))
+        createPrayer(getPrayer(0L, 7, false, "one", "two"))
+        createPrayer(getScheduledPrayer(0L, 8, false, "one", "two"))
 
-        createPrayer(getPrayer(0L, "9", true, "one"))
-        createPrayer(getPrayer(0L, "10", true, "two"))
-        createPrayer(getPrayer(0L, "11", true, "one", "two"))
+        createPrayer(getPrayer(0L, 9, true, "one"))
+        createPrayer(getPrayer(0L, 10, true, "two"))
+        createPrayer(getPrayer(0L, 11, true, "one", "two"))
     }
 
     "query prayers > not archived, no tags" {
@@ -82,14 +87,14 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
             results[1].shouldBeInstanceOf<Cached.Value<SavedPrayer>>()
             results[1].getCachedOrNull() shouldBe listOf(
-                getPrayer(0L, "1", false, "one"),
-                getPrayer(0L, "2", false, "one"),
-                getPrayer(0L, "3", false, "one"),
-                getPrayer(0L, "4", false, "two"),
-                getPrayer(0L, "5", false, "two"),
-                getPrayer(0L, "6", false, "two"),
-                getPrayer(0L, "7", false, "one", "two"),
-                getScheduledPrayer(0L, "8", false, "one", "two"),
+                getPrayer(0L, 1, false, "one"),
+                getPrayer(0L, 2, false, "one"),
+                getPrayer(0L, 3, false, "one"),
+                getPrayer(0L, 4, false, "two"),
+                getPrayer(0L, 5, false, "two"),
+                getPrayer(0L, 6, false, "two"),
+                getPrayer(0L, 7, false, "one", "two"),
+                getScheduledPrayer(0L, 8, false, "one", "two"),
             )
         }
     }
@@ -111,11 +116,11 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
             results[1].shouldBeInstanceOf<Cached.Value<SavedPrayer>>()
             results[1].getCachedOrNull() shouldBe listOf(
-                getPrayer(0L, "1", false, "one"),
-                getPrayer(0L, "2", false, "one"),
-                getPrayer(0L, "3", false, "one"),
-                getPrayer(0L, "7", false, "one", "two"),
-                getScheduledPrayer(0L, "8", false, "one", "two"),
+                getPrayer(0L, 1, false, "one"),
+                getPrayer(0L, 2, false, "one"),
+                getPrayer(0L, 3, false, "one"),
+                getPrayer(0L, 7, false, "one", "two"),
+                getScheduledPrayer(0L, 8, false, "one", "two"),
             )
         }
     }
@@ -136,8 +141,8 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
             results[1].shouldBeInstanceOf<Cached.Value<SavedPrayer>>()
             results[1].getCachedOrNull() shouldBe listOf(
-                getPrayer(0L, "7", false, "one", "two"),
-                getScheduledPrayer(0L, "8", false, "one", "two"),
+                getPrayer(0L, 7, false, "one", "two"),
+                getScheduledPrayer(0L, 8, false, "one", "two"),
             )
         }
     }
@@ -158,9 +163,9 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
             results[1].shouldBeInstanceOf<Cached.Value<SavedPrayer>>()
             results[1].getCachedOrNull() shouldBe listOf(
-                getPrayer(0L, "9", true, "one"),
-                getPrayer(0L, "10", true, "two"),
-                getPrayer(0L, "11", true, "one", "two"),
+                getPrayer(0L, 9, true, "one"),
+                getPrayer(0L, 10, true, "two"),
+                getPrayer(0L, 11, true, "one", "two"),
             )
         }
     }
@@ -181,8 +186,8 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
             results[1].shouldBeInstanceOf<Cached.Value<SavedPrayer>>()
             results[1].getCachedOrNull() shouldBe listOf(
-                getPrayer(0L, "9", true, "one"),
-                getPrayer(0L, "11", true, "one", "two"),
+                getPrayer(0L, 9, true, "one"),
+                getPrayer(0L, 11, true, "one", "two"),
             )
         }
     }
@@ -203,7 +208,7 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
             results[1].shouldBeInstanceOf<Cached.Value<SavedPrayer>>()
             results[1].getCachedOrNull() shouldBe listOf(
-                getPrayer(0L, "11", true, "one", "two"),
+                getPrayer(0L, 11, true, "one", "two"),
             )
         }
     }
@@ -224,17 +229,17 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
             results[1].shouldBeInstanceOf<Cached.Value<SavedPrayer>>()
             results[1].getCachedOrNull() shouldBe listOf(
-                getPrayer(0L, "1", false, "one"),
-                getPrayer(0L, "2", false, "one"),
-                getPrayer(0L, "3", false, "one"),
-                getPrayer(0L, "4", false, "two"),
-                getPrayer(0L, "5", false, "two"),
-                getPrayer(0L, "6", false, "two"),
-                getPrayer(0L, "7", false, "one", "two"),
-                getScheduledPrayer(0L, "8", false, "one", "two"),
-                getPrayer(0L, "9", true, "one"),
-                getPrayer(0L, "10", true, "two"),
-                getPrayer(0L, "11", true, "one", "two"),
+                getPrayer(0L, 1, false, "one"),
+                getPrayer(0L, 2, false, "one"),
+                getPrayer(0L, 3, false, "one"),
+                getPrayer(0L, 4, false, "two"),
+                getPrayer(0L, 5, false, "two"),
+                getPrayer(0L, 6, false, "two"),
+                getPrayer(0L, 7, false, "one", "two"),
+                getScheduledPrayer(0L, 8, false, "one", "two"),
+                getPrayer(0L, 9, true, "one"),
+                getPrayer(0L, 10, true, "two"),
+                getPrayer(0L, 11, true, "one", "two"),
             )
         }
     }
@@ -255,13 +260,13 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
             results[1].shouldBeInstanceOf<Cached.Value<SavedPrayer>>()
             results[1].getCachedOrNull() shouldBe listOf(
-                getPrayer(0L, "1", false, "one"),
-                getPrayer(0L, "2", false, "one"),
-                getPrayer(0L, "3", false, "one"),
-                getPrayer(0L, "7", false, "one", "two"),
-                getScheduledPrayer(0L, "8", false, "one", "two"),
-                getPrayer(0L, "9", true, "one"),
-                getPrayer(0L, "11", true, "one", "two"),
+                getPrayer(0L, 1, false, "one"),
+                getPrayer(0L, 2, false, "one"),
+                getPrayer(0L, 3, false, "one"),
+                getPrayer(0L, 7, false, "one", "two"),
+                getScheduledPrayer(0L, 8, false, "one", "two"),
+                getPrayer(0L, 9, true, "one"),
+                getPrayer(0L, 11, true, "one", "two"),
             )
         }
     }
@@ -282,9 +287,9 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
             results[1].shouldBeInstanceOf<Cached.Value<SavedPrayer>>()
             results[1].getCachedOrNull() shouldBe listOf(
-                getPrayer(0L, "7", false, "one", "two"),
-                getScheduledPrayer(0L, "8", false, "one", "two"),
-                getPrayer(0L, "11", true, "one", "two"),
+                getPrayer(0L, 7, false, "one", "two"),
+                getScheduledPrayer(0L, 8, false, "one", "two"),
+                getPrayer(0L, 11, true, "one", "two"),
             )
         }
     }
@@ -324,7 +329,7 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
             results[1].shouldBeInstanceOf<Cached.Value<SavedPrayer>>()
             results[1].getCachedOrNull() shouldBe listOf(
-                getPrayer(0L, "7", false, "one", "two"),
+                getPrayer(0L, 7, false, "one", "two"),
             )
         }
     }
@@ -336,7 +341,12 @@ public class QueryPrayersUseCaseTest : StringSpec({
             val useCase: QueryPrayersUseCase = get()
             val results = useCase(
                 archiveStatus = ArchiveStatus.NotArchived,
-                prayerType = setOf(SavedPrayerType.ScheduledCompletable(LocalDateTime(2024, Month.JANUARY, 1, 1, 1, 1, 1))),
+                prayerType = setOf(
+                    SavedPrayerType.ScheduledCompletable(
+                        LocalDateTime(2024, Month.JANUARY, 1, 1, 1, 1, 1)
+                            .toInstant(TimeZone.UTC)
+                    )
+                ),
                 tags = setOf(PrayerTag("one"), PrayerTag("two")),
             ).take(2).toList()
 
@@ -345,7 +355,7 @@ public class QueryPrayersUseCaseTest : StringSpec({
 
             results[1].shouldBeInstanceOf<Cached.Value<SavedPrayer>>()
             results[1].getCachedOrNull() shouldBe listOf(
-                getScheduledPrayer(0L, "8", false, "one", "two"),
+                getScheduledPrayer(0L, 8, false, "one", "two"),
             )
         }
     }

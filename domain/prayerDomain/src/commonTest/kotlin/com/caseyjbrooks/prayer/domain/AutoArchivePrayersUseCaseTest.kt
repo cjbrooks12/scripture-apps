@@ -2,12 +2,12 @@ package com.caseyjbrooks.prayer.domain
 
 import com.caseyjbrooks.prayer.domain.autoarchive.AutoArchivePrayersUseCase
 import com.caseyjbrooks.prayer.models.ArchiveStatus
-import com.caseyjbrooks.prayer.models.PrayerId
 import com.caseyjbrooks.prayer.models.PrayerTag
 import com.caseyjbrooks.prayer.models.PrayerUser
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.models.SavedPrayerType
 import com.caseyjbrooks.prayer.repository.saved.SavedPrayersRepository
+import com.caseyjbrooks.prayer.utils.PrayerId
 import com.caseyjbrooks.prayer.utils.TestClock
 import com.caseyjbrooks.prayer.utils.koinTest
 import io.kotest.core.spec.style.StringSpec
@@ -20,11 +20,11 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Duration.Companion.milliseconds
 
 public class AutoArchivePrayersUseCaseTest : StringSpec({
-    fun getPrayer(millis: Long, id: String, archived: Boolean, vararg tags: String): SavedPrayer {
+    fun getPrayer(millis: Long, id: Int, archived: Boolean, vararg tags: String): SavedPrayer {
         val instant = Instant.fromEpochMilliseconds(millis)
         return SavedPrayer(
             uuid = PrayerId(id),
-            text = id,
+            text = id.toString(),
             prayerType = SavedPrayerType.Persistent,
             tags = tags.map { PrayerTag(it) },
             archived = archived,
@@ -44,13 +44,13 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
             val initialInstant = clock.now().toLocalDateTime(timeZone).toInstant(timeZone)
 
             listOf(
-                getPrayer(0L, "1", false),
-                getPrayer(0L, "2", false),
-                getPrayer(0L, "3", true),
+                getPrayer(0L, 1, false),
+                getPrayer(0L, 2, false),
+                getPrayer(0L, 3, true),
                 SavedPrayer(
-                    uuid = PrayerId("4"),
+                    uuid = PrayerId(4),
                     text = "4",
-                    prayerType = SavedPrayerType.ScheduledCompletable(initialInstant.toLocalDateTime(timeZone)),
+                    prayerType = SavedPrayerType.ScheduledCompletable(initialInstant),
                     tags = emptyList(),
                     archived = false,
                     archivedAt = null,
@@ -58,9 +58,9 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
                     updatedAt = initialInstant,
                 ),
                 SavedPrayer(
-                    uuid = PrayerId("5"),
+                    uuid = PrayerId(5),
                     text = "5",
-                    prayerType = SavedPrayerType.ScheduledCompletable(initialInstant.toLocalDateTime(timeZone)),
+                    prayerType = SavedPrayerType.ScheduledCompletable(initialInstant),
                     tags = emptyList(),
                     archived = true,
                     archivedAt = initialInstant,
@@ -68,10 +68,10 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
                     updatedAt = initialInstant,
                 ),
                 SavedPrayer(
-                    uuid = PrayerId("6"),
+                    uuid = PrayerId(6),
                     text = "6",
                     prayerType = SavedPrayerType.ScheduledCompletable(
-                        initialInstant.plus(10.milliseconds).toLocalDateTime(timeZone),
+                        initialInstant.plus(10.milliseconds),
                     ),
                     tags = emptyList(),
                     archived = false,
@@ -85,13 +85,13 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
             clock.advanceTimeBy(1.milliseconds)
             useCase()
             repository.getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet()).first() shouldBe listOf(
-                getPrayer(0L, "1", false),
-                getPrayer(0L, "2", false),
-                getPrayer(0L, "3", true),
+                getPrayer(0L, 1, false),
+                getPrayer(0L, 2, false),
+                getPrayer(0L, 3, true),
                 SavedPrayer(
-                    uuid = PrayerId("4"),
+                    uuid = PrayerId(4),
                     text = "4",
-                    prayerType = SavedPrayerType.ScheduledCompletable(initialInstant.toLocalDateTime(timeZone)),
+                    prayerType = SavedPrayerType.ScheduledCompletable(initialInstant),
                     tags = emptyList(),
                     archived = true,
                     archivedAt = initialInstant.plus(1.milliseconds),
@@ -99,9 +99,9 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
                     updatedAt = initialInstant.plus(1.milliseconds),
                 ),
                 SavedPrayer(
-                    uuid = PrayerId("5"),
+                    uuid = PrayerId(5),
                     text = "5",
-                    prayerType = SavedPrayerType.ScheduledCompletable(initialInstant.toLocalDateTime(timeZone)),
+                    prayerType = SavedPrayerType.ScheduledCompletable(initialInstant),
                     tags = emptyList(),
                     archived = true,
                     archivedAt = initialInstant,
@@ -109,10 +109,10 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
                     updatedAt = initialInstant,
                 ),
                 SavedPrayer(
-                    uuid = PrayerId("6"),
+                    uuid = PrayerId(6),
                     text = "6",
                     prayerType = SavedPrayerType.ScheduledCompletable(
-                        initialInstant.plus(10.milliseconds).toLocalDateTime(timeZone),
+                        initialInstant.plus(10.milliseconds),
                     ),
                     tags = emptyList(),
                     archived = false,
@@ -126,13 +126,13 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
             clock.advanceTimeBy(20.milliseconds)
             useCase()
             repository.getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet()).first() shouldBe listOf(
-                getPrayer(0L, "1", false),
-                getPrayer(0L, "2", false),
-                getPrayer(0L, "3", true),
+                getPrayer(0L, 1, false),
+                getPrayer(0L, 2, false),
+                getPrayer(0L, 3, true),
                 SavedPrayer(
-                    uuid = PrayerId("4"),
+                    uuid = PrayerId(4),
                     text = "4",
-                    prayerType = SavedPrayerType.ScheduledCompletable(initialInstant.toLocalDateTime(timeZone)),
+                    prayerType = SavedPrayerType.ScheduledCompletable(initialInstant),
                     tags = emptyList(),
                     archived = true,
                     archivedAt = initialInstant.plus(1.milliseconds),
@@ -140,9 +140,9 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
                     updatedAt = initialInstant.plus(1.milliseconds),
                 ),
                 SavedPrayer(
-                    uuid = PrayerId("5"),
+                    uuid = PrayerId(5),
                     text = "5",
-                    prayerType = SavedPrayerType.ScheduledCompletable(initialInstant.toLocalDateTime(timeZone)),
+                    prayerType = SavedPrayerType.ScheduledCompletable(initialInstant),
                     tags = emptyList(),
                     archived = true,
                     archivedAt = initialInstant,
@@ -150,10 +150,10 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
                     updatedAt = initialInstant,
                 ),
                 SavedPrayer(
-                    uuid = PrayerId("6"),
+                    uuid = PrayerId(6),
                     text = "6",
                     prayerType = SavedPrayerType.ScheduledCompletable(
-                        initialInstant.plus(10.milliseconds).toLocalDateTime(timeZone),
+                        initialInstant.plus(10.milliseconds),
                     ),
                     tags = emptyList(),
                     archived = true,

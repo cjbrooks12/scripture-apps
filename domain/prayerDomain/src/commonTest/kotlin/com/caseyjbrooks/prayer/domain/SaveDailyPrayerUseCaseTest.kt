@@ -3,13 +3,13 @@ package com.caseyjbrooks.prayer.domain
 import com.caseyjbrooks.prayer.domain.savedaily.SaveDailyPrayerUseCase
 import com.caseyjbrooks.prayer.models.ArchiveStatus
 import com.caseyjbrooks.prayer.models.DailyPrayer
-import com.caseyjbrooks.prayer.models.PrayerId
 import com.caseyjbrooks.prayer.models.PrayerTag
 import com.caseyjbrooks.prayer.models.PrayerUser
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.models.SavedPrayerType
 import com.caseyjbrooks.prayer.repository.saved.SavedPrayersRepository
 import com.caseyjbrooks.prayer.repository.settings.PrayerUserSettings
+import com.caseyjbrooks.prayer.utils.PrayerId
 import com.caseyjbrooks.prayer.utils.TestClock
 import com.caseyjbrooks.prayer.utils.koinTest
 import io.kotest.core.spec.style.StringSpec
@@ -41,7 +41,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
                 .getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet())
                 .first() shouldBe listOf(
                 SavedPrayer(
-                    uuid = PrayerId("1"),
+                    uuid = PrayerId(1),
                     text = "Hardcoded Daily Prayer",
                     prayerType = SavedPrayerType.Persistent,
                     tags = listOf(PrayerTag("Daily Prayer"), PrayerTag("Hardcoded")),
@@ -58,7 +58,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
             savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet())
                 .first() shouldBe listOf(
                 SavedPrayer(
-                    uuid = PrayerId("1"),
+                    uuid = PrayerId(1),
                     text = "Hardcoded Daily Prayer",
                     prayerType = SavedPrayerType.Persistent,
                     tags = listOf(PrayerTag("Daily Prayer"), PrayerTag("Hardcoded")),
@@ -93,7 +93,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
                 .getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet())
                 .first() shouldBe listOf(
                 SavedPrayer(
-                    uuid = PrayerId("1"),
+                    uuid = PrayerId(1),
                     text = "Hardcoded Daily Prayer",
                     prayerType = SavedPrayerType.Persistent,
                     tags = listOf(PrayerTag("Daily Prayer")),
@@ -130,7 +130,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
                 .getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet())
                 .first() shouldBe listOf(
                 SavedPrayer(
-                    uuid = PrayerId("1"),
+                    uuid = PrayerId(1),
                     text = "Hardcoded Daily Prayer",
                     prayerType = SavedPrayerType.Persistent,
                     tags = listOf(PrayerTag("Hardcoded")),
@@ -166,7 +166,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
             savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet())
                 .first() shouldBe listOf(
                 SavedPrayer(
-                    uuid = PrayerId("1"),
+                    uuid = PrayerId(1),
                     text = "Hardcoded Daily Prayer",
                     prayerType = SavedPrayerType.Persistent,
                     tags = emptyList(),

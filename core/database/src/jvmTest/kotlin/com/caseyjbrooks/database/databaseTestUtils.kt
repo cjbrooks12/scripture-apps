@@ -9,7 +9,6 @@ inline fun koinTest(
     val koinApp = koinApplication {
         modules(
             fakeDatabaseModule,
-            jvmDatabaseModule,
         )
     }
     try {

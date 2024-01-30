@@ -1,11 +1,11 @@
 package com.caseyjbrooks.prayer.domain
 
 import com.caseyjbrooks.prayer.domain.create.CreatePrayerUseCase
-import com.caseyjbrooks.prayer.models.PrayerId
 import com.caseyjbrooks.prayer.models.PrayerUser
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.models.SavedPrayerType
 import com.caseyjbrooks.prayer.repository.config.PrayerConfig
+import com.caseyjbrooks.prayer.utils.PrayerId
 import com.caseyjbrooks.prayer.utils.koinTest
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrowAny
@@ -13,7 +13,7 @@ import io.kotest.core.spec.style.StringSpec
 import kotlinx.datetime.Instant
 
 public class CreatePrayerUseCaseTest : StringSpec({
-    fun getPrayer(millis: Long, id: String, text: String): SavedPrayer {
+    fun getPrayer(millis: Long, id: Int, text: String): SavedPrayer {
         val instant = Instant.fromEpochMilliseconds(millis)
         return SavedPrayer(
             uuid = PrayerId(id),
@@ -32,7 +32,7 @@ public class CreatePrayerUseCaseTest : StringSpec({
             val useCase: CreatePrayerUseCase = get()
 
             shouldThrowAny {
-                useCase(getPrayer(0L, "1", "prayer one"))
+                useCase(getPrayer(0L, 1, "prayer one"))
             }
         }
     }
@@ -45,7 +45,7 @@ public class CreatePrayerUseCaseTest : StringSpec({
             // we can add the max number of prayers just fine
             shouldNotThrowAny {
                 repeat(config.maxPrayersOnFreePlan) { index ->
-                    useCase(getPrayer(0L, "$index", "prayer $index"))
+                    useCase(getPrayer(0L, index, "prayer $index"))
                 }
             }
         }
@@ -59,13 +59,13 @@ public class CreatePrayerUseCaseTest : StringSpec({
             // we can add the max number of prayers just fine
             shouldNotThrowAny {
                 repeat(config.maxPrayersOnFreePlan) { index ->
-                    useCase(getPrayer(0L, "$index", "prayer $index"))
+                    useCase(getPrayer(0L, index, "prayer $index"))
                 }
             }
 
             // once we've hit that limit, subsequent additions will fail
             shouldThrowAny {
-                useCase(getPrayer(0L, "extra prayer", "extra prayer"))
+                useCase(getPrayer(0L, Int.MAX_VALUE, "extra prayer"))
             }
         }
     }
@@ -78,7 +78,7 @@ public class CreatePrayerUseCaseTest : StringSpec({
             // we can add the max number of prayers just fine
             shouldNotThrowAny {
                 repeat(config.maxPrayersOnFreePlan) { index ->
-                    useCase(getPrayer(0L, "$index", "prayer $index"))
+                    useCase(getPrayer(0L, index, "prayer $index"))
                 }
             }
         }
@@ -92,13 +92,13 @@ public class CreatePrayerUseCaseTest : StringSpec({
             // we can add the max number of prayers just fine
             shouldNotThrowAny {
                 repeat(config.maxPrayersOnFreePlan) { index ->
-                    useCase(getPrayer(0L, "$index", "prayer $index"))
+                    useCase(getPrayer(0L, index, "prayer $index"))
                 }
             }
 
             // once we've hit that limit, subsequent additions will fail
             shouldNotThrowAny {
-                useCase(getPrayer(0L, "extra prayer", "extra prayer"))
+                useCase(getPrayer(0L, Int.MAX_VALUE, "extra prayer"))
             }
         }
     }
