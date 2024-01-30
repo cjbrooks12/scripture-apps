@@ -2,7 +2,9 @@ package com.caseyjbrooks.foryou.ui.dashboard
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -37,7 +39,11 @@ public object ForYouDashboardScreen {
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.padding(8.dp)
         ) {
-            VerseofTheDayDashboardCard(onClick = { }, uiState.verseOfTheDay)
+            VerseofTheDayDashboardCard(
+                modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+                onClick = { postInput(ForYouDashboardContract.Inputs.VerseOfTheDayCardClicked) },
+                verseOfTheDay = uiState.verseOfTheDay,
+            )
         }
     }
 }

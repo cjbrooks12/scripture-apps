@@ -43,5 +43,25 @@ kotlin {
         val androidUnitTest by getting {
             dependencies { }
         }
+
+//        // JS Sourcesets
+//        val jsMain by getting {
+//            dependencies {
+//                api(libs.ktor.client.js)
+//            }
+//        }
+//        val jsTest by getting {
+//            dependencies { }
+//        }
+//
+//        // iOS Sourcesets
+//        val iosMain by getting {
+//            dependencies {
+//                api(libs.ktor.client.darwin)
+//            }
+//        }
+//        val iosTest by getting {
+//            dependencies { }
+//        }
     }
 }

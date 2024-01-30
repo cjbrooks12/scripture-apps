@@ -164,17 +164,17 @@ kotlin {
             }
         }
 
-        val iosMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.darwin)
-            }
-        }
-
-        val jsMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.js)
-            }
-        }
+//        val iosMain by getting {
+//            dependencies {
+//                implementation(libs.ktor.client.darwin)
+//            }
+//        }
+//
+//        val jsMain by getting {
+//            dependencies {
+//                implementation(libs.ktor.client.js)
+//            }
+//        }
     }
 }
 

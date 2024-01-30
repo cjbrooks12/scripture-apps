@@ -29,5 +29,9 @@ internal class ForYouDashboardInputHandler(
         is ForYouDashboardContract.Inputs.VerseOfTheDayUpdated -> {
             updateState { it.copy(verseOfTheDay = input.verseOfTheDay) }
         }
+
+        is ForYouDashboardContract.Inputs.VerseOfTheDayCardClicked -> {
+            noOp()
+        }
     }
 }

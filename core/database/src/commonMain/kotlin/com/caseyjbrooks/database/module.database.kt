@@ -44,7 +44,6 @@ public val realDatabaseModule: Module = module {
     single<UuidFactory> { RealUuidFactory() }
 }
 
-
 internal expect fun getFakePlatformDatabaseModule(): Module
 public val fakeDatabaseModule: Module = module {
     includes(getFakePlatformDatabaseModule())

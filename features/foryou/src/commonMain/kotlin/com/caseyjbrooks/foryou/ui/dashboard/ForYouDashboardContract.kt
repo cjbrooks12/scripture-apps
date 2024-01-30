@@ -11,6 +11,7 @@ internal object ForYouDashboardContract {
     internal sealed interface Inputs {
         data object Initialize : Inputs
         data class VerseOfTheDayUpdated(val verseOfTheDay: Cached<VerseOfTheDay>) : Inputs
+        data object VerseOfTheDayCardClicked : Inputs
     }
 
     internal sealed interface Events

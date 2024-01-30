@@ -12,8 +12,6 @@ internal class ForYouDashboardEventHandler : EventHandler<
             ForYouDashboardContract.Events,
             ForYouDashboardContract.State>.handleEvent(
         event: ForYouDashboardContract.Events
-    ): Unit = when (event) {
-        else -> {
-        }
+    ) {
     }
 }
