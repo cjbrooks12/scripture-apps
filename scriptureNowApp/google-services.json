@@ -36,35 +36,6 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:120438532755:android:681d3af7491ddc7787bb66",
-        "android_client_info": {
-          "package_name": "com.caseybrooks.openbible.dev"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "120438532755-g5uskbv1kdsnid8m185nkloci1g29uar.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBgNOKVDWgBoH9CZVDKdWEo3QG-fKh5wsk"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "120438532755-g5uskbv1kdsnid8m185nkloci1g29uar.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:120438532755:android:9518971f7d98cf0387bb66",
         "android_client_info": {
           "package_name": "com.caseybrooks.openbible.local"

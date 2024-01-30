@@ -28,4 +28,19 @@ internal actual fun getRealPlatformDatabaseModule(): Module = module {
 }
 
 internal actual fun getFakePlatformDatabaseModule(): Module = module {
+    factory<SqlDriver> {
+        AndroidSqliteDriver(
+            schema = ScriptureNowDatabase.Schema,
+            context = get(),
+            name = "scriptureNow.db",
+            callback = object : AndroidSqliteDriver.Callback(ScriptureNowDatabase.Schema) {
+                override fun onOpen(db: SupportSQLiteDatabase) {
+                    db.setForeignKeyConstraintsEnabled(true)
+                }
+            }
+        )
+    }
+    single<Settings> {
+        SharedPreferencesSettings.Factory(get<Context>().applicationContext).create("scriptureNow")
+    }
 }

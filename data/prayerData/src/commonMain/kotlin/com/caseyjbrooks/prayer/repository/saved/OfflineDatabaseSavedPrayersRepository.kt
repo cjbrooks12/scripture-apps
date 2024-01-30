@@ -1,6 +1,6 @@
 package com.caseyjbrooks.prayer.repository.saved
 
-import app.cash.sqldelight.TransactionWithoutReturn
+import app.cash.sqldelight.SuspendingTransactionWithoutReturn
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOneOrNull
@@ -142,7 +142,7 @@ internal class OfflineDatabaseSavedPrayersRepository(
         )
     }
 
-    private fun TransactionWithoutReturn.syncPrayerTags(prayer: SavedPrayer) {
+    private suspend fun SuspendingTransactionWithoutReturn.syncPrayerTags(prayer: SavedPrayer) {
         prayer.tags.forEach { tag ->
             database.tagQueries.createTag(
                 Tag(uuid = uuidFactory.getNewUuid(), name = tag.tag)

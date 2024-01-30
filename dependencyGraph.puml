@@ -58,6 +58,8 @@ coreDi <-- coreUi
 coreDatetime <-- coreDatabase
 coreBallast <-- coreRouting
 coreRouting <-- coreUi
+coreLogging <-- coreApi
+coreLogging <-- coreDatabase
 coreLogging <-- coreBallast
 coreLogging <-- coreNotifications
 
