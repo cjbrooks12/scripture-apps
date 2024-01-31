@@ -5,7 +5,9 @@ CREATE TABLE verse_of_the_day (
     uuid TEXT AS Uuid NOT NULL PRIMARY KEY,
     reference TEXT NOT NULL,
     text TEXT NOT NULL,
-    date TEXT AS LocalDate NOT NULL
+    date TEXT AS LocalDate NOT NULL,
+
+    UNIQUE(reference, date)
 );
 
 insertOrReplace:

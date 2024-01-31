@@ -12,11 +12,9 @@ import kotlinx.coroutines.flow.map
 public class GetTodaysVerseOfTheDayUseCaseImpl(
     private val repository: VerseOfTheDayRepository
 ) : GetTodaysVerseOfTheDayUseCase {
-    override suspend operator fun invoke(): Flow<Cached<VerseOfTheDay>> {
+    override operator fun invoke(): Flow<Cached<VerseOfTheDay>> {
         return flow {
             emit(Cached.Fetching(null))
-
-            repository.fetchAndCacheVerseOfTheDay()
 
             repository
                 .getTodaysVerseOfTheDay()

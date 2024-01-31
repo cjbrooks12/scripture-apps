@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.caseyjbrooks.foryou.cards.dailyprayer.DailyPrayerDashboardCard
 import com.caseyjbrooks.foryou.cards.votd.VerseofTheDayDashboardCard
 import com.caseyjbrooks.ui.koin.LocalKoin
 import org.koin.core.parameter.parametersOf
@@ -41,8 +42,13 @@ public object ForYouDashboardScreen {
         ) {
             VerseofTheDayDashboardCard(
                 modifier = Modifier.fillMaxWidth().wrapContentHeight(),
-                onClick = { postInput(ForYouDashboardContract.Inputs.VerseOfTheDayCardClicked) },
                 verseOfTheDay = uiState.verseOfTheDay,
+                onClick = { postInput(ForYouDashboardContract.Inputs.VerseOfTheDayCardClicked) },
+            )
+            DailyPrayerDashboardCard(
+                modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+                verseOfTheDay = uiState.dailyPrayer,
+                onClick = { postInput(ForYouDashboardContract.Inputs.VerseOfTheDayCardClicked) },
             )
         }
     }

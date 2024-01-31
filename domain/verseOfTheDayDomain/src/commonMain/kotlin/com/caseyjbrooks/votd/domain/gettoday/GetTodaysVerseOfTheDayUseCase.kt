@@ -8,5 +8,5 @@ import kotlinx.coroutines.flow.Flow
  *
  */
 public interface GetTodaysVerseOfTheDayUseCase {
-    public suspend operator fun invoke(): Flow<Cached<VerseOfTheDay>>
+    public operator fun invoke(): Flow<Cached<VerseOfTheDay>>
 }

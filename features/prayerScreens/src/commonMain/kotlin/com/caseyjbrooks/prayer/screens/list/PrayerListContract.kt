@@ -12,12 +12,17 @@ internal object PrayerListContract {
         val cachedPrayers: Cached<List<SavedPrayer>> = Cached.NotLoaded(),
         val archiveStatus: ArchiveStatus = ArchiveStatus.NotArchived,
         val prayerTypeFilter: Set<SavedPrayerType> = emptySet(),
-        val tagFilter: Set<PrayerTag> = emptySet(),
+        val tagFilter: List<PrayerTag> = emptyList(),
     ) {
         val allTags: Cached<List<PrayerTag>> = cachedPrayers.map { prayers ->
             prayers
                 .flatMap { it.tags }
                 .distinct()
+                .sortedBy { it.tag }
+        }
+        val inactiveTags: Cached<List<PrayerTag>> = allTags.map { tags ->
+            (tags - tagFilter)
+                .sortedBy { it.tag }
         }
     }
 
@@ -33,6 +38,8 @@ internal object PrayerListContract {
         data class ViewPrayerDetails(val prayer: SavedPrayer) : Inputs
         data class EditPrayer(val prayer: SavedPrayer) : Inputs
         data class PrayNow(val prayer: SavedPrayer) : Inputs
+        data class Archive(val prayer: SavedPrayer) : Inputs
+        data class RestoreFromArchive(val prayer: SavedPrayer) : Inputs
 
         data object GoBack : Inputs
     }

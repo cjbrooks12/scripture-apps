@@ -1,6 +1,8 @@
 package com.caseyjbrooks.prayer.screens.list
 
+import com.caseyjbrooks.prayer.domain.archive.ArchivePrayerUseCase
 import com.caseyjbrooks.prayer.domain.query.QueryPrayersUseCase
+import com.caseyjbrooks.prayer.domain.restore.RestoreArchivedPrayerUseCase
 import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
 import com.copperleaf.ballast.observeFlows
@@ -9,6 +11,8 @@ import kotlinx.coroutines.flow.map
 
 internal class PrayerListInputHandler(
     private val queryPrayersUseCase: QueryPrayersUseCase,
+    private val archivePrayerUseCase: ArchivePrayerUseCase,
+    private val restoreArchivedPrayerUseCase: RestoreArchivedPrayerUseCase,
 ) : InputHandler<
         PrayerListContract.Inputs,
         PrayerListContract.Events,
@@ -29,7 +33,7 @@ internal class PrayerListInputHandler(
                     .invoke(
                         currentState.archiveStatus,
                         currentState.prayerTypeFilter,
-                        currentState.tagFilter,
+                        currentState.tagFilter.toSet(),
                     )
                     .map { PrayerListContract.Inputs.PrayersUpdated(it) },
             )
@@ -45,12 +49,12 @@ internal class PrayerListInputHandler(
         }
 
         is PrayerListContract.Inputs.AddTagFilter -> {
-            updateState { it.copy(tagFilter = (it.tagFilter + input.tag)) }
+            updateState { it.copy(tagFilter = (it.tagFilter + input.tag).sortedBy { it.tag }) }
             postInput(PrayerListContract.Inputs.ObservePrayerList)
         }
 
         is PrayerListContract.Inputs.RemoveTagFilter -> {
-            updateState { it.copy(tagFilter = (it.tagFilter - input.tag)) }
+            updateState { it.copy(tagFilter = (it.tagFilter - input.tag).sortedBy { it.tag }) }
             postInput(PrayerListContract.Inputs.ObservePrayerList)
         }
 
@@ -84,6 +88,16 @@ internal class PrayerListInputHandler(
                     PrayerListRoute.Directions.timer(input.prayer),
                 ),
             )
+        }
+        is PrayerListContract.Inputs.Archive -> {
+            sideJob("Archive") {
+                archivePrayerUseCase(input.prayer)
+            }
+        }
+        is PrayerListContract.Inputs.RestoreFromArchive -> {
+            sideJob("RestoreFromArchive") {
+                restoreArchivedPrayerUseCase(input.prayer)
+            }
         }
 
         is PrayerListContract.Inputs.GoBack -> {

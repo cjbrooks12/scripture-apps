@@ -77,9 +77,11 @@ internal class OfflineDatabaseSavedPrayersRepository(
             .asFlow()
             .mapToList(Dispatchers.Default)
             .map { prayerRecordList ->
-                prayerRecordList.map { prayerRecord ->
-                    prayerRecord.fromRecord()
-                }
+                prayerRecordList
+                    .map { prayerRecord -> prayerRecord.fromRecord() }
+                    .filterByArchiveStatus(archiveStatus)
+                    .filterByPrayerType(prayerTypes)
+                    .filterByTag(tags)
             }
     }
 

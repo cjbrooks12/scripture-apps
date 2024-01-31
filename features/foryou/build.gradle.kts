@@ -16,6 +16,7 @@ kotlin {
                 api(project(":core:routing"))
                 api(project(":core:ui"))
 
+                api(project(":domain:prayerDomain"))
                 api(project(":domain:verseOfTheDayDomain"))
             }
         }

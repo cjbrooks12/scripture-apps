@@ -15,6 +15,7 @@ kotlin {
                 api(project(":core:di"))
                 api(project(":core:routing"))
                 api("dev.chrisbanes.material3:material3-window-size-class-multiplatform:0.3.1")
+                api(compose.materialIconsExtended)
             }
         }
         val commonTest by getting {

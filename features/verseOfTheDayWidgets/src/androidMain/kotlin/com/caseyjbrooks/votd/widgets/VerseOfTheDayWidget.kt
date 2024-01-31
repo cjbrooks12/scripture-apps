@@ -2,10 +2,14 @@ package com.caseyjbrooks.votd.widgets
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
+import androidx.glance.appwidget.CircularProgressIndicator
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
@@ -14,28 +18,49 @@ import androidx.glance.layout.Column
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
 import androidx.glance.text.Text
+import co.touchlab.kermit.Logger
 import com.caseyjbrooks.di.GlobalScriptureNowKoinApplication
 import com.caseyjbrooks.votd.domain.gettoday.GetTodaysVerseOfTheDayUseCase
 import com.caseyjbrooks.votd.models.VerseOfTheDay
-import com.copperleaf.ballast.repository.cache.awaitValue
-import com.copperleaf.ballast.repository.cache.getValueOrNull
+import com.copperleaf.ballast.repository.cache.Cached
+import com.copperleaf.ballast.repository.cache.getCachedOrNull
+import com.copperleaf.ballast.repository.cache.isLoading
+import org.koin.core.parameter.parametersOf
 
 public class VerseOfTheDayWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val getTodaysVerseOfTheDayUseCase: GetTodaysVerseOfTheDayUseCase = GlobalScriptureNowKoinApplication
-            .koinApplication.koin
-            .get()
+        val koin = GlobalScriptureNowKoinApplication.koinApplication.koin
+        val logger: Logger = koin.get { parametersOf("VerseOfTheDayWidget") }
 
-        val votd = getTodaysVerseOfTheDayUseCase().awaitValue().getValueOrNull()
+        logger.d { "Providing VerseOfTheDayWidget for id '$id'" }
 
         provideContent {
+//            // subscribe to the event bus to update this widget when VOTD is updated
+//            val eventBus: EventBus = koin.get()
+//            LaunchedEffect(Unit) {
+//                eventBus
+//                    .events
+//                    .onStart { logger.d { "VerseOfTheDayUpdated bus subscription started for id '$id'" } }
+//                    .onCompletion { logger.d { "VerseOfTheDayUpdated bus subscription cancelled for id '$id'" } }
+//                    .filterIsInstance<VerseOfTheDayUpdated>()
+//                    .onEach {
+//                        logger.d { "Received VerseOfTheDayUpdated event, updating widget with id '$id'" }
+//                        VerseOfTheDayWidget().update(context, id)
+//                    }
+//                    .launchIn(this)
+//            }
+
+            // fetch the VOTD content
+            val getTodaysVerseOfTheDayUseCase: GetTodaysVerseOfTheDayUseCase = remember(koin) { koin.get() }
+            val votd by getTodaysVerseOfTheDayUseCase().collectAsState(Cached.NotLoaded())
+
             Content(votd)
         }
     }
 
     @Composable
-    private fun Content(verseOfTheDay: VerseOfTheDay?) {
+    private fun Content(verseOfTheDay: Cached<VerseOfTheDay>) {
         GlanceTheme {
             Column(
                 modifier = GlanceModifier
@@ -45,15 +70,34 @@ public class VerseOfTheDayWidget : GlanceAppWidget() {
                 verticalAlignment = Alignment.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text(text = "Verse of the Day", modifier = GlanceModifier.padding(12.dp))
-
-                if (verseOfTheDay != null) {
-                    Text(verseOfTheDay.verse, modifier = GlanceModifier.padding(bottom = 8.dp))
-                    Text("~ ${verseOfTheDay.reference}")
+                Text("Verse of the Day")
+                if (verseOfTheDay.isLoading()) {
+                    LoadingContent()
                 } else {
-                    Text("Tap to view")
+                    val value = verseOfTheDay.getCachedOrNull()
+                    if (value == null) {
+                        EmptyValueContent()
+                    } else {
+                        NonEmptyValueContent(value)
+                    }
                 }
             }
         }
+    }
+
+    @Composable
+    private fun LoadingContent() {
+        CircularProgressIndicator()
+    }
+
+    @Composable
+    private fun EmptyValueContent() {
+        Text("Tap to view today's verse of the day!")
+    }
+
+    @Composable
+    private fun NonEmptyValueContent(verseOfTheDay: VerseOfTheDay) {
+        Text(verseOfTheDay.verse, modifier = GlanceModifier.padding(bottom = 8.dp))
+        Text("~ ${verseOfTheDay.reference}")
     }
 }

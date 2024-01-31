@@ -2,6 +2,7 @@ package com.caseyjbrooks.prayer.domain.createFromText
 
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.repository.config.PrayerConfig
+import kotlinx.datetime.Instant
 
 /**
  * Create a new prayer from user-generated input and store it in the DB.
@@ -11,5 +12,9 @@ import com.caseyjbrooks.prayer.repository.config.PrayerConfig
  * user would exceed that limit.
  */
 public interface CreatePrayerFromTextUseCase {
-    public suspend operator fun invoke(text: String): SavedPrayer
+    public suspend operator fun invoke(
+        text: String,
+        completionDate: Instant?,
+        tags: Set<String>
+    ): SavedPrayer
 }

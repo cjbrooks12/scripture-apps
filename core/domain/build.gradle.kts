@@ -13,6 +13,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":core:di"))
+                api(project(":core:logging"))
             }
         }
         val commonTest by getting {

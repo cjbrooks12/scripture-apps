@@ -1,13 +1,17 @@
 package com.caseyjbrooks.foryou.ui.dashboard
 
+import com.caseyjbrooks.prayer.domain.getdaily.GetDailyPrayerUseCase
 import com.caseyjbrooks.votd.domain.gettoday.GetTodaysVerseOfTheDayUseCase
+import com.caseyjbrooks.votd.domain.prefetch.PrefetchVerseOfTheDayUseCase
 import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
 import com.copperleaf.ballast.observeFlows
 import kotlinx.coroutines.flow.map
 
 internal class ForYouDashboardInputHandler(
-    private val getTodaysVerseOfTheDayUseCase: GetTodaysVerseOfTheDayUseCase
+    private val prefetchVerseOfTheDayUseCase: PrefetchVerseOfTheDayUseCase,
+    private val getTodaysVerseOfTheDayUseCase: GetTodaysVerseOfTheDayUseCase,
+    private val getDailyPrayerUseCase: GetDailyPrayerUseCase,
 ) : InputHandler<
         ForYouDashboardContract.Inputs,
         ForYouDashboardContract.Events,
@@ -19,10 +23,16 @@ internal class ForYouDashboardInputHandler(
         input: ForYouDashboardContract.Inputs
     ): Unit = when (input) {
         is ForYouDashboardContract.Inputs.Initialize -> {
+            sideJob("prefetchVerseOfTheDayUseCase") {
+                prefetchVerseOfTheDayUseCase()
+            }
+
             observeFlows(
                 "Initialize",
                 getTodaysVerseOfTheDayUseCase()
-                    .map { ForYouDashboardContract.Inputs.VerseOfTheDayUpdated(it) }
+                    .map { ForYouDashboardContract.Inputs.VerseOfTheDayUpdated(it) },
+                getDailyPrayerUseCase()
+                    .map { ForYouDashboardContract.Inputs.DailyPrayerUpdated(it) },
             )
         }
 
@@ -31,6 +41,14 @@ internal class ForYouDashboardInputHandler(
         }
 
         is ForYouDashboardContract.Inputs.VerseOfTheDayCardClicked -> {
+            noOp()
+        }
+
+        is ForYouDashboardContract.Inputs.DailyPrayerUpdated -> {
+            updateState { it.copy(dailyPrayer = input.dailyPrayer) }
+        }
+
+        is ForYouDashboardContract.Inputs.DailyPrayerCardClicked -> {
             noOp()
         }
     }

@@ -62,6 +62,7 @@ coreLogging <-- coreApi
 coreLogging <-- coreDatabase
 coreLogging <-- coreBallast
 coreLogging <-- coreNotifications
+coreLogging <-- coreDomain
 
 coreDatabase <--- prayerData
 coreLogging <--- prayerData

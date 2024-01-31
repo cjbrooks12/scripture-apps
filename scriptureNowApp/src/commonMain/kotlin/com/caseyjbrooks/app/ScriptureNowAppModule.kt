@@ -4,6 +4,7 @@ import com.caseyjbrooks.api.realApiModule
 import com.caseyjbrooks.ballast.realBallastModule
 import com.caseyjbrooks.database.realDatabaseModule
 import com.caseyjbrooks.datetime.realDateTimeModule
+import com.caseyjbrooks.domain.realDomainModule
 import com.caseyjbrooks.foryou.ui.dashboard.forYouDashboardScreenModule
 import com.caseyjbrooks.logging.realLoggingModule
 import com.caseyjbrooks.notifications.realNotificationModule
@@ -19,6 +20,7 @@ public val commonApplicationModule: Module = module {
         realBallastModule,
         realDatabaseModule,
         realDateTimeModule,
+        realDomainModule,
         realLoggingModule,
         realNotificationModule,
         realRoutingModule,
