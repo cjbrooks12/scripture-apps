@@ -41,7 +41,7 @@ class VerseOfTheDayTableTest : StringSpec({
                 date = LocalDate(2024, Month.JANUARY, 4),
             )
 
-            with(database.verseOftheDayQueries) {
+            with(database.verse_of_the_dayQueries) {
                 // initial state
                 getAll().executeAsList() shouldBe emptyList()
                 getByDay(LocalDate(2024, 1, 1)).executeAsOneOrNull().shouldBeNull()

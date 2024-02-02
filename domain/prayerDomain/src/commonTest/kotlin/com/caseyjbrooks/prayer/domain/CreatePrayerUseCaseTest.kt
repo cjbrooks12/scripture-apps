@@ -1,6 +1,7 @@
 package com.caseyjbrooks.prayer.domain
 
 import com.caseyjbrooks.prayer.domain.create.CreatePrayerUseCase
+import com.caseyjbrooks.prayer.models.PrayerNotification
 import com.caseyjbrooks.prayer.models.PrayerUser
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.models.SavedPrayerType
@@ -22,6 +23,7 @@ public class CreatePrayerUseCaseTest : StringSpec({
             tags = listOf(),
             archived = false,
             archivedAt = null,
+            notification = PrayerNotification.None,
             createdAt = instant,
             updatedAt = instant,
         )

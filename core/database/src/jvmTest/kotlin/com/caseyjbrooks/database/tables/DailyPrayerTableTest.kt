@@ -37,7 +37,7 @@ class DailyPrayerTableTest : StringSpec({
                 date = LocalDate(2024, Month.JANUARY, 4),
             )
 
-            with(database.dailyPrayerQueries) {
+            with(database.daily_prayerQueries) {
                 // initial state
                 getAll().executeAsList() shouldBe emptyList()
                 getByDay(LocalDate(2024, 1, 1)).executeAsOneOrNull().shouldBeNull()

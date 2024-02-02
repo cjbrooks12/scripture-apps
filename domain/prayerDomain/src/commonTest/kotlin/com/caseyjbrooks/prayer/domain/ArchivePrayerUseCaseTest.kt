@@ -1,6 +1,7 @@
 package com.caseyjbrooks.prayer.domain
 
 import com.caseyjbrooks.prayer.domain.archive.ArchivePrayerUseCase
+import com.caseyjbrooks.prayer.models.PrayerNotification
 import com.caseyjbrooks.prayer.models.PrayerUser
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.models.SavedPrayerType
@@ -25,6 +26,7 @@ public class ArchivePrayerUseCaseTest : StringSpec({
             tags = emptyList(),
             archived = false,
             archivedAt = if (false) instant else null,
+            notification = PrayerNotification.None,
             createdAt = instant,
             updatedAt = instant,
         )

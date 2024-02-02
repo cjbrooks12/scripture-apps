@@ -42,7 +42,7 @@ package ":pillars" {
 }
 
 package ":apps" {
-    component [:scriptureNowApp] as scriptureNowApp
+    component [:abideApp] as abideApp
 }
 
 ' Define connections between modules
@@ -84,6 +84,6 @@ prayerDomain <-- prayerScreensFeature
 prayerScreensFeature <-- prayerPillar
 prayerSchedulesFeature <-- prayerPillar
 
-prayerPillar <-- scriptureNowApp
+prayerPillar <-- abideApp
 
 @enduml

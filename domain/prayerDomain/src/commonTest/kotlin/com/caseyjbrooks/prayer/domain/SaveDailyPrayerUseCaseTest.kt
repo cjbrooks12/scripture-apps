@@ -3,6 +3,7 @@ package com.caseyjbrooks.prayer.domain
 import com.caseyjbrooks.prayer.domain.savedaily.SaveDailyPrayerUseCase
 import com.caseyjbrooks.prayer.models.ArchiveStatus
 import com.caseyjbrooks.prayer.models.DailyPrayer
+import com.caseyjbrooks.prayer.models.PrayerNotification
 import com.caseyjbrooks.prayer.models.PrayerTag
 import com.caseyjbrooks.prayer.models.PrayerUser
 import com.caseyjbrooks.prayer.models.SavedPrayer
@@ -47,6 +48,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
                     tags = listOf(PrayerTag("Daily Prayer"), PrayerTag("Hardcoded")),
                     archived = false,
                     archivedAt = null,
+                    notification = PrayerNotification.None,
                     createdAt = Instant.fromEpochMilliseconds(0L),
                     updatedAt = Instant.fromEpochMilliseconds(0L),
                 ),
@@ -64,6 +66,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
                     tags = listOf(PrayerTag("Daily Prayer"), PrayerTag("Hardcoded")),
                     archived = false,
                     archivedAt = null,
+                    notification = PrayerNotification.None,
                     createdAt = Instant.fromEpochMilliseconds(0L),
                     updatedAt = Instant.fromEpochMilliseconds(0L),
                 ),
@@ -99,6 +102,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
                     tags = listOf(PrayerTag("Daily Prayer")),
                     archived = false,
                     archivedAt = null,
+                    notification = PrayerNotification.None,
                     createdAt = Instant.fromEpochMilliseconds(0L),
                     updatedAt = Instant.fromEpochMilliseconds(0L),
                 ),
@@ -136,6 +140,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
                     tags = listOf(PrayerTag("Hardcoded")),
                     archived = false,
                     archivedAt = null,
+                    notification = PrayerNotification.None,
                     createdAt = Instant.fromEpochMilliseconds(0L),
                     updatedAt = Instant.fromEpochMilliseconds(0L),
                 ),
@@ -172,6 +177,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
                     tags = emptyList(),
                     archived = false,
                     archivedAt = null,
+                    notification = PrayerNotification.None,
                     createdAt = Instant.fromEpochMilliseconds(0L),
                     updatedAt = Instant.fromEpochMilliseconds(0L),
                 ),

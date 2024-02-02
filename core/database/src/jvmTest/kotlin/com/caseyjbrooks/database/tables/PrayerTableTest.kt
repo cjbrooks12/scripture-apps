@@ -20,6 +20,7 @@ class PrayerTableTest : StringSpec({
                 text = "prayer 1",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -28,6 +29,7 @@ class PrayerTableTest : StringSpec({
                 text = "prayer 2",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -36,6 +38,7 @@ class PrayerTableTest : StringSpec({
                 text = "prayer 3",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -44,11 +47,12 @@ class PrayerTableTest : StringSpec({
                 text = "prayer 4",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
 
-            with(database.prayersQueries) {
+            with(database.prayerQueries) {
                 // check initial state
                 getAll().executeAsList() shouldBe emptyList()
 

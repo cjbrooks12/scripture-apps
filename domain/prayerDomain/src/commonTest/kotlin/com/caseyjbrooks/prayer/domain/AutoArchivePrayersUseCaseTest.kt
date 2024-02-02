@@ -2,6 +2,7 @@ package com.caseyjbrooks.prayer.domain
 
 import com.caseyjbrooks.prayer.domain.autoarchive.AutoArchivePrayersUseCase
 import com.caseyjbrooks.prayer.models.ArchiveStatus
+import com.caseyjbrooks.prayer.models.PrayerNotification
 import com.caseyjbrooks.prayer.models.PrayerTag
 import com.caseyjbrooks.prayer.models.PrayerUser
 import com.caseyjbrooks.prayer.models.SavedPrayer
@@ -29,6 +30,7 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
             tags = tags.map { PrayerTag(it) },
             archived = archived,
             archivedAt = if (archived) instant else null,
+            notification = PrayerNotification.None,
             createdAt = instant,
             updatedAt = instant,
         )
@@ -54,6 +56,7 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
                     tags = emptyList(),
                     archived = false,
                     archivedAt = null,
+                    notification = PrayerNotification.None,
                     createdAt = initialInstant,
                     updatedAt = initialInstant,
                 ),
@@ -64,6 +67,7 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
                     tags = emptyList(),
                     archived = true,
                     archivedAt = initialInstant,
+                    notification = PrayerNotification.None,
                     createdAt = initialInstant,
                     updatedAt = initialInstant,
                 ),
@@ -76,6 +80,7 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
                     tags = emptyList(),
                     archived = false,
                     archivedAt = null,
+                    notification = PrayerNotification.None,
                     createdAt = initialInstant,
                     updatedAt = initialInstant,
                 ),
@@ -95,6 +100,7 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
                     tags = emptyList(),
                     archived = true,
                     archivedAt = initialInstant.plus(1.milliseconds),
+                    notification = PrayerNotification.None,
                     createdAt = initialInstant,
                     updatedAt = initialInstant.plus(1.milliseconds),
                 ),
@@ -105,6 +111,7 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
                     tags = emptyList(),
                     archived = true,
                     archivedAt = initialInstant,
+                    notification = PrayerNotification.None,
                     createdAt = initialInstant,
                     updatedAt = initialInstant,
                 ),
@@ -117,6 +124,7 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
                     tags = emptyList(),
                     archived = false,
                     archivedAt = null,
+                    notification = PrayerNotification.None,
                     createdAt = initialInstant,
                     updatedAt = initialInstant,
                 ),
@@ -136,6 +144,7 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
                     tags = emptyList(),
                     archived = true,
                     archivedAt = initialInstant.plus(1.milliseconds),
+                    notification = PrayerNotification.None,
                     createdAt = initialInstant,
                     updatedAt = initialInstant.plus(1.milliseconds),
                 ),
@@ -146,6 +155,7 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
                     tags = emptyList(),
                     archived = true,
                     archivedAt = initialInstant,
+                    notification = PrayerNotification.None,
                     createdAt = initialInstant,
                     updatedAt = initialInstant,
                 ),
@@ -158,6 +168,7 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
                     tags = emptyList(),
                     archived = true,
                     archivedAt = initialInstant.plus(21.milliseconds),
+                    notification = PrayerNotification.None,
                     createdAt = initialInstant,
                     updatedAt = initialInstant.plus(21.milliseconds),
                 ),

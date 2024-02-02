@@ -22,6 +22,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 1",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -30,6 +31,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 2",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -38,6 +40,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 3",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -46,6 +49,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 4",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -65,7 +69,7 @@ class PrayerTagTableTest : StringSpec({
             )
 
             // initialize DB structure
-            with(database.prayersQueries) {
+            with(database.prayerQueries) {
                 createPrayer(prayer1)
                 createPrayer(prayer2)
                 createPrayer(prayer3)
@@ -76,7 +80,7 @@ class PrayerTagTableTest : StringSpec({
                 createTag(tag2)
                 createTag(tag3)
             }
-            with(database.prayerTagQueries) {
+            with(database.prayer_tagQueries) {
                 createPrayerTag(Prayer_tag(prayer1.uuid, tag1.uuid))
                 createPrayerTag(Prayer_tag(prayer2.uuid, tag1.uuid))
                 createPrayerTag(Prayer_tag(prayer3.uuid, tag1.uuid))
@@ -89,7 +93,7 @@ class PrayerTagTableTest : StringSpec({
             }
 
             // Check basic associations
-            with(database.prayerTagQueries) {
+            with(database.prayer_tagQueries) {
                 getPrayersForTag(tag1.uuid).executeAsList().map { it.prayer_uuid } shouldBe listOf(
                     prayer1.uuid,
                     prayer2.uuid,
@@ -134,6 +138,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 1",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -142,6 +147,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 2",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -150,6 +156,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 3",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -158,6 +165,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 4",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -177,7 +185,7 @@ class PrayerTagTableTest : StringSpec({
             )
 
             // initialize DB structure
-            with(database.prayersQueries) {
+            with(database.prayerQueries) {
                 createPrayer(prayer1)
                 createPrayer(prayer2)
                 createPrayer(prayer3)
@@ -188,7 +196,7 @@ class PrayerTagTableTest : StringSpec({
                 createTag(tag2)
                 createTag(tag3)
             }
-            with(database.prayerTagQueries) {
+            with(database.prayer_tagQueries) {
                 createPrayerTag(Prayer_tag(prayer1.uuid, tag1.uuid))
                 createPrayerTag(Prayer_tag(prayer2.uuid, tag1.uuid))
                 createPrayerTag(Prayer_tag(prayer3.uuid, tag1.uuid))
@@ -201,8 +209,8 @@ class PrayerTagTableTest : StringSpec({
             }
 
             // remove a prayer, check the cascade
-            database.prayersQueries.deletePrayer(prayer4.uuid)
-            with(database.prayerTagQueries) {
+            database.prayerQueries.deletePrayer(prayer4.uuid)
+            with(database.prayer_tagQueries) {
                 getPrayersForTag(tag1.uuid).executeAsList().map { it.prayer_uuid } shouldBe listOf(
                     prayer1.uuid,
                     prayer2.uuid,
@@ -239,6 +247,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 1",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -247,6 +256,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 2",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -255,6 +265,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 3",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -263,6 +274,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 4",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -282,7 +294,7 @@ class PrayerTagTableTest : StringSpec({
             )
 
             // initialize DB structure
-            with(database.prayersQueries) {
+            with(database.prayerQueries) {
                 createPrayer(prayer1)
                 createPrayer(prayer2)
                 createPrayer(prayer3)
@@ -293,7 +305,7 @@ class PrayerTagTableTest : StringSpec({
                 createTag(tag2)
                 createTag(tag3)
             }
-            with(database.prayerTagQueries) {
+            with(database.prayer_tagQueries) {
                 createPrayerTag(Prayer_tag(prayer1.uuid, tag1.uuid))
                 createPrayerTag(Prayer_tag(prayer2.uuid, tag1.uuid))
                 createPrayerTag(Prayer_tag(prayer3.uuid, tag1.uuid))
@@ -307,7 +319,7 @@ class PrayerTagTableTest : StringSpec({
 
             // remove a tag, check the cascade
             database.tagQueries.deleteById(tag1.uuid)
-            with(database.prayerTagQueries) {
+            with(database.prayer_tagQueries) {
                 getPrayersForTag(tag1.uuid).executeAsList().map { it.prayer_uuid } shouldBe emptyList()
                 getPrayersForTag(tag2.uuid).executeAsList().map { it.prayer_uuid } shouldBe listOf(
                     prayer2.uuid,
@@ -341,6 +353,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 1",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -349,6 +362,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 2",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -357,6 +371,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 3",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -365,6 +380,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 4",
                 autoArchiveAt = null,
                 archivedAt = null,
+                notificationSchedule = null,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -384,7 +400,7 @@ class PrayerTagTableTest : StringSpec({
             )
 
             // initialize DB structure
-            with(database.prayersQueries) {
+            with(database.prayerQueries) {
                 createPrayer(prayer1)
                 createPrayer(prayer2)
                 createPrayer(prayer3)
@@ -395,7 +411,7 @@ class PrayerTagTableTest : StringSpec({
                 createTag(tag2)
                 createTag(tag3)
             }
-            with(database.prayerTagQueries) {
+            with(database.prayer_tagQueries) {
                 createPrayerTag(Prayer_tag(prayer1.uuid, tag1.uuid))
                 createPrayerTag(Prayer_tag(prayer2.uuid, tag1.uuid))
                 createPrayerTag(Prayer_tag(prayer3.uuid, tag1.uuid))
@@ -408,8 +424,8 @@ class PrayerTagTableTest : StringSpec({
             }
 
             // remove the tag from a prayer
-            database.prayerTagQueries.removeTagFromPrayer(prayer2.uuid, tag2.uuid)
-            with(database.prayerTagQueries) {
+            database.prayer_tagQueries.removeTagFromPrayer(prayer2.uuid, tag2.uuid)
+            with(database.prayer_tagQueries) {
                 getPrayersForTag(tag1.uuid).executeAsList().map { it.prayer_uuid } shouldBe listOf(
                     prayer1.uuid,
                     prayer2.uuid,

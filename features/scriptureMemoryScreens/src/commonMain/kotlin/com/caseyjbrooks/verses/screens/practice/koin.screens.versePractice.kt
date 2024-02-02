@@ -2,10 +2,6 @@ package com.caseyjbrooks.verses.screens.practice
 
 import com.caseyjbrooks.ballast.buildWithViewModel
 import com.caseyjbrooks.verses.models.VerseId
-import com.caseyjbrooks.verses.screens.practice.VersePracticeContract
-import com.caseyjbrooks.verses.screens.practice.VersePracticeEventHandler
-import com.caseyjbrooks.verses.screens.practice.VersePracticeInputHandler
-import com.caseyjbrooks.verses.screens.practice.VersePracticeViewModel
 import kotlinx.coroutines.CoroutineScope
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf

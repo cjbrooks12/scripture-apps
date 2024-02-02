@@ -2,6 +2,7 @@ package com.caseyjbrooks.prayer.domain
 
 import com.caseyjbrooks.prayer.domain.query.QueryPrayersUseCase
 import com.caseyjbrooks.prayer.models.ArchiveStatus
+import com.caseyjbrooks.prayer.models.PrayerNotification
 import com.caseyjbrooks.prayer.models.PrayerTag
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.models.SavedPrayerType
@@ -31,6 +32,7 @@ public class QueryPrayersUseCaseTest : StringSpec({
             tags = tags.map { PrayerTag(it) },
             archived = archived,
             archivedAt = if (archived) instant else null,
+            notification = PrayerNotification.None,
             createdAt = instant,
             updatedAt = instant,
         )
@@ -48,6 +50,7 @@ public class QueryPrayersUseCaseTest : StringSpec({
             tags = tags.map { PrayerTag(it) },
             archived = archived,
             archivedAt = if (archived) instant else null,
+            notification = PrayerNotification.None,
             createdAt = instant,
             updatedAt = instant,
         )

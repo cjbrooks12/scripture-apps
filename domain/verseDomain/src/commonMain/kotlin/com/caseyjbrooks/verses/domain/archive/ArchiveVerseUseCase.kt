@@ -2,7 +2,6 @@ package com.caseyjbrooks.verses.domain.archive
 
 import com.caseyjbrooks.verses.models.SavedVerse
 
-
 /**
  * The user can move a verse to the "archive" so it's not normally displayed in their list of current verses. They
  * may also view their archives, and move a verse back to their main collection.

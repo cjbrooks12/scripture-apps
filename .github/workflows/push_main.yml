@@ -53,9 +53,9 @@ jobs:
       - name: 'Check'
         run: './gradlew check -Prelease -Pvariant=scriptureNowQa'
       - name: 'Assemble Artifacts'
-        run: './gradlew :scriptureNowApp:assembleQaRelease -Prelease -Pvariant=scriptureNowDev'
+        run: './gradlew :abideApp:assembleQaRelease -Prelease -Pvariant=scriptureNowDev'
       - name: 'Upload Artifacts to Firebase'
-        run: './gradlew :scriptureNowApp:appDistributionUploadQaRelease -Prelease -Pvariant=scriptureNowDev'
+        run: './gradlew :abideApp:appDistributionUploadQaRelease -Prelease -Pvariant=scriptureNowDev'
   scriptureNowProdRelease:
     runs-on: 'macos-latest'
     env:
@@ -82,6 +82,6 @@ jobs:
       - name: 'Assemble Artifacts'
         run: './gradlew check -Prelease -Pvariant=scriptureNowProd'
       - name: 'Assemble Artifacts'
-        run: './gradlew :scriptureNowApp:bundleProdRelease -Prelease -Pvariant=scriptureNowProd'
+        run: './gradlew :abideApp:bundleProdRelease -Prelease -Pvariant=scriptureNowProd'
       - name: 'Upload Artifacts to Firebase'
-        run: './gradlew :scriptureNowApp:appDistributionUploadProdRelease -Prelease -Pvariant=scriptureNowProd'
+        run: './gradlew :abideApp:appDistributionUploadProdRelease -Prelease -Pvariant=scriptureNowProd'

@@ -2,6 +2,7 @@ package com.caseyjbrooks.prayer.domain
 
 import com.caseyjbrooks.prayer.domain.getbyid.GetPrayerByIdUseCase
 import com.caseyjbrooks.prayer.models.DailyPrayer
+import com.caseyjbrooks.prayer.models.PrayerNotification
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.models.SavedPrayerType
 import com.caseyjbrooks.prayer.repository.saved.SavedPrayersRepository
@@ -26,6 +27,7 @@ public class GetPrayerByIdUseCaseTest : StringSpec({
             tags = listOf(),
             archived = false,
             archivedAt = null,
+            notification = PrayerNotification.None,
             createdAt = instant,
             updatedAt = instant,
         )

@@ -74,8 +74,8 @@ public object VersePracticeScreen {
                     }
                 },
                 actions = {
-                    IconButton({postInput(VersePracticeContract.Inputs.TogglePeek)}) {
-                        if(uiState.peeking) {
+                    IconButton({ postInput(VersePracticeContract.Inputs.TogglePeek) }) {
+                        if (uiState.peeking) {
                             Icon(Icons.Default.Visibility, "Turn Peek Off")
                         } else {
                             Icon(Icons.Default.VisibilityOff, "Turn Peek On")
