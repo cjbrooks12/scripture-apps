@@ -116,7 +116,7 @@ public object PrayerFormScreen {
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .padding(8.dp),
+                .padding(16.dp),
             contentAlignment = Alignment.Center,
         ) {
             CircularProgressIndicator()
@@ -138,7 +138,7 @@ public object PrayerFormScreen {
         ) {
             Card(Modifier.fillMaxWidth().wrapContentHeight()) {
                 Column(Modifier.padding(16.dp)) {
-                    Text("Prayer Text", style = MaterialTheme.typography.headlineMedium)
+                    Text("Prayer Text", style = MaterialTheme.typography.headlineSmall)
                     Text(
                         "Describe who or what you want to be praying for.",
                         style = MaterialTheme.typography.labelSmall,
@@ -163,7 +163,7 @@ public object PrayerFormScreen {
 
             Card(Modifier.fillMaxWidth().wrapContentHeight()) {
                 Column(Modifier.padding(16.dp)) {
-                    Text("Completion date", style = MaterialTheme.typography.headlineMedium)
+                    Text("Completion date", style = MaterialTheme.typography.headlineSmall)
                     Text(
                         "If a completion date it set, it will be automatically moved to the archive after that date.",
                         style = MaterialTheme.typography.labelSmall,
@@ -248,7 +248,7 @@ public object PrayerFormScreen {
 
             Card(Modifier.fillMaxWidth().wrapContentHeight()) {
                 Column(Modifier.padding(16.dp)) {
-                    Text("Tags", style = MaterialTheme.typography.headlineMedium)
+                    Text("Tags", style = MaterialTheme.typography.headlineSmall)
                     Text(
                         "Use tags to help categorize your prayers",
                         style = MaterialTheme.typography.labelSmall,

@@ -6,7 +6,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.caseyjbrooks.routing.ApplicationStructure
-import com.caseyjbrooks.routing.ScriptureNowScreen
+import com.caseyjbrooks.routing.ApplicationScreen
 import com.caseyjbrooks.ui.routing.MainNavigationBar
 import com.caseyjbrooks.ui.routing.currentBackstack
 import com.copperleaf.ballast.navigation.routing.renderCurrentDestination
@@ -24,7 +24,7 @@ internal fun PhoneLayout(pillar: ApplicationStructure) {
     ) {
         Column(Modifier.padding(it)) {
             currentBackstack().renderCurrentDestination(
-                route = { appScreen: ScriptureNowScreen ->
+                route = { appScreen: ApplicationScreen ->
                     appScreen.Content(this)
                 },
                 notFound = {},

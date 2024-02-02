@@ -9,10 +9,10 @@ import com.caseyjbrooks.prayer.screens.list.PrayerListRoute
 import com.caseyjbrooks.prayer.screens.timer.PrayerTimerRoute
 import com.caseyjbrooks.routing.NavigationItem
 import com.caseyjbrooks.routing.Pillar
-import com.caseyjbrooks.routing.ScriptureNowScreen
+import com.caseyjbrooks.routing.ApplicationScreen
 
 public object PrayerPillar : Pillar {
-    override val routes: List<ScriptureNowScreen> = listOf(
+    override val routes: List<ApplicationScreen> = listOf(
         PrayerListRoute,
         PrayerDetailRoute,
         PrayerFormRoute,

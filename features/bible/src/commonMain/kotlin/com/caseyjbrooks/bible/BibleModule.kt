@@ -6,10 +6,10 @@ import androidx.compose.material.icons.outlined.List
 import com.caseyjbrooks.bible.ui.bible.BibleReaderRoute
 import com.caseyjbrooks.routing.Pillar
 import com.caseyjbrooks.routing.NavigationItem
-import com.caseyjbrooks.routing.ScriptureNowScreen
+import com.caseyjbrooks.routing.ApplicationScreen
 
 public object BibleModule : Pillar {
-    override val routes: List<ScriptureNowScreen> = listOf(
+    override val routes: List<ApplicationScreen> = listOf(
         BibleReaderRoute,
     )
     override val mainNavigationItem: NavigationItem? = null

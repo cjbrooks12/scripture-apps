@@ -32,6 +32,7 @@ include(":core:di")
 include(":core:routing")
 include(":core:ui")
 
+// Prayer pillar
 include(":data:prayerData")
 include(":domain:prayerDomain")
 include(":features:prayerSchedules")
@@ -39,6 +40,7 @@ include(":features:prayerScreens")
 include(":features:prayerWidgets")
 include(":pillars:prayerPillar")
 
+// Prayer pillar
 include(":data:verseOfTheDayData")
 include(":domain:verseOfTheDayDomain")
 include(":features:verseOfTheDaySchedules")
@@ -46,11 +48,16 @@ include(":features:verseOfTheDayScreens")
 include(":features:verseOfTheDayWidgets")
 include(":pillars:verseOfTheDayPillar")
 
+// Scripture Memory Pillar
+include(":data:verseData")
+include(":domain:verseDomain")
+include(":features:scriptureMemoryScreens")
+include(":pillars:scriptureMemoryPillar")
+
 include(":features:bible")
 include(":features:foryou")
-include(":features:scriptureMemory")
 include(":features:settings")
 include(":features:topicalBible")
 
-include(":scriptureNowApp")
+include(":abideApp")
 //include(":topicalBibleApp")

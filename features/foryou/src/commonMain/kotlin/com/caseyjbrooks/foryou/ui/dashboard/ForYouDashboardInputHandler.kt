@@ -36,6 +36,10 @@ internal class ForYouDashboardInputHandler(
             )
         }
 
+        is ForYouDashboardContract.Inputs.OverviewCardClicked -> {
+            noOp()
+        }
+
         is ForYouDashboardContract.Inputs.VerseOfTheDayUpdated -> {
             updateState { it.copy(verseOfTheDay = input.verseOfTheDay) }
         }
@@ -49,6 +53,14 @@ internal class ForYouDashboardInputHandler(
         }
 
         is ForYouDashboardContract.Inputs.DailyPrayerCardClicked -> {
+            noOp()
+        }
+
+        is ForYouDashboardContract.Inputs.NoticeTextUpdated -> {
+            updateState { it.copy(noticeText = input.noticeText) }
+        }
+
+        is ForYouDashboardContract.Inputs.NoticeCardClicked -> {
             noOp()
         }
     }

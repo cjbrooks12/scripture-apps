@@ -91,7 +91,7 @@ public object PrayerTimerScreen {
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .padding(8.dp),
+                .padding(16.dp),
             contentAlignment = Alignment.Center,
         ) {
             CircularProgressIndicator()
@@ -107,7 +107,7 @@ public object PrayerTimerScreen {
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .padding(8.dp),
+                .padding(16.dp),
             contentAlignment = Alignment.Center,
         ) {
             Text("Uh-oh! That prayer seems to be missing.")
@@ -123,7 +123,7 @@ public object PrayerTimerScreen {
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .padding(8.dp),
+                .padding(16.dp),
         ) {
             val prayer = uiState.cachedPrayer.getCachedOrThrow()
 
@@ -134,7 +134,7 @@ public object PrayerTimerScreen {
                     .padding(8.dp, 16.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(prayer.text)
+                Text(prayer.text, style = MaterialTheme.typography.bodyLarge)
             }
 
             Divider()

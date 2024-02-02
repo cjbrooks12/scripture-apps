@@ -5,11 +5,11 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Search
 import com.caseyjbrooks.routing.Pillar
 import com.caseyjbrooks.routing.NavigationItem
-import com.caseyjbrooks.routing.ScriptureNowScreen
+import com.caseyjbrooks.routing.ApplicationScreen
 import com.caseyjbrooks.topicalbible.ui.topics.BibleTopicsRoute
 
 public object TopicalBibleModule : Pillar {
-    override val routes: List<ScriptureNowScreen> = listOf(
+    override val routes: List<ApplicationScreen> = listOf(
         BibleTopicsRoute,
     )
     override val mainNavigationItem: NavigationItem? = null

@@ -3,6 +3,7 @@ package com.caseyjbrooks.prayer.domain.createFromText
 import com.caseyjbrooks.database.UuidFactory
 import com.caseyjbrooks.prayer.domain.create.CreatePrayerUseCase
 import com.caseyjbrooks.prayer.models.PrayerId
+import com.caseyjbrooks.prayer.models.PrayerNotification
 import com.caseyjbrooks.prayer.models.PrayerTag
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.models.SavedPrayerType
@@ -24,6 +25,7 @@ internal class CreatePrayerFromTextUseCaseImpl(
             tags = tags.map { PrayerTag(it) },
             archived = false,
             archivedAt = null,
+            notification = PrayerNotification.None,
             createdAt = clock.now(),
             updatedAt = clock.now(),
         )

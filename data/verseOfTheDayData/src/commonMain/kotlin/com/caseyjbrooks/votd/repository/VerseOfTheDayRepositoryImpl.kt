@@ -34,7 +34,7 @@ internal class VerseOfTheDayRepositoryImpl(
         return runCatching<Unit> {
             val todaysDate = clock.now().toLocalDateTime(timeZone).date
 
-            val alreadyFetched = database.verseOftheDayQueries
+            val alreadyFetched = database.verse_of_the_dayQueries
                 .getByDay(todaysDate)
                 .executeAsOneOrNull() != null
 
@@ -58,7 +58,7 @@ internal class VerseOfTheDayRepositoryImpl(
             if (response is Either.Left<OurMannaVerseOfTheDayResponse>) {
                 val successBody = response.value
 
-                database.verseOftheDayQueries.insertOrReplace(
+                database.verse_of_the_dayQueries.insertOrReplace(
                     Verse_of_the_day(
                         uuid = uuidFactory.getNewUuid(),
                         reference = successBody.verse.details.reference,
@@ -75,7 +75,7 @@ internal class VerseOfTheDayRepositoryImpl(
     override fun getTodaysVerseOfTheDay(): Flow<VerseOfTheDay?> {
         val todaysDate = clock.now().toLocalDateTime(timeZone).date
 
-        return database.verseOftheDayQueries
+        return database.verse_of_the_dayQueries
             .getByDay(todaysDate)
             .asFlow()
             .mapToOneOrNull(Dispatchers.Default)

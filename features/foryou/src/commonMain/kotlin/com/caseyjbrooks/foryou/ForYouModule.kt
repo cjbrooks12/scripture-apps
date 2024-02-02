@@ -6,10 +6,10 @@ import androidx.compose.material.icons.outlined.Face
 import com.caseyjbrooks.foryou.ui.dashboard.ForYouDashboardRoute
 import com.caseyjbrooks.routing.NavigationItem
 import com.caseyjbrooks.routing.Pillar
-import com.caseyjbrooks.routing.ScriptureNowScreen
+import com.caseyjbrooks.routing.ApplicationScreen
 
 public object ForYouModule : Pillar {
-    override val routes: List<ScriptureNowScreen> = listOf(
+    override val routes: List<ApplicationScreen> = listOf(
         ForYouDashboardRoute,
     )
     override val mainNavigationItem: NavigationItem = NavigationItem(

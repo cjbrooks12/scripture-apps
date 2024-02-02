@@ -16,11 +16,11 @@ import kotlinx.coroutines.CoroutineScope
 
 public class RouterViewModel(
     config: BallastViewModelConfiguration<
-            RouterContract.Inputs<ScriptureNowScreen>,
-            RouterContract.Events<ScriptureNowScreen>,
-            RouterContract.State<ScriptureNowScreen>>,
+            RouterContract.Inputs<ApplicationScreen>,
+            RouterContract.Events<ApplicationScreen>,
+            RouterContract.State<ApplicationScreen>>,
     coroutineScope: CoroutineScope,
-) : BasicRouter<ScriptureNowScreen>(
+) : BasicRouter<ApplicationScreen>(
     config = config,
     eventHandler = eventHandler { },
     coroutineScope = coroutineScope,
@@ -28,10 +28,10 @@ public class RouterViewModel(
 
 public fun RouterViewModel(
     viewModelCoroutineScope: CoroutineScope,
-    initialRoute: ScriptureNowScreen,
-    allRoutes: List<ScriptureNowScreen>,
+    initialRoute: ApplicationScreen,
+    allRoutes: List<ApplicationScreen>,
 ): RouterViewModel {
-    val routesSortedByWeight: List<ScriptureNowScreen> = allRoutes
+    val routesSortedByWeight: List<ApplicationScreen> = allRoutes
         .sortedByDescending { it.matcher.weight }
 
     return RouterViewModel(

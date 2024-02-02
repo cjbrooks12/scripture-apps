@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.caseyjbrooks.routing.ApplicationStructure
-import com.caseyjbrooks.routing.ScriptureNowScreen
+import com.caseyjbrooks.routing.ApplicationScreen
 import com.caseyjbrooks.ui.routing.MainNavigationRail
 import com.caseyjbrooks.ui.routing.currentDetailBackstack
 import com.caseyjbrooks.ui.routing.currentListBackstack
@@ -26,7 +26,7 @@ internal fun DesktopLayout(pillar: ApplicationStructure) {
             }
             Column(Modifier.width(240.dp)) {
                 currentListBackstack().renderCurrentDestination(
-                    route = { appScreen: ScriptureNowScreen ->
+                    route = { appScreen: ApplicationScreen ->
                         appScreen.Content(this)
                     },
                     notFound = {},
@@ -34,7 +34,7 @@ internal fun DesktopLayout(pillar: ApplicationStructure) {
             }
             Column(Modifier.weight(1f)) {
                 currentDetailBackstack().renderCurrentDestination(
-                    route = { appScreen: ScriptureNowScreen ->
+                    route = { appScreen: ApplicationScreen ->
                         appScreen.Content(this)
                     },
                     notFound = {},

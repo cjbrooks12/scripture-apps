@@ -1,0 +1,39 @@
+import com.benasher44.uuid.Uuid;
+
+-- many-to-many relationship between verses and tags
+CREATE TABLE verse_tag (
+    verse_uuid TEXT AS Uuid NOT NULL,
+    tag_uuid TEXT AS Uuid NOT NULL,
+
+    FOREIGN KEY (verse_uuid) REFERENCES verse (uuid)
+        ON DELETE CASCADE,
+    FOREIGN KEY (tag_uuid) REFERENCES tag (uuid)
+        ON DELETE CASCADE,
+
+    UNIQUE(verse_uuid, tag_uuid)
+);
+
+createVerseTag:
+INSERT OR IGNORE INTO verse_tag(verse_uuid, tag_uuid)
+VALUES ?;
+
+removeTagFromVerse:
+DELETE FROM
+    verse_tag
+WHERE
+    verse_uuid = :verse_uuid AND
+    tag_uuid = :tag_uuid;
+
+getVersesForTag:
+SELECT
+    *
+FROM verse_tag
+WHERE
+    tag_uuid = :tag_uuid;
+
+getTagsForVerse:
+SELECT
+    *
+FROM verse_tag
+WHERE
+    verse_uuid = :verse_uuid;

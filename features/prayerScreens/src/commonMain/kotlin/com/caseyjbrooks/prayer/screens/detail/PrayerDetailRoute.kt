@@ -9,7 +9,7 @@ import com.caseyjbrooks.prayer.screens.form.PrayerFormRoute
 import com.caseyjbrooks.prayer.screens.list.PrayerListRoute
 import com.caseyjbrooks.prayer.screens.timer.PrayerTimerRoute
 import com.caseyjbrooks.routing.DetailPane
-import com.caseyjbrooks.routing.ScriptureNowScreen
+import com.caseyjbrooks.routing.ApplicationScreen
 import com.copperleaf.ballast.navigation.routing.Destination
 import com.copperleaf.ballast.navigation.routing.RouteAnnotation
 import com.copperleaf.ballast.navigation.routing.RouteMatcher
@@ -18,7 +18,7 @@ import com.copperleaf.ballast.navigation.routing.directions
 import com.copperleaf.ballast.navigation.routing.pathParameter
 import com.copperleaf.ballast.navigation.routing.stringPath
 
-public object PrayerDetailRoute : ScriptureNowScreen {
+public object PrayerDetailRoute : ApplicationScreen {
     override val matcher: RouteMatcher = RouteMatcher.create("/prayer/view/{prayerId}")
     override val annotations: Set<RouteAnnotation> = setOf(DetailPane)
 
@@ -45,7 +45,7 @@ public object PrayerDetailRoute : ScriptureNowScreen {
     }
 
     @Composable
-    override fun Content(destination: Destination.Match<ScriptureNowScreen>) {
+    override fun Content(destination: Destination.Match<ApplicationScreen>) {
         val prayerId: String by destination.stringPath()
 
         key(prayerId) {

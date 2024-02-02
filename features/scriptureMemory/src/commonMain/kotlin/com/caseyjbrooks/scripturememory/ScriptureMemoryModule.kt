@@ -5,11 +5,11 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
 import com.caseyjbrooks.routing.Pillar
 import com.caseyjbrooks.routing.NavigationItem
-import com.caseyjbrooks.routing.ScriptureNowScreen
+import com.caseyjbrooks.routing.ApplicationScreen
 import com.caseyjbrooks.scripturememory.ui.list.SavedVersesListRoute
 
 public object ScriptureMemoryModule : Pillar {
-    override val routes: List<ScriptureNowScreen> = listOf(
+    override val routes: List<ApplicationScreen> = listOf(
         SavedVersesListRoute,
     )
     override val mainNavigationItem: NavigationItem = NavigationItem(

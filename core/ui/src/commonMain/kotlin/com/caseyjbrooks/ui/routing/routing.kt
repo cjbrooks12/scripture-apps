@@ -11,7 +11,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import com.caseyjbrooks.routing.DetailPane
 import com.caseyjbrooks.routing.ListPane
 import com.caseyjbrooks.routing.RouterViewModel
-import com.caseyjbrooks.routing.ScriptureNowScreen
+import com.caseyjbrooks.routing.ApplicationScreen
 import com.caseyjbrooks.ui.koin.LocalKoin
 import com.copperleaf.ballast.navigation.routing.Backstack
 import com.copperleaf.ballast.navigation.routing.Destination
@@ -55,26 +55,26 @@ internal fun WithRouter(
 }
 
 @Composable
-public fun currentBackstack(): Backstack<ScriptureNowScreen> {
+public fun currentBackstack(): Backstack<ApplicationScreen> {
     val router = LocalRouter.current
-    val routerState: Backstack<ScriptureNowScreen> by router.observeStates().collectAsState()
+    val routerState: Backstack<ApplicationScreen> by router.observeStates().collectAsState()
     return routerState
 }
 
 @Composable
-public fun currentListBackstack(): Backstack<ScriptureNowScreen> {
+public fun currentListBackstack(): Backstack<ApplicationScreen> {
     val router = LocalRouter.current
-    val routerState: Backstack<ScriptureNowScreen> by router.observeStates().collectAsState()
+    val routerState: Backstack<ApplicationScreen> by router.observeStates().collectAsState()
     return routerState
-        .filterIsInstance<Destination.Match<ScriptureNowScreen>>()
+        .filterIsInstance<Destination.Match<ApplicationScreen>>()
         .filter { ListPane in it.annotations }
 }
 
 @Composable
-public fun currentDetailBackstack(): Backstack<ScriptureNowScreen> {
+public fun currentDetailBackstack(): Backstack<ApplicationScreen> {
     val router = LocalRouter.current
-    val routerState: Backstack<ScriptureNowScreen> by router.observeStates().collectAsState()
+    val routerState: Backstack<ApplicationScreen> by router.observeStates().collectAsState()
     return routerState
-        .filterIsInstance<Destination.Match<ScriptureNowScreen>>()
+        .filterIsInstance<Destination.Match<ApplicationScreen>>()
         .filter { DetailPane in it.annotations }
 }

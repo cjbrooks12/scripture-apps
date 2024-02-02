@@ -21,7 +21,9 @@ kotlin {
             }
         }
         val commonTest by getting {
-            dependencies { }
+            dependencies {
+                implementation("io.ktor:ktor-client-mock:2.3.7")
+            }
         }
 
         // plain JVM Sourcesets

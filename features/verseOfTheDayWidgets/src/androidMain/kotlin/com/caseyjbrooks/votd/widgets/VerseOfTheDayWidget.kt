@@ -19,7 +19,7 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
 import androidx.glance.text.Text
 import co.touchlab.kermit.Logger
-import com.caseyjbrooks.di.GlobalScriptureNowKoinApplication
+import com.caseyjbrooks.di.GlobalKoinApplication
 import com.caseyjbrooks.votd.domain.gettoday.GetTodaysVerseOfTheDayUseCase
 import com.caseyjbrooks.votd.models.VerseOfTheDay
 import com.copperleaf.ballast.repository.cache.Cached
@@ -30,7 +30,7 @@ import org.koin.core.parameter.parametersOf
 public class VerseOfTheDayWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val koin = GlobalScriptureNowKoinApplication.koinApplication.koin
+        val koin = GlobalKoinApplication.koinApplication.koin
         val logger: Logger = koin.get { parametersOf("VerseOfTheDayWidget") }
 
         logger.d { "Providing VerseOfTheDayWidget for id '$id'" }
@@ -66,7 +66,7 @@ public class VerseOfTheDayWidget : GlanceAppWidget() {
                 modifier = GlanceModifier
                     .fillMaxSize()
                     .background(GlanceTheme.colors.background)
-                    .padding(8.dp),
+                    .padding(16.dp),
                 verticalAlignment = Alignment.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {

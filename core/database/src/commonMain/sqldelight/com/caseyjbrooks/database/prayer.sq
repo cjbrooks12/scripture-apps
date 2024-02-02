@@ -1,0 +1,58 @@
+import kotlinx.datetime.Instant;
+import com.benasher44.uuid.Uuid;
+
+-- all of the prayers that a user has added to their library
+CREATE TABLE prayer (
+    uuid TEXT AS Uuid NOT NULL PRIMARY KEY,
+    text TEXT NOT NULL,
+    autoArchiveAt INTEGER AS Instant,
+    archivedAt INTEGER AS Instant,
+    createdAt INTEGER AS Instant NOT NULL,
+    updatedAt INTEGER AS Instant NOT NULL,
+    notificationSchedule TEXT
+);
+
+createPrayer:
+INSERT INTO prayer(uuid, text, autoArchiveAt, archivedAt, notificationSchedule, createdAt, updatedAt)
+VALUES ?;
+
+updatePrayer:
+UPDATE prayer
+SET
+    text = :text,
+    autoArchiveAt = :autoArchiveAt,
+    archivedAt = :archivedAt,
+    notificationSchedule = :notificationSchedule,
+    updatedAt = :updatedAt
+WHERE
+    uuid = :uuid;
+
+deletePrayer:
+DELETE FROM prayer
+WHERE
+    uuid = :uuid;
+
+deleteAll:
+DELETE FROM prayer;
+
+getAll:
+SELECT
+    *
+FROM
+    prayer;
+
+getById:
+SELECT
+    *
+FROM prayer
+WHERE
+    uuid = :uuid
+LIMIT 1;
+
+getByText:
+SELECT
+    *
+FROM prayer
+WHERE
+    text = :text
+LIMIT 1;

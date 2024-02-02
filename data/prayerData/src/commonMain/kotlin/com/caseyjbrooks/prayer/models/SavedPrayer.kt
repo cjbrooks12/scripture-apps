@@ -23,6 +23,11 @@ public data class SavedPrayer(
     val prayerType: SavedPrayerType,
 
     /**
+     * The kind of notifications to be sent for this prayer.
+     */
+    val notification: PrayerNotification,
+
+    /**
      * A list of tags used to categorize prayers
      */
     val tags: List<PrayerTag>,

@@ -12,35 +12,33 @@ internal object PrayerDetailContract {
     )
 
     internal sealed interface Inputs {
-        data class ObservePrayer(val prayerId: PrayerId) :
-            PrayerDetailContract.Inputs
-        data class PrayerUpdated(val cachedPrayers: Cached<SavedPrayer>) :
-            PrayerDetailContract.Inputs
+        data class ObservePrayer(val prayerId: PrayerId) : Inputs
+        data class PrayerUpdated(val cachedPrayers: Cached<SavedPrayer>) : Inputs
 
         /**
          * Navigate to the hierarchical parent of the [PrayerDetailRoute], which is [PrayerListRoute]
          */
-        data object NavigateUp : com.caseyjbrooks.prayer.screens.detail.PrayerDetailContract.Inputs
+        data object NavigateUp : Inputs
 
         /**
          * Navigate to the previous entry in the router backstack
          */
-        data object GoBack : com.caseyjbrooks.prayer.screens.detail.PrayerDetailContract.Inputs
+        data object GoBack : Inputs
 
         /**
          * Navigate to the previous entry in the router backstack
          */
-        data object Edit : com.caseyjbrooks.prayer.screens.detail.PrayerDetailContract.Inputs
+        data object Edit : Inputs
 
         /**
          * Navigate to the previous entry in the router backstack
          */
-        data object PrayNow : com.caseyjbrooks.prayer.screens.detail.PrayerDetailContract.Inputs
+        data object PrayNow : Inputs
     }
 
     internal sealed interface Events {
         data class NavigateTo(val destination: String, val replaceTop: Boolean = false) :
             PrayerDetailContract.Events
-        data object NavigateBack : com.caseyjbrooks.prayer.screens.detail.PrayerDetailContract.Events
+        data object NavigateBack : Events
     }
 }

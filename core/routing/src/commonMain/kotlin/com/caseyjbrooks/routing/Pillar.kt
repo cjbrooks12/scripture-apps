@@ -7,7 +7,7 @@ public interface Pillar {
     /**
      * A list of all routes that can be navigated to within this pillar.
      */
-    public val routes: List<ScriptureNowScreen>
+    public val routes: List<ApplicationScreen>
 
     /**
      * If this pillar has an item which can be placed in the main navigation (such as the Android bottom navigation

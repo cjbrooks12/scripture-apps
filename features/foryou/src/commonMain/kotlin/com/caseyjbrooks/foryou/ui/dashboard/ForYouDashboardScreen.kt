@@ -13,6 +13,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.caseyjbrooks.foryou.cards.dailyprayer.DailyPrayerDashboardCard
+import com.caseyjbrooks.foryou.cards.notice.NoticeDashboardCard
+import com.caseyjbrooks.foryou.cards.overview.OverviewDashboardCard
 import com.caseyjbrooks.foryou.cards.votd.VerseofTheDayDashboardCard
 import com.caseyjbrooks.ui.koin.LocalKoin
 import org.koin.core.parameter.parametersOf
@@ -37,19 +39,38 @@ public object ForYouDashboardScreen {
         postInput: (ForYouDashboardContract.Inputs) -> Unit,
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(8.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.padding(16.dp)
         ) {
-            VerseofTheDayDashboardCard(
-                modifier = Modifier.fillMaxWidth().wrapContentHeight(),
-                verseOfTheDay = uiState.verseOfTheDay,
-                onClick = { postInput(ForYouDashboardContract.Inputs.VerseOfTheDayCardClicked) },
-            )
-            DailyPrayerDashboardCard(
-                modifier = Modifier.fillMaxWidth().wrapContentHeight(),
-                verseOfTheDay = uiState.dailyPrayer,
-                onClick = { postInput(ForYouDashboardContract.Inputs.VerseOfTheDayCardClicked) },
-            )
+            if (uiState.showOverview) {
+                OverviewDashboardCard(
+                    modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+                    onClick = { postInput(ForYouDashboardContract.Inputs.OverviewCardClicked) },
+                )
+            }
+
+            if (uiState.noticeText != null) {
+                NoticeDashboardCard(
+                    noticeText = uiState.noticeText,
+                    modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+                    onClick = { postInput(ForYouDashboardContract.Inputs.NoticeCardClicked) },
+                )
+            }
+
+            if (uiState.showVerseOfTheDay) {
+                VerseofTheDayDashboardCard(
+                    modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+                    verseOfTheDay = uiState.verseOfTheDay,
+                    onClick = { postInput(ForYouDashboardContract.Inputs.VerseOfTheDayCardClicked) },
+                )
+            }
+            if (uiState.showDailyPrayer) {
+                DailyPrayerDashboardCard(
+                    modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+                    dailyPrayer = uiState.dailyPrayer,
+                    onClick = { postInput(ForYouDashboardContract.Inputs.VerseOfTheDayCardClicked) },
+                )
+            }
         }
     }
 }

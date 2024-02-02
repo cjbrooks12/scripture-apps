@@ -12,6 +12,7 @@ import com.caseyjbrooks.database.Tag
 import com.caseyjbrooks.database.UuidFactory
 import com.caseyjbrooks.prayer.models.ArchiveStatus
 import com.caseyjbrooks.prayer.models.PrayerId
+import com.caseyjbrooks.prayer.models.PrayerNotification
 import com.caseyjbrooks.prayer.models.PrayerTag
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.models.SavedPrayerType
@@ -27,7 +28,7 @@ internal class OfflineDatabaseSavedPrayersRepository(
     override suspend fun createPrayer(prayer: SavedPrayer) {
         database.transaction {
             // create the prayer record
-            database.prayersQueries.createPrayer(
+            database.prayerQueries.createPrayer(
                 Prayer(
                     uuid = prayer.uuid.uuid,
                     text = prayer.text,
@@ -36,6 +37,7 @@ internal class OfflineDatabaseSavedPrayersRepository(
                         is SavedPrayerType.ScheduledCompletable -> prayer.prayerType.completionDate
                     },
                     archivedAt = prayer.archivedAt,
+                    notificationSchedule = null,
                     createdAt = prayer.createdAt,
                     updatedAt = prayer.updatedAt,
                 )
@@ -47,7 +49,7 @@ internal class OfflineDatabaseSavedPrayersRepository(
 
     override suspend fun updatePrayer(prayer: SavedPrayer) {
         database.transaction {
-            database.prayersQueries.updatePrayer(
+            database.prayerQueries.updatePrayer(
                 uuid = prayer.uuid.uuid,
 
                 text = prayer.text,
@@ -56,6 +58,7 @@ internal class OfflineDatabaseSavedPrayersRepository(
                     is SavedPrayerType.ScheduledCompletable -> prayer.prayerType.completionDate
                 },
                 archivedAt = prayer.archivedAt,
+                notificationSchedule = null,
                 updatedAt = prayer.updatedAt,
             )
 
@@ -64,7 +67,7 @@ internal class OfflineDatabaseSavedPrayersRepository(
     }
 
     override suspend fun deletePrayer(prayer: SavedPrayer) {
-        database.prayersQueries.deletePrayer(prayer.uuid.uuid)
+        database.prayerQueries.deletePrayer(prayer.uuid.uuid)
     }
 
     override fun getPrayers(
@@ -72,7 +75,7 @@ internal class OfflineDatabaseSavedPrayersRepository(
         prayerTypes: Set<SavedPrayerType>,
         tags: Set<PrayerTag>
     ): Flow<List<SavedPrayer>> {
-        return database.prayersQueries
+        return database.prayerQueries
             .getAll()
             .asFlow()
             .mapToList(Dispatchers.Default)
@@ -87,7 +90,7 @@ internal class OfflineDatabaseSavedPrayersRepository(
 
     override fun getPrayerById(uuid: PrayerId): Flow<SavedPrayer?> {
         logger.i("Fetching prayer at ${uuid.uuid}")
-        return database.prayersQueries
+        return database.prayerQueries
             .getById(uuid.uuid)
             .asFlow()
             .mapToOneOrNull(Dispatchers.Default)
@@ -103,7 +106,7 @@ internal class OfflineDatabaseSavedPrayersRepository(
     }
 
     override fun getPrayerByText(prayerText: String): Flow<SavedPrayer?> {
-        return database.prayersQueries
+        return database.prayerQueries
             .getByText(prayerText)
             .asFlow()
             .mapToOneOrNull(Dispatchers.Default)
@@ -118,7 +121,7 @@ internal class OfflineDatabaseSavedPrayersRepository(
     private fun Prayer.fromRecord(): SavedPrayer {
         val prayerRecord = this
 
-        val tags = database.prayerTagQueries
+        val tags = database.prayer_tagQueries
             .getTagsForPrayer(prayerRecord.uuid)
             .executeAsList()
             .map { prayerTag ->
@@ -129,6 +132,7 @@ internal class OfflineDatabaseSavedPrayersRepository(
             .map { tag ->
                 PrayerTag(tag.name)
             }
+            .sortedBy { it.tag }
 
         return SavedPrayer(
             uuid = PrayerId(prayerRecord.uuid),
@@ -139,6 +143,7 @@ internal class OfflineDatabaseSavedPrayersRepository(
             tags = tags,
             archived = prayerRecord.archivedAt != null,
             archivedAt = prayerRecord.archivedAt,
+            notification = PrayerNotification.None,
             createdAt = prayerRecord.createdAt,
             updatedAt = prayerRecord.updatedAt,
         )
@@ -150,7 +155,7 @@ internal class OfflineDatabaseSavedPrayersRepository(
                 Tag(uuid = uuidFactory.getNewUuid(), name = tag.tag)
             )
             val tagId = database.tagQueries.getByName(tag.tag).executeAsOne().uuid
-            database.prayerTagQueries.createPrayerTag(
+            database.prayer_tagQueries.createPrayerTag(
                 Prayer_tag(
                     prayer_uuid = prayer.uuid.uuid,
                     tag_uuid = tagId,

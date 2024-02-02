@@ -105,7 +105,7 @@ public object PrayerDetailScreen {
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .padding(8.dp),
+                .padding(16.dp),
             contentAlignment = Alignment.Center,
         ) {
             CircularProgressIndicator()
@@ -121,7 +121,7 @@ public object PrayerDetailScreen {
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .padding(8.dp),
+                .padding(16.dp),
             contentAlignment = Alignment.Center,
         ) {
             Text("Uh-oh! That prayer seems to be missing.")
@@ -147,7 +147,7 @@ public object PrayerDetailScreen {
                 Column(Modifier.padding(16.dp)) {
                     Text(
                         "Prayer Text",
-                        style = MaterialTheme.typography.headlineMedium,
+                        style = MaterialTheme.typography.headlineSmall,
                         modifier = Modifier.padding(bottom = 24.dp),
                     )
                     Text(prayer.text)
@@ -159,7 +159,7 @@ public object PrayerDetailScreen {
                     Column(Modifier.padding(16.dp)) {
                         Text(
                             "Completion date",
-                            style = MaterialTheme.typography.headlineMedium,
+                            style = MaterialTheme.typography.headlineSmall,
                             modifier = Modifier.padding(bottom = 24.dp),
                         )
                         val date = (prayer.prayerType as SavedPrayerType.ScheduledCompletable)
@@ -175,7 +175,7 @@ public object PrayerDetailScreen {
                     Column(Modifier.padding(16.dp)) {
                         Text(
                             "Tags",
-                            style = MaterialTheme.typography.headlineMedium,
+                            style = MaterialTheme.typography.headlineSmall,
                             modifier = Modifier.padding(bottom = 24.dp),
                         )
 

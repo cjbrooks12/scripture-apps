@@ -1,0 +1,24 @@
+import com.benasher44.uuid.Uuid;
+import kotlinx.datetime.Instant;
+
+-- Track the days that a user prayed for a specific prayer
+CREATE TABLE prayer_date (
+    prayer_uuid TEXT AS Uuid NOT NULL,
+    date INTEGER AS Instant NOT NULL,
+
+    FOREIGN KEY (prayer_uuid) REFERENCES prayer (uuid)
+        ON DELETE CASCADE,
+
+    UNIQUE(prayer_uuid, date)
+);
+
+createPrayerDate:
+INSERT OR IGNORE INTO prayer_date(prayer_uuid, date)
+VALUES ?;
+
+removeDateFromPrayer:
+DELETE FROM
+    prayer_date
+WHERE
+    prayer_uuid = :prayer_uuid AND
+    date = :date;

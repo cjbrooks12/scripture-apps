@@ -4,6 +4,7 @@ import com.caseyjbrooks.database.UuidFactory
 import com.caseyjbrooks.prayer.domain.create.CreatePrayerUseCase
 import com.caseyjbrooks.prayer.models.DailyPrayer
 import com.caseyjbrooks.prayer.models.PrayerId
+import com.caseyjbrooks.prayer.models.PrayerNotification
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.models.SavedPrayerType
 import com.caseyjbrooks.prayer.repository.daily.DailyPrayerRepository
@@ -46,6 +47,7 @@ internal class SaveDailyPrayerUseCaseImpl(
                 },
                 archived = false,
                 archivedAt = null,
+                notification = PrayerNotification.None,
                 createdAt = clock.now(),
                 updatedAt = clock.now(),
             )
