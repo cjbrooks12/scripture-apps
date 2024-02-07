@@ -1,5 +1,6 @@
 package com.caseyjbrooks.votd.schedules
 
+import com.caseyjbrooks.di.GlobalKoinApplication
 import com.copperleaf.ballast.scheduler.SchedulerAdapter
 import com.copperleaf.ballast.scheduler.SchedulerAdapterScope
 import com.copperleaf.ballast.scheduler.schedule.EveryDaySchedule
@@ -15,7 +16,7 @@ internal class VotdSchedulerAdapter : SchedulerAdapter<
             VotdSchedulesContract.Inputs,
             VotdSchedulesContract.Events,
             VotdSchedulesContract.State>.configureSchedules() {
-        val timeZone = TimeZone.currentSystemDefault()
+        val timeZone: TimeZone = GlobalKoinApplication.koinApplication.koin.get()
 
         onSchedule(
             key = "Prefetch Verse of the day",

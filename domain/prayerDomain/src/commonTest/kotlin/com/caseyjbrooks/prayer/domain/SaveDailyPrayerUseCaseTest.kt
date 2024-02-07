@@ -24,7 +24,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
             prayerUser = PrayerUser("User", PrayerUser.SubscriptionStatus.Free),
             dailyPrayer = DailyPrayer(
                 text = "Hardcoded Daily Prayer",
-                attribution = "Scripture Now!",
+                attribution = "Abide",
                 tags = listOf(PrayerTag("Hardcoded")),
             )
         ) {
@@ -79,7 +79,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
             prayerUser = PrayerUser("User", PrayerUser.SubscriptionStatus.Free),
             dailyPrayer = DailyPrayer(
                 text = "Hardcoded Daily Prayer",
-                attribution = "Scripture Now!",
+                attribution = "Abide",
                 tags = emptyList(),
             )
         ) {
@@ -115,7 +115,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
             prayerUser = PrayerUser("User", PrayerUser.SubscriptionStatus.Free),
             dailyPrayer = DailyPrayer(
                 text = "Hardcoded Daily Prayer",
-                attribution = "Scripture Now!",
+                attribution = "Abide",
                 tags = listOf(PrayerTag("Hardcoded")),
             )
         ) {
@@ -153,7 +153,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
             prayerUser = PrayerUser("User", PrayerUser.SubscriptionStatus.Free),
             dailyPrayer = DailyPrayer(
                 text = "Hardcoded Daily Prayer",
-                attribution = "Scripture Now!",
+                attribution = "Abide",
                 tags = listOf(PrayerTag("Hardcoded")),
             )
         ) {

@@ -15,9 +15,11 @@ kotlin {
                 api(project(":core:ballast"))
                 api(project(":core:routing"))
                 api(project(":core:ui"))
+                api(project(":core:notifications"))
 
                 api(project(":domain:prayerDomain"))
                 api(project(":domain:verseOfTheDayDomain"))
+                api(libs.ballast.schedules)
             }
         }
         val commonTest by getting {

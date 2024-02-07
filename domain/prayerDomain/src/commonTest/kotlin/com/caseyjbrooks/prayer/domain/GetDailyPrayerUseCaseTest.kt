@@ -16,7 +16,7 @@ public class GetDailyPrayerUseCaseTest : StringSpec({
         koinTest(
             dailyPrayer = DailyPrayer(
                 text = "Hardcoded Daily Prayer",
-                attribution = "Scripture Now!",
+                attribution = "Abide",
                 tags = listOf(PrayerTag("Hardcoded")),
             )
         ) {
@@ -30,7 +30,7 @@ public class GetDailyPrayerUseCaseTest : StringSpec({
             results[1].shouldBeInstanceOf<Cached.Value<DailyPrayer>>()
             results[1].getCachedOrNull() shouldBe DailyPrayer(
                 text = "Hardcoded Daily Prayer",
-                attribution = "Scripture Now!",
+                attribution = "Abide",
                 tags = listOf(PrayerTag("Hardcoded")),
             )
         }

@@ -1,9 +1,11 @@
 package com.caseyjbrooks.prayer.utils
 
+import com.caseyjbrooks.database.DatabaseKoinModule
 import com.caseyjbrooks.database.HardcodedUuidFactory
-import com.caseyjbrooks.database.fakeDatabaseModule
-import com.caseyjbrooks.prayer.domain.prayerDomainModule
-import com.caseyjbrooks.prayer.fakePrayerDataModule
+import com.caseyjbrooks.di.Variant
+import com.caseyjbrooks.di.getModulesForVariant
+import com.caseyjbrooks.prayer.PrayerDataKoinModule
+import com.caseyjbrooks.prayer.domain.PrayerDomainKoinModule
 import com.caseyjbrooks.prayer.models.DailyPrayer
 import com.caseyjbrooks.prayer.models.PrayerId
 import com.caseyjbrooks.prayer.models.PrayerUser
@@ -20,10 +22,11 @@ inline fun koinTest(
     block: Koin.() -> Unit
 ) {
     val koinApp = koinApplication {
+        val variant = Variant(Variant.Environment.Test, Variant.BuildType.Debug)
         modules(
-            fakeDatabaseModule,
-            fakePrayerDataModule,
-            prayerDomainModule,
+            *DatabaseKoinModule().getModulesForVariant(variant).toTypedArray(),
+            *PrayerDataKoinModule().getModulesForVariant(variant).toTypedArray(),
+            *PrayerDomainKoinModule().getModulesForVariant(variant).toTypedArray(),
             module {
                 factory<PrayerUser?> { prayerUser }
                 factory<DailyPrayer?> { dailyPrayer }

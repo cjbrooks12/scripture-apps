@@ -1,7 +1,7 @@
 package com.caseyjbrooks.notifications
 
 internal class FakeNotificationService : NotificationService {
-    override suspend fun isPermissionGranted(): Boolean {
+    override fun isPermissionGranted(): Boolean {
         TODO("Not yet implemented")
     }
 
@@ -9,6 +9,11 @@ internal class FakeNotificationService : NotificationService {
         TODO("Not yet implemented")
     }
 
-    override fun showNotification(title: String, message: String) {
+    override fun showNotification(
+        channelId: String,
+        notificationId: String,
+        title: String,
+        message: String,
+    ) {
     }
 }

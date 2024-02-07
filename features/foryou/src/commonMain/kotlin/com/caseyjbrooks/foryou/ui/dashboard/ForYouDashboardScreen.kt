@@ -68,7 +68,7 @@ public object ForYouDashboardScreen {
                 DailyPrayerDashboardCard(
                     modifier = Modifier.fillMaxWidth().wrapContentHeight(),
                     dailyPrayer = uiState.dailyPrayer,
-                    onClick = { postInput(ForYouDashboardContract.Inputs.VerseOfTheDayCardClicked) },
+                    onClick = { postInput(ForYouDashboardContract.Inputs.DailyPrayerCardClicked) },
                 )
             }
         }

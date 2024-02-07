@@ -23,19 +23,25 @@ internal class VotdSchedulesInputHandler(
         input: VotdSchedulesContract.Inputs
     ): Unit = when (input) {
         VotdSchedulesContract.Inputs.FetchVotd -> {
+            noOp()
             prefetchVerseOfTheDayUseCase()
         }
 
         VotdSchedulesContract.Inputs.VotdNotification -> {
+            noOp()
             val result = getTodaysVerseOfTheDayUseCase().awaitValue().getValueOrNull()
 
             if (result != null) {
                 notificationService.showNotification(
+                    channelId = "Verse of the Day",
+                    notificationId = "Verse of the Day",
                     title = "Verse of the Day",
                     message = "${result.verse}\n-${result.reference}"
                 )
             } else {
                 notificationService.showNotification(
+                    channelId = "Verse of the Day",
+                    notificationId = "Verse of the Day",
                     title = "Verse of the Day",
                     message = "Click to view today's verse."
                 )

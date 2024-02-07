@@ -15,7 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.caseyjbrooks.notifications.NotificationService
 import com.caseyjbrooks.prayer.models.DailyPrayer
+import com.caseyjbrooks.ui.koin.LocalKoin
 import com.copperleaf.ballast.repository.cache.Cached
 import com.copperleaf.ballast.repository.cache.getCachedOrNull
 import com.copperleaf.ballast.repository.cache.isLoading
@@ -27,9 +29,20 @@ internal fun DailyPrayerDashboardCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val koin = LocalKoin.current
     Card(
         modifier = modifier.fillMaxWidth().wrapContentHeight(),
-        onClick = onClick,
+        onClick = {
+            val notificationService: NotificationService = koin.get()
+            notificationService.showNotification(
+                channelId = "Prayer",
+                notificationId = "Prayer",
+                title = "Abide",
+                message = "Why don't you take a minute to pray right now?"
+            )
+
+            onClick()
+        },
     ) {
         Column(Modifier.padding(16.dp)) {
             Text(

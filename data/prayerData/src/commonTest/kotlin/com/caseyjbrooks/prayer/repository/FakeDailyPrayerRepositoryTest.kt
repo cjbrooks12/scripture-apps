@@ -13,7 +13,7 @@ public class FakeDailyPrayerRepositoryTest : StringSpec({
         val repository: DailyPrayerRepository = FakeDailyPrayerRepository(
             DailyPrayer(
                 text = "Hardcoded Daily Prayer",
-                attribution = "Scripture Now!",
+                attribution = "Abide",
                 tags = listOf(PrayerTag("Hardcoded")),
             )
         )
@@ -23,7 +23,7 @@ public class FakeDailyPrayerRepositoryTest : StringSpec({
         responseList shouldBe listOf(
             DailyPrayer(
                 text = "Hardcoded Daily Prayer",
-                attribution = "Scripture Now!",
+                attribution = "Abide",
                 tags = listOf(PrayerTag("Hardcoded")),
             ),
         )

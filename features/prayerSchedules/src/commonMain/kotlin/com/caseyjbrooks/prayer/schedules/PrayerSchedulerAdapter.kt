@@ -1,5 +1,6 @@
 package com.caseyjbrooks.prayer.schedules
 
+import com.caseyjbrooks.di.GlobalKoinApplication
 import com.copperleaf.ballast.scheduler.SchedulerAdapter
 import com.copperleaf.ballast.scheduler.SchedulerAdapterScope
 import com.copperleaf.ballast.scheduler.schedule.EveryDaySchedule
@@ -15,7 +16,7 @@ internal class PrayerSchedulerAdapter : SchedulerAdapter<
             PrayerSchedulesContract.Inputs,
             PrayerSchedulesContract.Events,
             PrayerSchedulesContract.State>.configureSchedules() {
-        val timeZone = TimeZone.currentSystemDefault()
+        val timeZone: TimeZone = GlobalKoinApplication.koinApplication.koin.get()
 
         onSchedule(
             key = "Prefetch daily prayer",

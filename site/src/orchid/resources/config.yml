@@ -2,8 +2,8 @@ site:
   theme: Copper
   baseUrl: 'https://cjbrooks12.github.io/scripture-apps/'
   about:
-    siteName: Scripture Now
-    siteDescription: Scripture Now
+    siteName: Abide
+    siteDescription: Abide
 
 theme:
   sidebarBackground: 'primary'

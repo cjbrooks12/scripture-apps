@@ -15,62 +15,65 @@ import com.copperleaf.notifications.R
 
 internal class AndroidNotificationService(
     private val applicationContext: Context,
-    private val channelId: String,
-    private val channelName: String,
     private val logger: Logger,
 ) : NotificationService {
 
     @SuppressLint("NewApi")
-    override suspend fun isPermissionGranted(): Boolean {
-        return NotificationManagerCompat.from(applicationContext)
+    override fun isPermissionGranted(): Boolean {
+        val notificationEnabled = NotificationManagerCompat
+            .from(applicationContext)
             .areNotificationsEnabled()
+        val permissionGranted =
+            (ActivityCompat.checkSelfPermission(applicationContext, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED)
+
+        logger.i("notificationEnabled=$notificationEnabled, permissionGranted=$permissionGranted")
+        return notificationEnabled && permissionGranted
     }
 
     override fun promptForPermission() {
     }
 
-    override fun showNotification(title: String, message: String) {
-        logger.i("Displaying notification: title=$title, message=$message")
-        createNotificationChannel()
+    override fun showNotification(
+        channelId: String,
+        notificationId: String,
+        title: String,
+        message: String,
+    ) {
+        logger.i("Displaying notification: channelId=$channelId, notificationId=$notificationId, title=$title, message=$message")
+        createNotificationChannel(channelId)
+
+        if (!isPermissionGranted()) {
+            logger.i("Permission not granted for channelId=$channelId, notificationId=$notificationId")
+            return
+        }
 
         val builder = NotificationCompat.Builder(applicationContext, channelId)
             .setSmallIcon(R.drawable.ic_android_black_24dp)
             .setContentTitle(title)
             .setContentText(message)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(message))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-        with(NotificationManagerCompat.from(applicationContext)) {
-            // notificationId is a unique int for each notification that you must define.
-            if (ActivityCompat.checkSelfPermission(
-                    applicationContext,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return
-            }
-            notify(0, builder.build())
-        }
+        NotificationManagerCompat
+            .from(applicationContext)
+            .notify(channelId.hashCode() + notificationId.hashCode(), builder.build())
     }
 
-    private fun createNotificationChannel() {
+    private fun createNotificationChannel(channelId: String) {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is not in the Support Library.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(channelId, channelName, importance).apply {
-                description = channelName
-            }
-            // Register the channel with the system.
-            val notificationManager: NotificationManager =
-                applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+            NotificationManagerCompat
+                .from(applicationContext)
+                .createNotificationChannel(
+                    NotificationChannel(
+                        channelId,
+                        channelId,
+                        NotificationManager.IMPORTANCE_DEFAULT,
+                    ).apply {
+                        description = channelId
+                    }
+                )
         }
     }
 }

@@ -19,12 +19,16 @@ internal class PrayerSchedulesInputHandler(
         input: PrayerSchedulesContract.Inputs
     ): Unit = when (input) {
         PrayerSchedulesContract.Inputs.ArchiveScheduledPrayers -> {
+            noOp()
             archivePrayersUseCase.invoke()
         }
 
         PrayerSchedulesContract.Inputs.PrayerNotification -> {
+            noOp()
             notificationService.showNotification(
-                title = "Scripture Now",
+                channelId = "Prayer",
+                notificationId = "Prayer",
+                title = "Abide",
                 message = "Why don't you take a minute to pray right now?"
             )
         }

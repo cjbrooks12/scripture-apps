@@ -7,18 +7,18 @@ import androidx.annotation.RequiresApi
 import androidx.startup.Initializer
 import androidx.work.WorkManager
 import androidx.work.WorkManagerInitializer
-import com.copperleaf.ballast.scheduler.workmanager.scheduleWork
+import com.copperleaf.ballast.scheduler.workmanager.syncSchedulesOnStartup
 
 @RequiresApi(Build.VERSION_CODES.O)
 public class PrayerSchedulerStartup : Initializer<Unit> {
     override fun create(context: Context) {
-        Log.d("Scripture Now", "Running PrayerSchedulerStartup")
+        Log.d("Abide", "Running PrayerSchedulerStartup")
         val workManager = WorkManager.getInstance(context)
 
-        workManager.scheduleWork(
-            PrayerSchedulerAdapter(),
-            PrayerSchedulerCallback(),
-            false
+        workManager.syncSchedulesOnStartup(
+            adapter = PrayerSchedulerAdapter(),
+            callback = PrayerSchedulerCallback(),
+            withHistory = false,
         )
     }
 

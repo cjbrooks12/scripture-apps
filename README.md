@@ -1,4 +1,4 @@
-# Scripture Now - Android
+# Abide - Android
 
 ## App Libraries to know about
 
