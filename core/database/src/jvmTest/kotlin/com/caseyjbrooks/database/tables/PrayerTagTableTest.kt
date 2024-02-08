@@ -22,7 +22,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 1",
                 autoArchiveAt = null,
                 archivedAt = null,
-                notificationSchedule = null,
+                notificationSchedule = "",
                 createdAt = now,
                 updatedAt = now,
             )
@@ -31,7 +31,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 2",
                 autoArchiveAt = null,
                 archivedAt = null,
-                notificationSchedule = null,
+                notificationSchedule = "",
                 createdAt = now,
                 updatedAt = now,
             )
@@ -40,7 +40,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 3",
                 autoArchiveAt = null,
                 archivedAt = null,
-                notificationSchedule = null,
+                notificationSchedule = "",
                 createdAt = now,
                 updatedAt = now,
             )
@@ -49,7 +49,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 4",
                 autoArchiveAt = null,
                 archivedAt = null,
-                notificationSchedule = null,
+                notificationSchedule = "",
                 createdAt = now,
                 updatedAt = now,
             )
@@ -138,7 +138,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 1",
                 autoArchiveAt = null,
                 archivedAt = null,
-                notificationSchedule = null,
+                notificationSchedule = "",
                 createdAt = now,
                 updatedAt = now,
             )
@@ -147,7 +147,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 2",
                 autoArchiveAt = null,
                 archivedAt = null,
-                notificationSchedule = null,
+                notificationSchedule = "",
                 createdAt = now,
                 updatedAt = now,
             )
@@ -156,7 +156,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 3",
                 autoArchiveAt = null,
                 archivedAt = null,
-                notificationSchedule = null,
+                notificationSchedule = "",
                 createdAt = now,
                 updatedAt = now,
             )
@@ -165,7 +165,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 4",
                 autoArchiveAt = null,
                 archivedAt = null,
-                notificationSchedule = null,
+                notificationSchedule = "",
                 createdAt = now,
                 updatedAt = now,
             )
@@ -247,7 +247,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 1",
                 autoArchiveAt = null,
                 archivedAt = null,
-                notificationSchedule = null,
+                notificationSchedule = "",
                 createdAt = now,
                 updatedAt = now,
             )
@@ -256,7 +256,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 2",
                 autoArchiveAt = null,
                 archivedAt = null,
-                notificationSchedule = null,
+                notificationSchedule = "",
                 createdAt = now,
                 updatedAt = now,
             )
@@ -265,7 +265,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 3",
                 autoArchiveAt = null,
                 archivedAt = null,
-                notificationSchedule = null,
+                notificationSchedule = "",
                 createdAt = now,
                 updatedAt = now,
             )
@@ -274,7 +274,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 4",
                 autoArchiveAt = null,
                 archivedAt = null,
-                notificationSchedule = null,
+                notificationSchedule = "",
                 createdAt = now,
                 updatedAt = now,
             )
@@ -353,7 +353,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 1",
                 autoArchiveAt = null,
                 archivedAt = null,
-                notificationSchedule = null,
+                notificationSchedule = "",
                 createdAt = now,
                 updatedAt = now,
             )
@@ -362,7 +362,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 2",
                 autoArchiveAt = null,
                 archivedAt = null,
-                notificationSchedule = null,
+                notificationSchedule = "",
                 createdAt = now,
                 updatedAt = now,
             )
@@ -371,7 +371,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 3",
                 autoArchiveAt = null,
                 archivedAt = null,
-                notificationSchedule = null,
+                notificationSchedule = "",
                 createdAt = now,
                 updatedAt = now,
             )
@@ -380,7 +380,7 @@ class PrayerTagTableTest : StringSpec({
                 text = "prayer 4",
                 autoArchiveAt = null,
                 archivedAt = null,
-                notificationSchedule = null,
+                notificationSchedule = "",
                 createdAt = now,
                 updatedAt = now,
             )

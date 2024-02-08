@@ -133,6 +133,7 @@ kotlin {
                 api(project(":features:foryou"))
                 api(project(":features:settings"))
                 api(project(":features:topicalBible"))
+                api(project(":features:debugScreens"))
             }
         }
 

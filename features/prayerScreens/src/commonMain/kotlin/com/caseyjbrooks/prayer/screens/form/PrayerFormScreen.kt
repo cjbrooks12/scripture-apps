@@ -45,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.caseyjbrooks.prayer.models.PrayerId
+import com.caseyjbrooks.prayer.models.PrayerNotification
 import com.caseyjbrooks.ui.koin.LocalKoin
 import com.caseyjbrooks.ui.text.rememberLiveText
 import com.copperleaf.ballast.repository.cache.getCachedOrNull
@@ -248,6 +249,31 @@ public object PrayerFormScreen {
 
             Card(Modifier.fillMaxWidth().wrapContentHeight()) {
                 Column(Modifier.padding(16.dp)) {
+                    Text("Notifications", style = MaterialTheme.typography.headlineSmall)
+                    Text(
+                        "A schedule to show notifications for this prayer.",
+                        style = MaterialTheme.typography.labelSmall,
+                        modifier = Modifier.padding(bottom = 24.dp),
+                    )
+
+                    when (uiState.notification) {
+                        is PrayerNotification.None -> {
+                            NotificationScheduleNone(uiState, postInput)
+                        }
+
+                        is PrayerNotification.Once -> {
+                            NotificationScheduleOnce(uiState, postInput)
+                        }
+
+                        is PrayerNotification.Daily -> {
+                            NotificationScheduleDaily(uiState, postInput)
+                        }
+                    }
+                }
+            }
+
+            Card(Modifier.fillMaxWidth().wrapContentHeight()) {
+                Column(Modifier.padding(16.dp)) {
                     Text("Tags", style = MaterialTheme.typography.headlineSmall)
                     Text(
                         "Use tags to help categorize your prayers",
@@ -308,5 +334,91 @@ public object PrayerFormScreen {
                 }
             }
         }
+    }
+
+    @Composable
+    private fun NotificationScheduleNone(
+        uiState: PrayerFormContract.State,
+        postInput: (PrayerFormContract.Inputs) -> Unit,
+    ) {
+        var showOneTimeNotificationPicker by remember { mutableStateOf(false) }
+        var showDailyNotificationPicker by remember { mutableStateOf(false) }
+        Button({ showOneTimeNotificationPicker = true }) {
+            Text("Notify once")
+        }
+        Button({ showDailyNotificationPicker = true }) {
+            Text("Set daily notification")
+        }
+
+        if (showOneTimeNotificationPicker) {
+            NotificationPickerForOnce(uiState, postInput)
+        }
+        if (showDailyNotificationPicker) {
+            NotificationPickerForDaily(uiState, postInput)
+        }
+    }
+
+    @Composable
+    private fun NotificationScheduleOnce(
+        uiState: PrayerFormContract.State,
+        postInput: (PrayerFormContract.Inputs) -> Unit,
+    ) {
+        var showOneTimeNotificationPicker by remember { mutableStateOf(false) }
+        var showDailyNotificationPicker by remember { mutableStateOf(false) }
+        Button({ postInput(PrayerFormContract.Inputs.PrayerNotificationUpdated(PrayerNotification.None)) }) {
+            Text("Remove notifications")
+        }
+        Button({ showOneTimeNotificationPicker = true }) {
+            Text("Update one-time notification")
+        }
+        Button({ showDailyNotificationPicker = true }) {
+            Text("Change to daily notification")
+        }
+
+        if (showOneTimeNotificationPicker) {
+            NotificationPickerForOnce(uiState, postInput)
+        }
+        if (showDailyNotificationPicker) {
+            NotificationPickerForDaily(uiState, postInput)
+        }
+    }
+
+    @Composable
+    private fun NotificationScheduleDaily(
+        uiState: PrayerFormContract.State,
+        postInput: (PrayerFormContract.Inputs) -> Unit,
+    ) {
+        var showOneTimeNotificationPicker by remember { mutableStateOf(false) }
+        var showDailyNotificationPicker by remember { mutableStateOf(false) }
+        Button({ postInput(PrayerFormContract.Inputs.PrayerNotificationUpdated(PrayerNotification.None)) }) {
+            Text("Remove notifications")
+        }
+        Button({ showOneTimeNotificationPicker = true }) {
+            Text("Change to one-time notification")
+        }
+        Button({ showDailyNotificationPicker = true }) {
+            Text("Update daily notification")
+        }
+
+        if (showOneTimeNotificationPicker) {
+            NotificationPickerForOnce(uiState, postInput)
+        }
+        if (showDailyNotificationPicker) {
+            NotificationPickerForDaily(uiState, postInput)
+        }
+    }
+
+    @Composable
+    private fun NotificationPickerForOnce(
+        uiState: PrayerFormContract.State,
+        postInput: (PrayerFormContract.Inputs) -> Unit,
+    ) {
+    }
+
+    @Composable
+    private fun NotificationPickerForDaily(
+        uiState: PrayerFormContract.State,
+        postInput: (PrayerFormContract.Inputs) -> Unit,
+    ) {
     }
 }

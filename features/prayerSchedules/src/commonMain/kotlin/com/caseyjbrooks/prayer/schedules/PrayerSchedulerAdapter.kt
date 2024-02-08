@@ -4,8 +4,10 @@ import com.caseyjbrooks.di.GlobalKoinApplication
 import com.copperleaf.ballast.scheduler.SchedulerAdapter
 import com.copperleaf.ballast.scheduler.SchedulerAdapterScope
 import com.copperleaf.ballast.scheduler.schedule.EveryDaySchedule
+import com.copperleaf.ballast.scheduler.schedule.FixedDelaySchedule
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
+import kotlin.time.Duration.Companion.hours
 
 internal class PrayerSchedulerAdapter : SchedulerAdapter<
         PrayerSchedulesContract.Inputs,
@@ -25,7 +27,7 @@ internal class PrayerSchedulerAdapter : SchedulerAdapter<
         )
         onSchedule(
             key = "Auto-Archive Scheduled Prayers",
-            schedule = EveryDaySchedule(LocalTime(0, 0), timeZone = timeZone),
+            schedule = FixedDelaySchedule(4.hours),
             scheduledInput = { PrayerSchedulesContract.Inputs.ArchiveScheduledPrayers }
         )
         onSchedule(

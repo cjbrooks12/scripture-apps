@@ -34,11 +34,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.caseyjbrooks.prayer.models.PrayerId
+import com.caseyjbrooks.prayer.models.PrayerNotification
 import com.caseyjbrooks.prayer.models.SavedPrayerType
 import com.caseyjbrooks.ui.koin.LocalKoin
 import com.copperleaf.ballast.repository.cache.getCachedOrNull
 import com.copperleaf.ballast.repository.cache.getCachedOrThrow
 import com.copperleaf.ballast.repository.cache.isLoading
+import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.koin.core.parameter.parametersOf
@@ -166,6 +168,55 @@ public object PrayerDetailScreen {
                             .completionDate
                             .toLocalDateTime(TimeZone.currentSystemDefault()).date
                         Text("Prayer will be archived after ${date.dayOfWeek.name}, ${date.month.name} ${date.dayOfMonth}, ${date.year}")
+                    }
+                }
+            }
+
+            if (prayer.notification !is PrayerNotification.None) {
+                Card(Modifier.fillMaxWidth().wrapContentHeight()) {
+                    Column(Modifier.padding(16.dp)) {
+                        Text(
+                            "Notifications",
+                            style = MaterialTheme.typography.headlineSmall,
+                            modifier = Modifier.padding(bottom = 24.dp),
+                        )
+
+                        when (val notif = prayer.notification) {
+                            is PrayerNotification.Once -> {
+                                val date = notif
+                                    .instant
+                                    .toLocalDateTime(TimeZone.currentSystemDefault())
+                                Text("A notification will be shown once on ${date.dayOfWeek.name}, ${date.month.name} ${date.dayOfMonth}, ${date.year} at ${date.hour}:${date.minute}")
+                            }
+
+                            is PrayerNotification.Daily -> {
+                                val time = notif.time
+
+                                val isWeekDays = notif.daysOfWeek == setOf(
+                                    DayOfWeek.MONDAY,
+                                    DayOfWeek.TUESDAY,
+                                    DayOfWeek.WEDNESDAY,
+                                    DayOfWeek.THURSDAY,
+                                    DayOfWeek.FRIDAY
+                                )
+                                val isWeekends = notif.daysOfWeek == setOf(DayOfWeek.SUNDAY, DayOfWeek.SATURDAY)
+                                val isAllDays = notif.daysOfWeek.size == 7
+
+                                if (isAllDays) {
+                                    Text("A notification will be shown every day at ${time.hour}:${time.minute}")
+                                } else if (isWeekDays) {
+                                    Text("A notification will be weekdays at ${time.hour}:${time.minute}")
+                                } else if (isWeekends) {
+                                    Text("A notification will be weekends at ${time.hour}:${time.minute}")
+                                } else {
+                                    Text("A notification will be shown at ${time.hour}:${time.minute} on ${notif.daysOfWeek}")
+                                }
+                            }
+
+                            is PrayerNotification.None -> {
+                                // show nothing
+                            }
+                        }
                     }
                 }
             }

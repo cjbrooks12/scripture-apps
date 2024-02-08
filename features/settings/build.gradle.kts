@@ -15,6 +15,8 @@ kotlin {
                 api(project(":core:ballast"))
                 api(project(":core:routing"))
                 api(project(":core:ui"))
+
+                api(project(":features:debugScreens"))
             }
         }
         val commonTest by getting {

@@ -1,6 +1,7 @@
 package com.caseyjbrooks.app
 
 import com.caseyjbrooks.bible.BibleModule
+import com.caseyjbrooks.debug.screens.DebugScreensModule
 import com.caseyjbrooks.foryou.ForYouModule
 import com.caseyjbrooks.prayer.pillars.PrayerPillar
 import com.caseyjbrooks.routing.ApplicationScreen
@@ -20,6 +21,7 @@ class AbideApplicationStructure : ApplicationStructure {
         SettingsModule,
         TopicalBibleModule,
         BibleModule,
+        DebugScreensModule,
     )
 
     override val initialRoute: ApplicationScreen = ForYouModule.mainNavigationItem.route

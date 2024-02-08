@@ -10,6 +10,7 @@ import com.caseyjbrooks.database.Prayer_tag
 import com.caseyjbrooks.database.ScriptureNowDatabase
 import com.caseyjbrooks.database.Tag
 import com.caseyjbrooks.database.UuidFactory
+import com.caseyjbrooks.database.json.LocalTimeSerializer
 import com.caseyjbrooks.prayer.models.ArchiveStatus
 import com.caseyjbrooks.prayer.models.PrayerId
 import com.caseyjbrooks.prayer.models.PrayerNotification
@@ -19,12 +20,19 @@ import com.caseyjbrooks.prayer.models.SavedPrayerType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalTime
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 internal class OfflineDatabaseSavedPrayersRepository(
     private val database: ScriptureNowDatabase,
     private val uuidFactory: UuidFactory,
     private val logger: Logger,
 ) : SavedPrayersRepository {
+
     override suspend fun createPrayer(prayer: SavedPrayer) {
         database.transaction {
             // create the prayer record
@@ -37,7 +45,7 @@ internal class OfflineDatabaseSavedPrayersRepository(
                         is SavedPrayerType.ScheduledCompletable -> prayer.prayerType.completionDate
                     },
                     archivedAt = prayer.archivedAt,
-                    notificationSchedule = null,
+                    notificationSchedule = prayer.notification.toJson(),
                     createdAt = prayer.createdAt,
                     updatedAt = prayer.updatedAt,
                 )
@@ -58,7 +66,7 @@ internal class OfflineDatabaseSavedPrayersRepository(
                     is SavedPrayerType.ScheduledCompletable -> prayer.prayerType.completionDate
                 },
                 archivedAt = prayer.archivedAt,
-                notificationSchedule = null,
+                notificationSchedule = prayer.notification.toJson(),
                 updatedAt = prayer.updatedAt,
             )
 
@@ -143,7 +151,7 @@ internal class OfflineDatabaseSavedPrayersRepository(
             tags = tags,
             archived = prayerRecord.archivedAt != null,
             archivedAt = prayerRecord.archivedAt,
-            notification = PrayerNotification.None,
+            notification = prayerRecord.notificationSchedule.toPrayerNotification(),
             createdAt = prayerRecord.createdAt,
             updatedAt = prayerRecord.updatedAt,
         )
@@ -161,6 +169,59 @@ internal class OfflineDatabaseSavedPrayersRepository(
                     tag_uuid = tagId,
                 )
             )
+        }
+    }
+
+// asdf
+// ---------------------------------------------------------------------------------------------------------------------
+
+    @Serializable
+    sealed interface PrayerNotificationJson {
+        public data object None : PrayerNotificationJson
+
+        @Serializable
+        public data class Once(
+            val instant: Instant
+        ) : PrayerNotificationJson
+
+        @Serializable
+        public data class Daily(
+            val daysOfWeek: Set<DayOfWeek>,
+            @Serializable(with = LocalTimeSerializer::class) val time: LocalTime,
+        ) : PrayerNotificationJson
+    }
+
+    private fun PrayerNotification.toJson(): String {
+        val json = when (this) {
+            is PrayerNotification.None -> {
+                PrayerNotificationJson.None
+            }
+
+            is PrayerNotification.Once -> {
+                PrayerNotificationJson.Once(instant)
+            }
+
+            is PrayerNotification.Daily -> {
+                PrayerNotificationJson.Daily(daysOfWeek, time)
+            }
+        }
+        return Json.Default.encodeToString(json)
+    }
+
+    private fun String.toPrayerNotification(): PrayerNotification {
+        val json: PrayerNotificationJson = Json.Default.decodeFromString(PrayerNotificationJson.serializer(), this)
+        return when (json) {
+            is PrayerNotificationJson.None -> {
+                PrayerNotification.None
+            }
+
+            is PrayerNotificationJson.Once -> {
+                PrayerNotification.Once(json.instant)
+            }
+
+            is PrayerNotificationJson.Daily -> {
+                PrayerNotification.Daily(json.daysOfWeek, json.time)
+            }
         }
     }
 }

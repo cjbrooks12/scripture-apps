@@ -17,12 +17,15 @@ import kotlinx.coroutines.Dispatchers
 import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
 
+internal typealias TB<Inputs, Events, State> = BallastViewModelConfiguration.TypedBuilder<Inputs, Events, State>
+
 public fun <Inputs : Any, Events : Any, State : Any> Scope.buildWithViewModel(
     initialState: State,
     inputHandler: InputHandler<Inputs, Events, State>,
     name: String,
     withSchedules: Boolean = false,
     withUndoRedo: Boolean = false,
+    configureBuilder: (TB<Inputs, Events, State>) -> TB<Inputs, Events, State> = { it },
     bootstrappedInput: (() -> Inputs)? = null
 ): BallastViewModelConfiguration<Inputs, Events, State> {
     return BallastViewModelConfiguration.Builder()
@@ -56,5 +59,6 @@ public fun <Inputs : Any, Events : Any, State : Any> Scope.buildWithViewModel(
             sideJobsDispatcher = Dispatchers.Default,
             interceptorDispatcher = Dispatchers.Default,
         )
+        .let(configureBuilder)
         .build()
 }

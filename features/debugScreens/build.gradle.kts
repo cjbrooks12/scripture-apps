@@ -1,10 +1,14 @@
+import com.copperleaf.gradle.ProjectVersion
+import com.copperleaf.gradle.stringField
+
 plugins {
     id("copper-leaf-base")
     id("copper-leaf-android-library")
     id("copper-leaf-targets")
     id("copper-leaf-kotest")
     id("copper-leaf-compose")
-    id("copper-leaf-lint")
+//    id("copper-leaf-lint")
+    id("copper-leaf-buildConfig")
 }
 
 kotlin {
@@ -16,7 +20,7 @@ kotlin {
                 api(project(":core:routing"))
                 api(project(":core:ui"))
 
-                api(project(":domain:prayerDomain"))
+                api(libs.ballast.schedules)
             }
         }
         val commonTest by getting {
@@ -39,4 +43,11 @@ kotlin {
             dependencies { }
         }
     }
+}
+
+val projectVersion: ProjectVersion = project.version as ProjectVersion
+
+buildConfig {
+    stringField("GIT_SHA", projectVersion.latestSha)
+    stringField("APP_VERSION", projectVersion.projectVersion)
 }

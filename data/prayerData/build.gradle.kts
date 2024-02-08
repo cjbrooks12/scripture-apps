@@ -5,6 +5,7 @@ plugins {
     id("copper-leaf-kotest")
     id("copper-leaf-compose")
     id("copper-leaf-lint")
+    id("copper-leaf-serialization")
 }
 
 kotlin {

@@ -4,6 +4,7 @@ import com.caseyjbrooks.api.ApiKoinModule
 import com.caseyjbrooks.ballast.BallastKoinModule
 import com.caseyjbrooks.database.DatabaseKoinModule
 import com.caseyjbrooks.datetime.DatetimeKoinModule
+import com.caseyjbrooks.debug.screens.devinfo.DeveloperInfoKoinModule
 import com.caseyjbrooks.di.KoinModule
 import com.caseyjbrooks.domain.DomainKoinModule
 import com.caseyjbrooks.foryou.ui.dashboard.ForYouDashboardKoinModule
@@ -39,6 +40,7 @@ public class AbideApplicationKoinModule(
         ScriptureMemoryPillarKoinModule(),
         VerseOfTheDayPillarKoinModule(),
         ForYouDashboardKoinModule(),
+        DeveloperInfoKoinModule(),
     )
 
     override fun mainModule(): Module = module {

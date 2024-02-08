@@ -1,6 +1,7 @@
 package com.caseyjbrooks.prayer.screens.form
 
 import com.caseyjbrooks.prayer.models.PrayerId
+import com.caseyjbrooks.prayer.models.PrayerNotification
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.screens.detail.PrayerDetailRoute
 import com.caseyjbrooks.prayer.screens.list.PrayerListRoute
@@ -13,7 +14,8 @@ internal object PrayerFormContract {
         val cachedPrayer: Cached<SavedPrayer> = Cached.NotLoaded(),
         val prayerText: String = "",
         val completionDate: Instant? = null,
-        val tags: Set<String> = emptySet()
+        val notification: PrayerNotification = PrayerNotification.None,
+        val tags: Set<String> = emptySet(),
     )
 
     internal sealed interface Inputs {
@@ -22,6 +24,7 @@ internal object PrayerFormContract {
 
         data class PrayerTextUpdated(val text: String) : Inputs
         data class CompletionDateUpdated(val completionDate: Instant?) : Inputs
+        data class PrayerNotificationUpdated(val notification: PrayerNotification) : Inputs
         data class AddTag(val tag: String) : Inputs
         data class RemoveTag(val tag: String) : Inputs
         data object SavePrayer : Inputs

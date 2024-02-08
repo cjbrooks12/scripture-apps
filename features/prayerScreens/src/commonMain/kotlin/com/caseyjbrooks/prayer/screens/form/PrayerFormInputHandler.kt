@@ -3,6 +3,7 @@ package com.caseyjbrooks.prayer.screens.form
 import com.caseyjbrooks.prayer.domain.createFromText.CreatePrayerFromTextUseCase
 import com.caseyjbrooks.prayer.domain.getbyid.GetPrayerByIdUseCase
 import com.caseyjbrooks.prayer.domain.update.UpdatePrayerUseCase
+import com.caseyjbrooks.prayer.models.PrayerNotification
 import com.caseyjbrooks.prayer.models.PrayerTag
 import com.caseyjbrooks.prayer.models.SavedPrayerType
 import com.copperleaf.ballast.InputHandler
@@ -57,6 +58,7 @@ internal class PrayerFormInputHandler(
                             is SavedPrayerType.ScheduledCompletable -> it.completionDate
                         }
                     },
+                    notification = prayer?.notification ?: PrayerNotification.None,
                     tags = prayer?.tags?.map { it.tag }?.toSet() ?: emptySet()
                 )
             }
@@ -68,6 +70,9 @@ internal class PrayerFormInputHandler(
 
         is PrayerFormContract.Inputs.CompletionDateUpdated -> {
             updateState { it.copy(completionDate = input.completionDate) }
+        }
+        is PrayerFormContract.Inputs.PrayerNotificationUpdated -> {
+            updateState { it.copy(notification = input.notification) }
         }
 
         is PrayerFormContract.Inputs.AddTag -> {

@@ -9,7 +9,7 @@ CREATE TABLE prayer (
     archivedAt INTEGER AS Instant,
     createdAt INTEGER AS Instant NOT NULL,
     updatedAt INTEGER AS Instant NOT NULL,
-    notificationSchedule TEXT
+    notificationSchedule TEXT NOT NULL
 );
 
 createPrayer:

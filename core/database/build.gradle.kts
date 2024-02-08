@@ -6,6 +6,7 @@ plugins {
     id("copper-leaf-compose")
 //    id("copper-leaf-lint")
     id("copper-leaf-sqldelight")
+    id("copper-leaf-serialization")
 }
 
 kotlin {

@@ -2,7 +2,7 @@ package com.caseyjbrooks.prayer.models
 
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
-import java.time.LocalTime
+import kotlinx.datetime.LocalTime
 
 /**
  * A schedule to send reminder notifications for this specific prayer.

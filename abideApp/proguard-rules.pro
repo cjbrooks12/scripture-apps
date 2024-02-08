@@ -8,3 +8,9 @@
 # Fixes a crash in R8
 -keep class nl.adaptivity.** { *; }
 -dontwarn nl.adaptivity.**
+
+# Keep schedules created by reflection
+-keep class com.caseyjbrooks.prayer.schedules.PrayerSchedulerAdapter
+-keep class com.caseyjbrooks.prayer.schedules.PrayerSchedulerCallback
+-keep class com.caseyjbrooks.votd.schedules.VotdSchedulerAdapter
+-keep class com.caseyjbrooks.votd.schedules.VotdSchedulerCallback

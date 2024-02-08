@@ -58,6 +58,7 @@ include(":features:bible")
 include(":features:foryou")
 include(":features:settings")
 include(":features:topicalBible")
+include(":features:debugScreens")
 
 include(":abideApp")
 //include(":topicalBibleApp")
