@@ -89,7 +89,7 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
             // the first time we run it, nothing happens since the scheduled time has not passed
             clock.advanceTimeBy(1.milliseconds)
             useCase()
-            repository.getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet()).first() shouldBe listOf(
+            repository.getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet(), null).first() shouldBe listOf(
                 getPrayer(0L, 1, false),
                 getPrayer(0L, 2, false),
                 getPrayer(0L, 3, true),
@@ -133,7 +133,7 @@ public class AutoArchivePrayersUseCaseTest : StringSpec({
             // the next time we run it, automatically archive the scheduled prayer past its time
             clock.advanceTimeBy(20.milliseconds)
             useCase()
-            repository.getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet()).first() shouldBe listOf(
+            repository.getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet(), null).first() shouldBe listOf(
                 getPrayer(0L, 1, false),
                 getPrayer(0L, 2, false),
                 getPrayer(0L, 3, true),

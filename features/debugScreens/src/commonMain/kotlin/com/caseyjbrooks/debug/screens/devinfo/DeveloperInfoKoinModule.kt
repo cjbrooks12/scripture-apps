@@ -25,13 +25,15 @@ public class DeveloperInfoKoinModule : KoinModule {
                     name = "Developer Info",
                     configureBuilder = {
                         it.apply {
-                            this += SchedulerInterceptor {
-                                onSchedule(
-                                    "update now",
-                                    schedule = FixedDelaySchedule(5.seconds),
-                                    scheduledInput = { DeveloperInfoContract.Inputs.UpdateNow }
-                                )
-                            }
+                            this += SchedulerInterceptor(
+                                initialSchedule = {
+                                    onSchedule(
+                                        "update now",
+                                        schedule = FixedDelaySchedule(5.seconds),
+                                        scheduledInput = { DeveloperInfoContract.Inputs.UpdateNow }
+                                    )
+                                }
+                            )
                         }
                     }
                 ) {

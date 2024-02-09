@@ -12,6 +12,7 @@ public class KermitBallastLogger(
 
     override fun error(throwable: Throwable) {
         logger.e(messageString = throwable.message ?: "", throwable = throwable)
+        throwable.printStackTrace()
     }
 
     override fun info(message: String) {

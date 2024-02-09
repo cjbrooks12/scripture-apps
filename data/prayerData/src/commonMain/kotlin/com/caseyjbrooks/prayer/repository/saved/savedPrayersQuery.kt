@@ -1,6 +1,7 @@
 package com.caseyjbrooks.prayer.repository.saved
 
 import com.caseyjbrooks.prayer.models.ArchiveStatus
+import com.caseyjbrooks.prayer.models.PrayerNotification
 import com.caseyjbrooks.prayer.models.PrayerTag
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.models.SavedPrayerType
@@ -34,5 +35,13 @@ internal fun List<SavedPrayer>.filterByTag(tags: Set<PrayerTag>): List<SavedPray
         }
     } else {
         this
+    }
+}
+
+internal fun List<SavedPrayer>.filterByNotifications(notifications: Boolean?): List<SavedPrayer> {
+    return when (notifications) {
+        true -> this.filter { it.notification != PrayerNotification.None }
+        false -> this.filter { it.notification == PrayerNotification.None }
+        null -> this
     }
 }

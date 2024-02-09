@@ -38,7 +38,7 @@ public fun <Inputs : Any, Events : Any, State : Any> Scope.buildWithViewModel(
             inputStrategy = FifoInputStrategy.typed()
 
             logger = { tag -> get<BallastLogger> { parametersOf(tag) } }
-            this += LoggingInterceptor()
+            this += LoggingInterceptor(logDebug = true, logInfo = true, logError = true)
 
             if (withSchedules) {
                 this += SchedulerInterceptor()

@@ -33,13 +33,13 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
             val useCase: SaveDailyPrayerUseCase = get()
 
             savedPrayersRepository
-                .getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet())
+                .getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet(), null)
                 .first() shouldBe emptyList()
 
             // add the daily verse to the user's collection
             useCase()
             savedPrayersRepository
-                .getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet())
+                .getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet(), null)
                 .first() shouldBe listOf(
                 SavedPrayer(
                     uuid = PrayerId(1),
@@ -57,7 +57,7 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
             // don't add a new verse, don't update the existing one. It's already there
             clock.advanceTime()
             useCase()
-            savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet())
+            savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet(), null)
                 .first() shouldBe listOf(
                 SavedPrayer(
                     uuid = PrayerId(1),
@@ -87,13 +87,13 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
             val useCase: SaveDailyPrayerUseCase = get()
 
             savedPrayersRepository
-                .getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet())
+                .getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet(), null)
                 .first() shouldBe emptyList()
 
             // add the daily verse to the user's collection
             useCase()
             savedPrayersRepository
-                .getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet())
+                .getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet(), null)
                 .first() shouldBe listOf(
                 SavedPrayer(
                     uuid = PrayerId(1),
@@ -125,13 +125,13 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
             val useCase: SaveDailyPrayerUseCase = get()
 
             savedPrayersRepository
-                .getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet())
+                .getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet(), null)
                 .first() shouldBe emptyList()
 
             // add the daily verse to the user's collection
             useCase()
             savedPrayersRepository
-                .getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet())
+                .getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet(), null)
                 .first() shouldBe listOf(
                 SavedPrayer(
                     uuid = PrayerId(1),
@@ -163,12 +163,12 @@ public class SaveDailyPrayerUseCaseTest : StringSpec({
             prayerUserSettings.addDefaultTagToSavedDailyPrayer = false
             val useCase: SaveDailyPrayerUseCase = get()
 
-            savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet())
+            savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet(), null)
                 .first() shouldBe emptyList()
 
             // add the daily verse to the user's collection
             useCase()
-            savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet())
+            savedPrayersRepository.getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet(), null)
                 .first() shouldBe listOf(
                 SavedPrayer(
                     uuid = PrayerId(1),

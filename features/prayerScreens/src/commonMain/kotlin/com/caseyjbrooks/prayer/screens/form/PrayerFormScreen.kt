@@ -22,8 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -32,7 +31,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -46,15 +44,17 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.caseyjbrooks.prayer.models.PrayerId
 import com.caseyjbrooks.prayer.models.PrayerNotification
+import com.caseyjbrooks.ui.datetime.DayOfWeekPicker
+import com.caseyjbrooks.ui.datetime.LocalDatePickerDialog
+import com.caseyjbrooks.ui.datetime.LocalDateTimePickerDialog
+import com.caseyjbrooks.ui.datetime.LocalTimePickerDialog
 import com.caseyjbrooks.ui.koin.LocalKoin
 import com.caseyjbrooks.ui.text.rememberLiveText
 import com.copperleaf.ballast.repository.cache.getCachedOrNull
 import com.copperleaf.ballast.repository.cache.getValueOrNull
 import com.copperleaf.ballast.repository.cache.isLoading
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import org.koin.core.parameter.parametersOf
 
@@ -129,6 +129,8 @@ public object PrayerFormScreen {
         uiState: PrayerFormContract.State,
         postInput: (PrayerFormContract.Inputs) -> Unit,
     ) {
+        val timeZone: TimeZone = LocalKoin.current.get()
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -181,7 +183,7 @@ public object PrayerFormScreen {
                             Text("Add completion Date")
                         }
                     } else {
-                        val date = uiState.completionDate.toLocalDateTime(TimeZone.currentSystemDefault()).date
+                        val date = uiState.completionDate.toLocalDateTime(timeZone).date
                         Text("Prayer will be archived after ${date.dayOfWeek.name}, ${date.month.name} ${date.dayOfMonth}, ${date.year}")
                         Row(modifier = Modifier.fillMaxWidth()) {
                             Button(
@@ -201,48 +203,12 @@ public object PrayerFormScreen {
                     }
 
                     if (datePickerDialogVisible) {
-                        val datePickerState = rememberDatePickerState(
-                            initialSelectedDateMillis = uiState.completionDate?.toEpochMilliseconds()
-                        )
-                        DatePickerDialog(
+                        LocalDatePickerDialog(
                             onDismissRequest = { datePickerDialogVisible = false },
-                            confirmButton = {
-                                Button({
-                                    val equivalentInstantInLocalTimeZone: Instant? =
-                                        datePickerState.selectedDateMillis?.let {
-                                            val localDateInUtc =
-                                                Instant.fromEpochMilliseconds(it).toLocalDateTime(TimeZone.UTC)
-                                            LocalDateTime(
-                                                year = localDateInUtc.year,
-                                                month = localDateInUtc.month,
-                                                dayOfMonth = localDateInUtc.dayOfMonth,
-                                                hour = localDateInUtc.hour,
-                                                minute = localDateInUtc.minute,
-                                                second = 0,
-                                                nanosecond = 0,
-                                            ).toInstant(TimeZone.currentSystemDefault())
-                                        }
-
-                                    postInput(
-                                        PrayerFormContract.Inputs.CompletionDateUpdated(equivalentInstantInLocalTimeZone)
-                                    )
-                                    datePickerDialogVisible = false
-                                }) {
-                                    Text("Ok")
-                                }
-                            },
-                            modifier = Modifier,
-                            dismissButton = {
-                                Button(
-                                    { datePickerDialogVisible = false },
-                                    colors = ButtonDefaults.textButtonColors()
-                                ) {
-                                    Text("Cancel")
-                                }
-                            },
-                        ) {
-                            DatePicker(datePickerState)
-                        }
+                            initialDate = uiState.completionDate,
+                            onDateSelected = { postInput(PrayerFormContract.Inputs.CompletionDateUpdated(it)) },
+                            timeZone = timeZone,
+                        )
                     }
                 }
             }
@@ -258,15 +224,15 @@ public object PrayerFormScreen {
 
                     when (uiState.notification) {
                         is PrayerNotification.None -> {
-                            NotificationScheduleNone(uiState, postInput)
+                            NotificationScheduleNone(timeZone, uiState.notification, uiState, postInput)
                         }
 
                         is PrayerNotification.Once -> {
-                            NotificationScheduleOnce(uiState, postInput)
+                            NotificationScheduleOnce(timeZone, uiState.notification, uiState, postInput)
                         }
 
                         is PrayerNotification.Daily -> {
-                            NotificationScheduleDaily(uiState, postInput)
+                            NotificationScheduleDaily(timeZone, uiState.notification, uiState, postInput)
                         }
                     }
                 }
@@ -338,9 +304,14 @@ public object PrayerFormScreen {
 
     @Composable
     private fun NotificationScheduleNone(
+        timeZone: TimeZone,
+        dailyNotification: PrayerNotification.None,
         uiState: PrayerFormContract.State,
         postInput: (PrayerFormContract.Inputs) -> Unit,
     ) {
+        Text("No notifications will be shown for this prayer.")
+
+        Divider()
         var showOneTimeNotificationPicker by remember { mutableStateOf(false) }
         var showDailyNotificationPicker by remember { mutableStateOf(false) }
         Button({ showOneTimeNotificationPicker = true }) {
@@ -351,21 +322,60 @@ public object PrayerFormScreen {
         }
 
         if (showOneTimeNotificationPicker) {
-            NotificationPickerForOnce(uiState, postInput)
+            LocalDateTimePickerDialog(
+                onDismissRequest = { showDailyNotificationPicker = false },
+                initialInstant = null,
+                onInstantSelected = { selectedTime ->
+                    postInput(
+                        PrayerFormContract.Inputs.PrayerNotificationUpdated(
+                            PrayerNotification.Once(
+                                selectedTime
+                            )
+                        )
+                    )
+                },
+                timeZone = timeZone,
+            )
         }
         if (showDailyNotificationPicker) {
-            NotificationPickerForDaily(uiState, postInput)
+            LocalTimePickerDialog(
+                onDismissRequest = { showDailyNotificationPicker = false },
+                initialTime = null,
+                onTimeSelected = { selectedTime ->
+                    postInput(
+                        PrayerFormContract.Inputs.PrayerNotificationUpdated(
+                            PrayerNotification.Daily(
+                                DayOfWeek.entries.toSet(),
+                                selectedTime
+                            )
+                        )
+                    )
+                },
+                timeZone = timeZone,
+            )
         }
     }
 
     @Composable
     private fun NotificationScheduleOnce(
+        timeZone: TimeZone,
+        dailyNotification: PrayerNotification.Once,
         uiState: PrayerFormContract.State,
         postInput: (PrayerFormContract.Inputs) -> Unit,
     ) {
+        val dateTime = dailyNotification.instant.toLocalDateTime(timeZone)
+        Text("A notification will be shown on ${dateTime.date} at ${dateTime.time}")
+
+        Divider()
         var showOneTimeNotificationPicker by remember { mutableStateOf(false) }
         var showDailyNotificationPicker by remember { mutableStateOf(false) }
-        Button({ postInput(PrayerFormContract.Inputs.PrayerNotificationUpdated(PrayerNotification.None)) }) {
+        Button({
+            postInput(
+                PrayerFormContract.Inputs.PrayerNotificationUpdated(
+                    PrayerNotification.None
+                )
+            )
+        }) {
             Text("Remove notifications")
         }
         Button({ showOneTimeNotificationPicker = true }) {
@@ -376,49 +386,127 @@ public object PrayerFormScreen {
         }
 
         if (showOneTimeNotificationPicker) {
-            NotificationPickerForOnce(uiState, postInput)
+            LocalDateTimePickerDialog(
+                onDismissRequest = { showDailyNotificationPicker = false },
+                initialInstant = dailyNotification.instant,
+                onInstantSelected = { selectedTime ->
+                    postInput(
+                        PrayerFormContract.Inputs.PrayerNotificationUpdated(
+                            PrayerNotification.Once(
+                                selectedTime
+                            )
+                        )
+                    )
+                },
+                timeZone = timeZone,
+            )
         }
         if (showDailyNotificationPicker) {
-            NotificationPickerForDaily(uiState, postInput)
+            LocalTimePickerDialog(
+                onDismissRequest = { showDailyNotificationPicker = false },
+                initialTime = null,
+                onTimeSelected = { selectedTime ->
+                    postInput(
+                        PrayerFormContract.Inputs.PrayerNotificationUpdated(
+                            PrayerNotification.Daily(
+                                DayOfWeek.entries.toSet(),
+                                selectedTime
+                            )
+                        )
+                    )
+                },
+                timeZone = timeZone,
+            )
         }
     }
 
     @Composable
     private fun NotificationScheduleDaily(
+        timeZone: TimeZone,
+        dailyNotification: PrayerNotification.Daily,
         uiState: PrayerFormContract.State,
         postInput: (PrayerFormContract.Inputs) -> Unit,
     ) {
+        val isWeekDays = dailyNotification.daysOfWeek == setOf(
+            DayOfWeek.MONDAY,
+            DayOfWeek.TUESDAY,
+            DayOfWeek.WEDNESDAY,
+            DayOfWeek.THURSDAY,
+            DayOfWeek.FRIDAY,
+        )
+        val isWeekends = dailyNotification.daysOfWeek == setOf(
+            DayOfWeek.SUNDAY,
+            DayOfWeek.SATURDAY,
+        )
+
+        if (isWeekDays) {
+            Text("Notifications will be shown weekdays at ${dailyNotification.time}")
+        } else if (isWeekends) {
+            Text("Notifications will be shown weekends at ${dailyNotification.time}")
+        } else {
+            Text("Notifications will be at ${dailyNotification.time} on ${dailyNotification.daysOfWeek}")
+        }
+
+        Divider()
         var showOneTimeNotificationPicker by remember { mutableStateOf(false) }
         var showDailyNotificationPicker by remember { mutableStateOf(false) }
-        Button({ postInput(PrayerFormContract.Inputs.PrayerNotificationUpdated(PrayerNotification.None)) }) {
+        Button({
+            postInput(
+                PrayerFormContract.Inputs.PrayerNotificationUpdated(
+                    PrayerNotification.None
+                )
+            )
+        }) {
             Text("Remove notifications")
         }
         Button({ showOneTimeNotificationPicker = true }) {
             Text("Change to one-time notification")
         }
         Button({ showDailyNotificationPicker = true }) {
-            Text("Update daily notification")
+            Text("Change time")
         }
+
+        DayOfWeekPicker(
+            modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+            daysOfWeek = dailyNotification.daysOfWeek,
+            onDaysOfWeekUpdated = { daysOfWeek ->
+                postInput(
+                    PrayerFormContract.Inputs.PrayerNotificationUpdated(
+                        dailyNotification.copy(daysOfWeek = daysOfWeek)
+                    )
+                )
+            },
+        )
 
         if (showOneTimeNotificationPicker) {
-            NotificationPickerForOnce(uiState, postInput)
+            LocalDateTimePickerDialog(
+                onDismissRequest = { showDailyNotificationPicker = false },
+                initialInstant = null,
+                onInstantSelected = { selectedTime ->
+                    postInput(
+                        PrayerFormContract.Inputs.PrayerNotificationUpdated(
+                            PrayerNotification.Once(
+                                selectedTime
+                            )
+                        )
+                    )
+                },
+                timeZone = timeZone,
+            )
         }
         if (showDailyNotificationPicker) {
-            NotificationPickerForDaily(uiState, postInput)
+            LocalTimePickerDialog(
+                onDismissRequest = { showDailyNotificationPicker = false },
+                initialTime = null,
+                onTimeSelected = { selectedTime ->
+                    postInput(
+                        PrayerFormContract.Inputs.PrayerNotificationUpdated(
+                            dailyNotification.copy(time = selectedTime)
+                        )
+                    )
+                },
+                timeZone = timeZone,
+            )
         }
-    }
-
-    @Composable
-    private fun NotificationPickerForOnce(
-        uiState: PrayerFormContract.State,
-        postInput: (PrayerFormContract.Inputs) -> Unit,
-    ) {
-    }
-
-    @Composable
-    private fun NotificationPickerForDaily(
-        uiState: PrayerFormContract.State,
-        postInput: (PrayerFormContract.Inputs) -> Unit,
-    ) {
     }
 }

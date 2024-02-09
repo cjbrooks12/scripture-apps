@@ -19,10 +19,12 @@ import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.models.SavedPrayerType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalTime
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -34,6 +36,7 @@ internal class OfflineDatabaseSavedPrayersRepository(
 ) : SavedPrayersRepository {
 
     override suspend fun createPrayer(prayer: SavedPrayer) {
+        logger.d { "Creating prayer: $prayer" }
         database.transaction {
             // create the prayer record
             database.prayerQueries.createPrayer(
@@ -56,6 +59,8 @@ internal class OfflineDatabaseSavedPrayersRepository(
     }
 
     override suspend fun updatePrayer(prayer: SavedPrayer) {
+        logger.d { "Updating prayer: $prayer" }
+
         database.transaction {
             database.prayerQueries.updatePrayer(
                 uuid = prayer.uuid.uuid,
@@ -81,19 +86,27 @@ internal class OfflineDatabaseSavedPrayersRepository(
     override fun getPrayers(
         archiveStatus: ArchiveStatus,
         prayerTypes: Set<SavedPrayerType>,
-        tags: Set<PrayerTag>
+        tags: Set<PrayerTag>,
+        withNotifications: Boolean?,
     ): Flow<List<SavedPrayer>> {
-        return database.prayerQueries
-            .getAll()
-            .asFlow()
-            .mapToList(Dispatchers.Default)
-            .map { prayerRecordList ->
-                prayerRecordList
-                    .map { prayerRecord -> prayerRecord.fromRecord() }
-                    .filterByArchiveStatus(archiveStatus)
-                    .filterByPrayerType(prayerTypes)
-                    .filterByTag(tags)
-            }
+        return try {
+            database
+                .prayerQueries
+                .getAll()
+                .asFlow()
+                .mapToList(Dispatchers.Default)
+                .map { prayerRecordList ->
+                    prayerRecordList
+                        .map { prayerRecord -> prayerRecord.fromRecord() }
+                        .filterByArchiveStatus(archiveStatus)
+                        .filterByPrayerType(prayerTypes)
+                        .filterByTag(tags)
+                        .filterByNotifications(withNotifications)
+                }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyFlow()
+        }
     }
 
     override fun getPrayerById(uuid: PrayerId): Flow<SavedPrayer?> {
@@ -177,14 +190,18 @@ internal class OfflineDatabaseSavedPrayersRepository(
 
     @Serializable
     sealed interface PrayerNotificationJson {
+        @Serializable
+        @SerialName("none")
         public data object None : PrayerNotificationJson
 
         @Serializable
+        @SerialName("once")
         public data class Once(
             val instant: Instant
         ) : PrayerNotificationJson
 
         @Serializable
+        @SerialName("daily")
         public data class Daily(
             val daysOfWeek: Set<DayOfWeek>,
             @Serializable(with = LocalTimeSerializer::class) val time: LocalTime,

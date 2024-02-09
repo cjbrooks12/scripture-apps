@@ -42,6 +42,7 @@ public interface SavedPrayersRepository {
         archiveStatus: ArchiveStatus,
         prayerTypes: Set<SavedPrayerType>,
         tags: Set<PrayerTag>,
+        withNotifications: Boolean?,
     ): Flow<List<SavedPrayer>>
 
     /**

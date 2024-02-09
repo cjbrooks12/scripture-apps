@@ -12,7 +12,7 @@ internal class VotdSchedulerAdapter : SchedulerAdapter<
         VotdSchedulesContract.Events,
         VotdSchedulesContract.State> {
 
-    override fun SchedulerAdapterScope<
+    override suspend fun SchedulerAdapterScope<
             VotdSchedulesContract.Inputs,
             VotdSchedulesContract.Events,
             VotdSchedulesContract.State>.configureSchedules() {

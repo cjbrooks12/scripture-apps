@@ -14,7 +14,7 @@ internal class PrayerTimerScheduleAdapter : SchedulerAdapter<
         internal const val SCHEDULE_KEY = "timer tick"
     }
 
-    override fun SchedulerAdapterScope<
+    override suspend fun SchedulerAdapterScope<
             PrayerTimerContract.Inputs,
             PrayerTimerContract.Events,
             PrayerTimerContract.State>.configureSchedules() {

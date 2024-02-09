@@ -2,12 +2,16 @@ package com.caseyjbrooks.prayer.schedules
 
 import com.caseyjbrooks.notifications.NotificationService
 import com.caseyjbrooks.prayer.domain.autoarchive.AutoArchivePrayersUseCase
+import com.caseyjbrooks.prayer.domain.getbyid.GetPrayerByIdUseCase
 import com.copperleaf.ballast.InputHandler
 import com.copperleaf.ballast.InputHandlerScope
+import com.copperleaf.ballast.repository.cache.awaitValue
+import com.copperleaf.ballast.repository.cache.getCachedOrThrow
 
 internal class PrayerSchedulesInputHandler(
     private val notificationService: NotificationService,
     private val archivePrayersUseCase: AutoArchivePrayersUseCase,
+    private val getPrayerByIdUseCase: GetPrayerByIdUseCase,
 ) : InputHandler<
         PrayerSchedulesContract.Inputs,
         PrayerSchedulesContract.Events,
@@ -18,12 +22,12 @@ internal class PrayerSchedulesInputHandler(
             PrayerSchedulesContract.State>.handleInput(
         input: PrayerSchedulesContract.Inputs
     ): Unit = when (input) {
-        PrayerSchedulesContract.Inputs.ArchiveScheduledPrayers -> {
+        is PrayerSchedulesContract.Inputs.ArchiveScheduledPrayers -> {
             noOp()
             archivePrayersUseCase.invoke()
         }
 
-        PrayerSchedulesContract.Inputs.PrayerNotification -> {
+        is PrayerSchedulesContract.Inputs.GenericPrayerNotification -> {
             noOp()
             notificationService.showNotification(
                 channelId = "Prayer",
@@ -33,7 +37,18 @@ internal class PrayerSchedulesInputHandler(
             )
         }
 
-        PrayerSchedulesContract.Inputs.FetchDailyPrayer -> {
+        is PrayerSchedulesContract.Inputs.ScheduledPrayerNotification -> {
+            noOp()
+            val prayer = getPrayerByIdUseCase(input.prayerId).awaitValue().getCachedOrThrow()
+            notificationService.showNotification(
+                channelId = "Prayer",
+                notificationId = "Prayer Notification (id=${input.prayerId.uuid})",
+                title = "Prayer Notification",
+                message = prayer.text,
+            )
+        }
+
+        is PrayerSchedulesContract.Inputs.FetchDailyPrayer -> {
             noOp()
         }
     }

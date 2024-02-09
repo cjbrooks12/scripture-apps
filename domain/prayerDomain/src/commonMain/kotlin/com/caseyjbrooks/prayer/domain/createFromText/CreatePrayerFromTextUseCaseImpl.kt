@@ -15,20 +15,30 @@ internal class CreatePrayerFromTextUseCaseImpl(
     private val uuidFactory: UuidFactory,
     private val clock: Clock,
 ) : CreatePrayerFromTextUseCase {
-    override suspend fun invoke(text: String, completionDate: Instant?, tags: Set<String>): SavedPrayer {
-        val newPrayer = SavedPrayer(
-            uuid = PrayerId(uuidFactory.getNewUuid()),
-            text = text,
-            prayerType = completionDate
-                ?.let { SavedPrayerType.ScheduledCompletable(it) }
-                ?: SavedPrayerType.Persistent,
-            tags = tags.map { PrayerTag(it) },
-            archived = false,
-            archivedAt = null,
-            notification = PrayerNotification.None,
-            createdAt = clock.now(),
-            updatedAt = clock.now(),
-        )
-        return createPrayerUseCase(newPrayer)
+    override suspend fun invoke(
+        text: String,
+        completionDate: Instant?,
+        notification: PrayerNotification,
+        tags: Set<String>
+    ): SavedPrayer {
+        try {
+            val newPrayer = SavedPrayer(
+                uuid = PrayerId(uuidFactory.getNewUuid()),
+                text = text,
+                prayerType = completionDate
+                    ?.let { SavedPrayerType.ScheduledCompletable(it) }
+                    ?: SavedPrayerType.Persistent,
+                tags = tags.map { PrayerTag(it) },
+                archived = false,
+                archivedAt = null,
+                notification = notification,
+                createdAt = clock.now(),
+                updatedAt = clock.now(),
+            )
+            return createPrayerUseCase(newPrayer)
+        } catch (t: Throwable) {
+            t.printStackTrace()
+            throw t
+        }
     }
 }

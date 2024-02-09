@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEmpty
 
 internal class QueryPrayersUseCaseImpl(
     private val repository: SavedPrayersRepository,
@@ -24,11 +25,17 @@ internal class QueryPrayersUseCaseImpl(
         return flow {
             emit(Cached.Fetching(null))
 
-            repository
-                .getPrayers(archiveStatus, prayerType, tags)
-                .map { Cached.Value(it) }
-                .catch { Cached.FetchingFailed<List<SavedPrayer>>(it, null) }
-                .let { emitAll(it) }
+            try {
+                repository
+                    .getPrayers(archiveStatus, prayerType, tags, null)
+                    .map { Cached.Value(it) }
+                    .onEmpty { Cached.Value(emptyList<SavedPrayer>()) }
+                    .catch { Cached.FetchingFailed<List<SavedPrayer>>(it, null) }
+                    .let { emitAll(it) }
+            } catch (t: Throwable) {
+                t.printStackTrace()
+                throw t
+            }
         }
     }
 }

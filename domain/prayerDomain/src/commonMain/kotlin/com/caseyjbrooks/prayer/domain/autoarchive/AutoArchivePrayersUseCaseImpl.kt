@@ -23,6 +23,7 @@ internal class AutoArchivePrayersUseCaseImpl(
                     ),
                 ),
                 emptySet(),
+                null,
             )
             .first()
             .filter { prayer ->

@@ -13,6 +13,8 @@ import com.caseyjbrooks.prayer.domain.getbyid.GetPrayerByIdUseCase
 import com.caseyjbrooks.prayer.domain.getbyid.GetPrayerByIdUseCaseImpl
 import com.caseyjbrooks.prayer.domain.getdaily.GetDailyPrayerUseCase
 import com.caseyjbrooks.prayer.domain.getdaily.GetDailyPrayerUseCaseImpl
+import com.caseyjbrooks.prayer.domain.getwithnotifications.GetPrayersWithNotificationsUseCase
+import com.caseyjbrooks.prayer.domain.getwithnotifications.GetPrayersWithNotificationsUseCaseImpl
 import com.caseyjbrooks.prayer.domain.query.QueryPrayersUseCase
 import com.caseyjbrooks.prayer.domain.query.QueryPrayersUseCaseImpl
 import com.caseyjbrooks.prayer.domain.restore.RestoreArchivedPrayerUseCase
@@ -33,6 +35,7 @@ public class PrayerDomainKoinModule : KoinModule {
         factoryOf(::CreatePrayerUseCaseImpl).bind<CreatePrayerUseCase>()
         factoryOf(::CreatePrayerFromTextUseCaseImpl).bind<CreatePrayerFromTextUseCase>()
         factoryOf(::GetPrayerByIdUseCaseImpl).bind<GetPrayerByIdUseCase>()
+        factoryOf(::GetPrayersWithNotificationsUseCaseImpl).bind<GetPrayersWithNotificationsUseCase>()
         factoryOf(::GetDailyPrayerUseCaseImpl).bind<GetDailyPrayerUseCase>()
         factoryOf(::QueryPrayersUseCaseImpl).bind<QueryPrayersUseCase>()
         factoryOf(::RestoreArchivedPrayerUseCaseImpl).bind<RestoreArchivedPrayerUseCase>()

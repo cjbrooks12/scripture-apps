@@ -1,5 +1,6 @@
 package com.caseyjbrooks.prayer.domain.createFromText
 
+import com.caseyjbrooks.prayer.models.PrayerNotification
 import com.caseyjbrooks.prayer.models.SavedPrayer
 import com.caseyjbrooks.prayer.repository.config.PrayerConfig
 import kotlinx.datetime.Instant
@@ -15,6 +16,7 @@ public interface CreatePrayerFromTextUseCase {
     public suspend operator fun invoke(
         text: String,
         completionDate: Instant?,
+        notification: PrayerNotification,
         tags: Set<String>
     ): SavedPrayer
 }

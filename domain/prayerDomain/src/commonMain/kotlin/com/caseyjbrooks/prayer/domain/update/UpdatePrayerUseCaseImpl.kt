@@ -10,18 +10,23 @@ internal class UpdatePrayerUseCaseImpl(
     private val clock: Clock,
 ) : UpdatePrayerUseCase {
     override suspend operator fun invoke(prayer: SavedPrayer): SavedPrayer {
-        val latestPrayer = savedPrayersRepository.getPrayerById(prayer.uuid).first()
-            ?: error("Prayer with ID ${prayer.uuid} does not exist")
+        try {
+            val latestPrayer = savedPrayersRepository.getPrayerById(prayer.uuid).first()
+                ?: error("Prayer with ID ${prayer.uuid} does not exist")
 
-        return if (latestPrayer == prayer) {
-            // no-op, there are no changes needed
-            prayer
-        } else {
-            val updatedPrayer = prayer.copy(
-                updatedAt = clock.now(),
-            )
-            savedPrayersRepository.updatePrayer(updatedPrayer)
-            updatedPrayer
+            return if (latestPrayer == prayer) {
+                // no-op, there are no changes needed
+                prayer
+            } else {
+                val updatedPrayer = prayer.copy(
+                    updatedAt = clock.now(),
+                )
+                savedPrayersRepository.updatePrayer(updatedPrayer)
+                updatedPrayer
+            }
+        } catch (t: Throwable) {
+            t.printStackTrace()
+            throw t
         }
     }
 }

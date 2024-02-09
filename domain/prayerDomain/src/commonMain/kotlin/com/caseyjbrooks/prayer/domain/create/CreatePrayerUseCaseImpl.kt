@@ -23,7 +23,7 @@ internal class CreatePrayerUseCaseImpl(
             // on the free plan, check that the user has not exceeded the threshold
 
             if (savedPrayersRepository
-                    .getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet())
+                    .getPrayers(ArchiveStatus.FullCollection, emptySet(), emptySet(), null)
                     .first().size >= prayerConfig.maxPrayersOnFreePlan
             ) {
                 error("Exceeded free plan limit")

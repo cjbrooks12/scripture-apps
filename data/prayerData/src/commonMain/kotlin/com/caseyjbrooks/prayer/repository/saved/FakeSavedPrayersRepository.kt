@@ -62,6 +62,7 @@ internal class FakeSavedPrayersRepository(
         archiveStatus: ArchiveStatus,
         prayerTypes: Set<SavedPrayerType>,
         tags: Set<PrayerTag>,
+        withNotifications: Boolean?
     ): Flow<List<SavedPrayer>> {
         return _db.asStateFlow()
             .map { allPrayers ->
@@ -69,6 +70,7 @@ internal class FakeSavedPrayersRepository(
                     .filterByArchiveStatus(archiveStatus)
                     .filterByPrayerType(prayerTypes)
                     .filterByTag(tags)
+                    .filterByNotifications(withNotifications)
             }
     }
 

@@ -71,6 +71,7 @@ internal class PrayerFormInputHandler(
         is PrayerFormContract.Inputs.CompletionDateUpdated -> {
             updateState { it.copy(completionDate = input.completionDate) }
         }
+
         is PrayerFormContract.Inputs.PrayerNotificationUpdated -> {
             updateState { it.copy(notification = input.notification) }
         }
@@ -91,6 +92,7 @@ internal class PrayerFormInputHandler(
                 createPrayerUseCase(
                     text = currentState.prayerText,
                     completionDate = currentState.completionDate,
+                    notification = currentState.notification,
                     tags = currentState.tags,
                 )
             } else {
@@ -100,6 +102,7 @@ internal class PrayerFormInputHandler(
                         prayerType = currentState.completionDate
                             ?.let { SavedPrayerType.ScheduledCompletable(it) }
                             ?: SavedPrayerType.Persistent,
+                        notification = currentState.notification,
                         tags = currentState.tags
                             .map { PrayerTag(it) },
                     )
