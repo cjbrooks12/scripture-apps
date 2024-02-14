@@ -1,5 +1,5 @@
 package com.caseyjbrooks.votd.domain
 
-public interface VerseOfTheDayEvents
-
-public class VerseOfTheDayUpdated : VerseOfTheDayEvents
+public sealed interface VerseOfTheDayDomainEvents {
+    public data object VerseOfTheDayUpdated : VerseOfTheDayDomainEvents
+}

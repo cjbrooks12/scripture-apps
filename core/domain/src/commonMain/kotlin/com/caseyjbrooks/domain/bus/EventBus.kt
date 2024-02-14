@@ -1,5 +1,6 @@
 package com.caseyjbrooks.domain.bus
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharedFlow
 
 /**
@@ -16,4 +17,8 @@ public interface EventBus {
      * Send an Input into the Bus, to distribute to other downstream parts of the application as needed.
      */
     public suspend fun send(event: Any)
+
+    public interface Subscription {
+        public fun CoroutineScope.startSubscription(bus: EventBus)
+    }
 }

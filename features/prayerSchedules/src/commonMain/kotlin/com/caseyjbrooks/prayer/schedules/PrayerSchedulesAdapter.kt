@@ -15,7 +15,7 @@ import kotlinx.datetime.TimeZone
 import org.koin.core.parameter.parametersOf
 import kotlin.time.Duration.Companion.hours
 
-internal class PrayerSchedulerAdapter : SchedulerAdapter<
+internal class PrayerSchedulesAdapter : SchedulerAdapter<
         PrayerSchedulesContract.Inputs,
         PrayerSchedulesContract.Events,
         PrayerSchedulesContract.State> {

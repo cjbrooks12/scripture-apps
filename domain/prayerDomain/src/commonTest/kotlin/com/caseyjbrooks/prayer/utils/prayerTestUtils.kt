@@ -4,6 +4,8 @@ import com.caseyjbrooks.database.DatabaseKoinModule
 import com.caseyjbrooks.database.HardcodedUuidFactory
 import com.caseyjbrooks.di.Variant
 import com.caseyjbrooks.di.getModulesForVariant
+import com.caseyjbrooks.domain.DomainKoinModule
+import com.caseyjbrooks.logging.LoggingKoinModule
 import com.caseyjbrooks.prayer.PrayerDataKoinModule
 import com.caseyjbrooks.prayer.domain.PrayerDomainKoinModule
 import com.caseyjbrooks.prayer.models.DailyPrayer
@@ -25,6 +27,8 @@ inline fun koinTest(
         val variant = Variant(Variant.Environment.Test, Variant.BuildType.Debug)
         modules(
             *DatabaseKoinModule().getModulesForVariant(variant).toTypedArray(),
+            *DomainKoinModule().getModulesForVariant(variant).toTypedArray(),
+            *LoggingKoinModule().getModulesForVariant(variant).toTypedArray(),
             *PrayerDataKoinModule().getModulesForVariant(variant).toTypedArray(),
             *PrayerDomainKoinModule().getModulesForVariant(variant).toTypedArray(),
             module {

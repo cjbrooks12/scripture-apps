@@ -12,7 +12,7 @@ public class EventBusImpl(
     override val events: SharedFlow<Any> get() = _events.asSharedFlow()
 
     override suspend fun send(event: Any) {
-        logger.d { "Emitting evet: $event" }
+        logger.d { "Emitting event: $event" }
         _events.emit(event)
     }
 }

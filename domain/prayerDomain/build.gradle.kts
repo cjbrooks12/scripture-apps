@@ -12,6 +12,7 @@ kotlin {
         // Common Sourcesets
         val commonMain by getting {
             dependencies {
+                api(project(":core:domain"))
                 api(project(":data:prayerData"))
             }
         }

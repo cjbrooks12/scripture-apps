@@ -36,21 +36,6 @@ public class VerseOfTheDayWidget : GlanceAppWidget() {
         logger.d { "Providing VerseOfTheDayWidget for id '$id'" }
 
         provideContent {
-//            // subscribe to the event bus to update this widget when VOTD is updated
-//            val eventBus: EventBus = koin.get()
-//            LaunchedEffect(Unit) {
-//                eventBus
-//                    .events
-//                    .onStart { logger.d { "VerseOfTheDayUpdated bus subscription started for id '$id'" } }
-//                    .onCompletion { logger.d { "VerseOfTheDayUpdated bus subscription cancelled for id '$id'" } }
-//                    .filterIsInstance<VerseOfTheDayUpdated>()
-//                    .onEach {
-//                        logger.d { "Received VerseOfTheDayUpdated event, updating widget with id '$id'" }
-//                        VerseOfTheDayWidget().update(context, id)
-//                    }
-//                    .launchIn(this)
-//            }
-
             // fetch the VOTD content
             val getTodaysVerseOfTheDayUseCase: GetTodaysVerseOfTheDayUseCase = remember(koin) { koin.get() }
             val votd by getTodaysVerseOfTheDayUseCase().collectAsState(Cached.NotLoaded())

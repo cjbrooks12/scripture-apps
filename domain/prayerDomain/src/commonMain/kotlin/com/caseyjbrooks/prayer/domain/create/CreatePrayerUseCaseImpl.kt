@@ -1,5 +1,7 @@
 package com.caseyjbrooks.prayer.domain.create
 
+import com.caseyjbrooks.domain.bus.EventBus
+import com.caseyjbrooks.prayer.domain.PrayerDomainEvents
 import com.caseyjbrooks.prayer.models.ArchiveStatus
 import com.caseyjbrooks.prayer.models.PrayerUser
 import com.caseyjbrooks.prayer.models.SavedPrayer
@@ -14,6 +16,7 @@ internal class CreatePrayerUseCaseImpl(
     private val prayerConfig: PrayerConfig,
     private val prayerUserRepository: PrayerUserRepository,
     private val clock: Clock,
+    private val eventBus: EventBus,
 ) : CreatePrayerUseCase {
     override suspend operator fun invoke(prayer: SavedPrayer): SavedPrayer {
         val prayerUser = prayerUserRepository.getUserProfile()
@@ -36,6 +39,9 @@ internal class CreatePrayerUseCaseImpl(
             updatedAt = currentInstant,
         )
         savedPrayersRepository.createPrayer(updatedPrayer)
+
+        eventBus.send(PrayerDomainEvents.PrayerAddedOrChanged)
+
         return updatedPrayer
     }
 }

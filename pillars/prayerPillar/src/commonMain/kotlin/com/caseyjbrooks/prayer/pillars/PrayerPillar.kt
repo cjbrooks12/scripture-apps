@@ -3,13 +3,15 @@ package com.caseyjbrooks.prayer.pillars
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.outlined.ThumbUp
+import com.caseyjbrooks.domain.bus.EventBus
+import com.caseyjbrooks.prayer.schedules.PrayerSchedulesEventBusSubscription
 import com.caseyjbrooks.prayer.screens.detail.PrayerDetailRoute
 import com.caseyjbrooks.prayer.screens.form.PrayerFormRoute
 import com.caseyjbrooks.prayer.screens.list.PrayerListRoute
 import com.caseyjbrooks.prayer.screens.timer.PrayerTimerRoute
+import com.caseyjbrooks.routing.ApplicationScreen
 import com.caseyjbrooks.routing.NavigationItem
 import com.caseyjbrooks.routing.Pillar
-import com.caseyjbrooks.routing.ApplicationScreen
 
 public object PrayerPillar : Pillar {
     override val routes: List<ApplicationScreen> = listOf(
@@ -26,4 +28,8 @@ public object PrayerPillar : Pillar {
         order = 30,
     )
     override val secondaryNavigationItems: List<NavigationItem> = listOf()
+
+    override val eventBusSubscriptions: List<EventBus.Subscription> = listOf(
+        PrayerSchedulesEventBusSubscription()
+    )
 }

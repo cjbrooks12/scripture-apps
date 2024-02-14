@@ -10,26 +10,17 @@ import androidx.work.WorkManagerInitializer
 import com.copperleaf.ballast.scheduler.workmanager.syncSchedulesOnStartup
 
 @RequiresApi(Build.VERSION_CODES.O)
-public class PrayerSchedulerStartup : Initializer<Unit> {
+public class PrayerSchedulesStartup : Initializer<Unit> {
     override fun create(context: Context) {
         Log.d("Abide", "Running PrayerSchedulerStartup")
         val workManager = WorkManager.getInstance(context)
 
         // sync the schedules anytime the app is opened, to ensure things are handled correctly immediately
         workManager.syncSchedulesOnStartup(
-            adapter = PrayerSchedulerAdapter(),
-            callback = PrayerSchedulerCallback(),
+            adapter = PrayerSchedulesAdapter(),
+            callback = PrayerSchedulesCallback(),
             withHistory = false,
         )
-
-//        // also set up a periodic schedule to sync the prayers every few hours, so they are updated without the user
-//        // having to exit and re-enter the app
-//        workManager.syncSchedulesPeriodically(
-//            adapter = PrayerSchedulerAdapter(),
-//            callback = PrayerSchedulerCallback(),
-//            withHistory = false,
-//            period = 4.hours,
-//        )
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> {

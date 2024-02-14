@@ -14,6 +14,7 @@ kotlin {
             dependencies {
                 api(project(":core:di"))
                 api(project(":core:ballast"))
+                api(project(":core:domain"))
                 api(libs.ballast.navigation)
             }
         }

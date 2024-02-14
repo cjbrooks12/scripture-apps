@@ -5,10 +5,12 @@ import android.content.Context
 import com.caseyjbrooks.di.GlobalKoinApplication
 import com.caseyjbrooks.di.Variant
 import com.caseyjbrooks.di.getModulesForVariant
+import com.caseyjbrooks.domain.bus.EventBusService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.extension.coroutinesEngine
 import org.koin.dsl.binds
@@ -33,6 +35,15 @@ class MainAndroidApplication : Application() {
                     single { this@MainAndroidApplication }.binds(arrayOf(Context::class, Application::class))
                 }
             )
+        }
+
+        applicationCoroutineScope.launch {
+            val eventBusService: EventBusService = GlobalKoinApplication.koinApplication.koin.get()
+            val applicationStructure: AbideApplicationStructure = GlobalKoinApplication.koinApplication.koin.get()
+
+            with(eventBusService) {
+                startSubscriptions(applicationStructure.eventBusSubscriptions)
+            }
         }
     }
 

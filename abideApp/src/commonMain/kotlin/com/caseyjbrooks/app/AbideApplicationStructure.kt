@@ -2,6 +2,7 @@ package com.caseyjbrooks.app
 
 import com.caseyjbrooks.bible.BibleModule
 import com.caseyjbrooks.debug.screens.DebugScreensModule
+import com.caseyjbrooks.domain.bus.EventBus
 import com.caseyjbrooks.foryou.ForYouModule
 import com.caseyjbrooks.prayer.pillars.PrayerPillar
 import com.caseyjbrooks.routing.ApplicationScreen
@@ -11,6 +12,7 @@ import com.caseyjbrooks.routing.Pillar
 import com.caseyjbrooks.settings.SettingsModule
 import com.caseyjbrooks.topicalbible.TopicalBibleModule
 import com.caseyjbrooks.verses.pillars.ScriptureMemoryPillar
+import com.caseyjbrooks.votd.pillars.VotdPillar
 
 class AbideApplicationStructure : ApplicationStructure {
 
@@ -31,5 +33,10 @@ class AbideApplicationStructure : ApplicationStructure {
         ScriptureMemoryPillar.mainNavigationItem,
         PrayerPillar.mainNavigationItem,
         SettingsModule.mainNavigationItem,
+    )
+
+    override val eventBusSubscriptions: List<EventBus.Subscription> = listOf(
+        *PrayerPillar.eventBusSubscriptions.toTypedArray(),
+        * VotdPillar.eventBusSubscriptions.toTypedArray(),
     )
 }

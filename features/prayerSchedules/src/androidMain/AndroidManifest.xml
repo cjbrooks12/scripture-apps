@@ -9,7 +9,7 @@
                 android:exported="false"
                 tools:node="merge">
             <meta-data
-                    android:name="com.caseyjbrooks.prayer.schedules.PrayerSchedulerStartup"
+                    android:name="com.caseyjbrooks.prayer.schedules.PrayerSchedulesStartup"
                     android:value="androidx.startup"/>
         </provider>
     </application>
