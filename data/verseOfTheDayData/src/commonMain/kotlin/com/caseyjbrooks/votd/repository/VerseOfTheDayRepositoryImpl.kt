@@ -2,7 +2,8 @@ package com.caseyjbrooks.votd.repository
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToOneOrNull
-import com.caseyjbrooks.api.Either
+import co.touchlab.kermit.Logger
+import com.caseyjbrooks.api.fold
 import com.caseyjbrooks.api.request
 import com.caseyjbrooks.database.ScriptureNowDatabase
 import com.caseyjbrooks.database.UuidFactory
@@ -24,25 +25,28 @@ internal class VerseOfTheDayRepositoryImpl(
     private val clock: Clock,
     private val timeZone: TimeZone,
     private val uuidFactory: UuidFactory,
+    logger: Logger,
 ) : VerseOfTheDayRepository {
+    private val logger: Logger = logger.withTag("VerseOfTheDayRepositoryImpl")
 
     companion object {
         private const val OURMANNA_HOST = "https://beta.ourmanna.com"
     }
 
     override suspend fun fetchAndCacheVerseOfTheDay(): Result<Unit> {
-        return runCatching<Unit> {
-            val todaysDate = clock.now().toLocalDateTime(timeZone).date
+        val todaysDate = clock.now().toLocalDateTime(timeZone).date
 
+        return runCatching<Unit> {
             val alreadyFetched = database.verse_of_the_dayQueries
                 .getByDay(todaysDate)
                 .executeAsOneOrNull() != null
 
             if (alreadyFetched) {
-                println("VOTD for $todaysDate is already fetched")
+                logger.d("VOTD for $todaysDate is already fetched")
                 return@runCatching
             }
 
+            logger.d("fetching VOTD for $todaysDate from remote")
             val response = httpClient.request(
                 _method = HttpMethod.Get,
                 _baseUrl = OURMANNA_HOST,
@@ -55,21 +59,27 @@ internal class VerseOfTheDayRepositoryImpl(
                 errorBodySerializer = JsonObject.serializer(),
             )
 
-            if (response is Either.Left<OurMannaVerseOfTheDayResponse>) {
-                val successBody = response.value
-
-                database.verse_of_the_dayQueries.insertOrReplace(
-                    Verse_of_the_day(
-                        uuid = uuidFactory.getNewUuid(),
-                        reference = successBody.verse.details.reference,
-                        text = successBody.verse.details.text,
-                        date = todaysDate,
+            response.fold(
+                onLeft = { successBody ->
+                    logger.i("fetching VOTD for $todaysDate successful")
+                    database.verse_of_the_dayQueries.insertOrReplace(
+                        Verse_of_the_day(
+                            uuid = uuidFactory.getNewUuid(),
+                            reference = successBody.verse.details.reference,
+                            text = successBody.verse.details.text,
+                            date = todaysDate,
+                        )
                     )
-                )
-            }
+                },
+                onRight = {
+                    logger.e("fetching VOTD for $todaysDate failed")
+                },
+            )
 
             Unit
-        }.onFailure { it.printStackTrace() }
+        }.onFailure {
+            logger.e("fetching VOTD for $todaysDate failed: ${it.message}")
+        }
     }
 
     override fun getTodaysVerseOfTheDay(): Flow<VerseOfTheDay?> {

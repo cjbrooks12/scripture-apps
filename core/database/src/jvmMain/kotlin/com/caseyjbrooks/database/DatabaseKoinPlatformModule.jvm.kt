@@ -37,8 +37,6 @@ public actual class DatabaseKoinPlatformModule : KoinModule {
             }
 
             val connectionString = "jdbc:sqlite:${dbFile.canonicalPath}"
-            println("Opening DB: $connectionString")
-
             JdbcSqliteDriver(
                 url = connectionString,
                 properties = Properties().apply { put("foreign_keys", "true") },

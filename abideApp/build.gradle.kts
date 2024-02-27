@@ -43,6 +43,7 @@ android {
     buildTypes {
         debug {
             signingConfig = signingConfigs.getByName("debug")
+            isDebuggable = true
         }
 
         release {
@@ -53,6 +54,9 @@ android {
             // Enables resource shrinking, which is performed by the
             // Android Gradle plugin.
             isShrinkResources = true
+
+            // TODO: remove this line before actually going live with this app!
+            isDebuggable = true
 
             // Includes the default ProGuard rules files that are packaged with
             // the Android Gradle plugin. To learn more, go to the section about

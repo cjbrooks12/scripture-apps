@@ -34,3 +34,13 @@ public inline fun <reified L, reified R> Either<L, R>.orElseGet(block: () -> L):
     is Either.Left<L> -> this.value
     is Either.Right<R> -> block()
 }
+
+public inline fun <reified L, reified R> Either<L, R>.fold(
+    onLeft: (L) -> Unit,
+    onRight: (R) -> Unit,
+): Either<L, R> = this.also {
+    when (it) {
+        is Either.Left<L> -> onLeft(it.value)
+        is Either.Right<R> -> onRight(it.value)
+    }
+}

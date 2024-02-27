@@ -14,6 +14,8 @@ kotlin {
             dependencies {
                 api(project(":core:di"))
                 api(libs.kermit)
+                api(libs.kotlinx.datetime)
+                api(libs.kotlinx.coroutines.core)
             }
         }
         val commonTest by getting {

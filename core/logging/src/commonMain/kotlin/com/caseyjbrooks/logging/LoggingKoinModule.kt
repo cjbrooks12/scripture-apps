@@ -1,6 +1,5 @@
 package com.caseyjbrooks.logging
 
-import co.touchlab.kermit.LogWriter
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.loggerConfigInit
 import com.caseyjbrooks.di.KoinModule
@@ -15,7 +14,7 @@ public class LoggingKoinModule : KoinModule {
         factory<Logger> {
             val tag: String? = it.getOrNull()
             Logger(
-                loggerConfigInit(get<LogWriter>()),
+                loggerConfigInit(get<ConsoleLogWriter>(), get<FileLogWriter>()),
                 tag ?: "Abide"
             )
         }

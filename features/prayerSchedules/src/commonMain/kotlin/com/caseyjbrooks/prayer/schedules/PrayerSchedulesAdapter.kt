@@ -10,10 +10,12 @@ import com.copperleaf.ballast.scheduler.schedule.EveryDaySchedule
 import com.copperleaf.ballast.scheduler.schedule.FixedDelaySchedule
 import com.copperleaf.ballast.scheduler.schedule.FixedInstantSchedule
 import com.copperleaf.ballast.scheduler.schedule.filterByDayOfWeek
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import org.koin.core.parameter.parametersOf
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.seconds
 
 internal class PrayerSchedulesAdapter : SchedulerAdapter<
         PrayerSchedulesContract.Inputs,
@@ -40,7 +42,12 @@ internal class PrayerSchedulesAdapter : SchedulerAdapter<
             scheduledInput = { PrayerSchedulesContract.Inputs.ArchiveScheduledPrayers }
         )
 
-        val prayersWithNotifications = getPrayersWithNotificationsUseCase()
+        val prayersWithNotifications = runCatching {
+            withTimeoutOrNull(1.seconds) {
+                getPrayersWithNotificationsUseCase()
+            }
+        }.getOrNull()
+            ?: emptyList()
 
         if (prayersWithNotifications.isEmpty()) {
             // There are no prayers with notifications, but still show a generic notification prompting to pray
