@@ -10,6 +10,7 @@ import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.caseyjbrooks.ui.koin.LocalKoin
+import com.caseyjbrooks.ui.logging.LocalLogger
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
@@ -23,6 +24,8 @@ public fun LocalTimePickerDialog(
     onTimeSelected: (LocalTime) -> Unit,
     timeZone: TimeZone,
 ) {
+    val logger = LocalLogger.current.withTag("LocalTimePickerDialog1")
+
     val clock: Clock = LocalKoin.current.get()
     val currentTime: LocalTime = initialTime ?: run { clock.now().toLocalDateTime(timeZone).time }
 
@@ -33,24 +36,33 @@ public fun LocalTimePickerDialog(
     )
     DatePickerDialog(
         modifier = Modifier,
-        onDismissRequest = { onDismissRequest() },
+        onDismissRequest = {
+            logger.d("dialog dismissed")
+            onDismissRequest()
+        },
         confirmButton = {
-            Button({
-                val selectedLocalTimeInTimeZone: LocalTime = LocalTime(
-                    hour = timePickerState.hour,
-                    minute = timePickerState.minute,
-                    second = 0,
-                    nanosecond = 0
-                )
+            Button(
+                onClick = {
+                    logger.d("Ok button clicked")
+                    val selectedLocalTimeInTimeZone: LocalTime = LocalTime(
+                        hour = timePickerState.hour,
+                        minute = timePickerState.minute,
+                        second = 0,
+                        nanosecond = 0
+                    )
 
-                onTimeSelected(selectedLocalTimeInTimeZone)
-            }) {
+                    onTimeSelected(selectedLocalTimeInTimeZone)
+                }
+            ) {
                 Text("Ok")
             }
         },
         dismissButton = {
             Button(
-                { onDismissRequest() },
+                onClick = {
+                    logger.d("Cancel button clicked")
+                    onDismissRequest()
+                },
                 colors = ButtonDefaults.textButtonColors()
             ) {
                 Text("Cancel")

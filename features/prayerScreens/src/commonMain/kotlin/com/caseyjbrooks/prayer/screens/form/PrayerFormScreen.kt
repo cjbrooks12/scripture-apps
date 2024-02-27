@@ -49,6 +49,7 @@ import com.caseyjbrooks.ui.datetime.LocalDatePickerDialog
 import com.caseyjbrooks.ui.datetime.LocalDateTimePickerDialog
 import com.caseyjbrooks.ui.datetime.LocalTimePickerDialog
 import com.caseyjbrooks.ui.koin.LocalKoin
+import com.caseyjbrooks.ui.logging.LocalLogger
 import com.caseyjbrooks.ui.text.rememberLiveText
 import com.copperleaf.ballast.repository.cache.getCachedOrNull
 import com.copperleaf.ballast.repository.cache.getValueOrNull
@@ -166,50 +167,7 @@ public object PrayerFormScreen {
 
             Card(Modifier.fillMaxWidth().wrapContentHeight()) {
                 Column(Modifier.padding(16.dp)) {
-                    Text("Completion date", style = MaterialTheme.typography.headlineSmall)
-                    Text(
-                        "If a completion date it set, it will be automatically moved to the archive after that date.",
-                        style = MaterialTheme.typography.labelSmall,
-                        modifier = Modifier.padding(bottom = 24.dp),
-                    )
-
-                    // (optional) completion date
-                    var datePickerDialogVisible by remember { mutableStateOf(false) }
-                    if (uiState.completionDate == null) {
-                        Button(
-                            onClick = { datePickerDialogVisible = true },
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            Text("Add completion Date")
-                        }
-                    } else {
-                        val date = uiState.completionDate.toLocalDateTime(timeZone).date
-                        Text("Prayer will be archived after ${date.dayOfWeek.name}, ${date.month.name} ${date.dayOfMonth}, ${date.year}")
-                        Row(modifier = Modifier.fillMaxWidth()) {
-                            Button(
-                                onClick = { postInput(PrayerFormContract.Inputs.CompletionDateUpdated(null)) },
-                                colors = ButtonDefaults.outlinedButtonColors(),
-                                modifier = Modifier.weight(1f),
-                            ) {
-                                Text("Remove completion Date")
-                            }
-                            Button(
-                                onClick = { datePickerDialogVisible = true },
-                                modifier = Modifier.weight(1f),
-                            ) {
-                                Text("Change completion Date")
-                            }
-                        }
-                    }
-
-                    if (datePickerDialogVisible) {
-                        LocalDatePickerDialog(
-                            onDismissRequest = { datePickerDialogVisible = false },
-                            initialDate = uiState.completionDate,
-                            onDateSelected = { postInput(PrayerFormContract.Inputs.CompletionDateUpdated(it)) },
-                            timeZone = timeZone,
-                        )
-                    }
+                    CompletionDate(timeZone, uiState, postInput)
                 }
             }
 
@@ -303,6 +261,67 @@ public object PrayerFormScreen {
     }
 
     @Composable
+    private fun CompletionDate(
+        timeZone: TimeZone,
+        uiState: PrayerFormContract.State,
+        postInput: (PrayerFormContract.Inputs) -> Unit,
+    ) {
+        val logger = LocalLogger.current.withTag("PrayerFormScreen")
+
+        Text("Completion date", style = MaterialTheme.typography.headlineSmall)
+        Text(
+            "If a completion date it set, it will be automatically moved to the archive after that date.",
+            style = MaterialTheme.typography.labelSmall,
+            modifier = Modifier.padding(bottom = 24.dp),
+        )
+
+        // (optional) completion date
+        var datePickerDialogVisible by remember { mutableStateOf(false) }
+        if (uiState.completionDate == null) {
+            Button(
+                onClick = { datePickerDialogVisible = true },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text("Add completion Date")
+            }
+        } else {
+            val date = uiState.completionDate.toLocalDateTime(timeZone).date
+            Text("Prayer will be archived after ${date.dayOfWeek.name}, ${date.month.name} ${date.dayOfMonth}, ${date.year}")
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Button(
+                    onClick = { postInput(PrayerFormContract.Inputs.CompletionDateUpdated(null)) },
+                    colors = ButtonDefaults.outlinedButtonColors(),
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Text("Remove completion Date")
+                }
+                Button(
+                    onClick = { datePickerDialogVisible = true },
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Text("Change completion Date")
+                }
+            }
+        }
+
+        if (datePickerDialogVisible) {
+            LocalDatePickerDialog(
+                onDismissRequest = {
+                    logger.d("LocalDatePickerDialog onDismissRequest()")
+                    datePickerDialogVisible = false
+                },
+                initialDate = uiState.completionDate,
+                requireFutureDate = true,
+                onDateSelected = {
+                    logger.d("LocalDatePickerDialog onDateSelected()")
+                    postInput(PrayerFormContract.Inputs.CompletionDateUpdated(it))
+                },
+                timeZone = timeZone,
+            )
+        }
+    }
+
+    @Composable
     private fun NotificationScheduleNone(
         timeZone: TimeZone,
         dailyNotification: PrayerNotification.None,
@@ -323,7 +342,7 @@ public object PrayerFormScreen {
 
         if (showOneTimeNotificationPicker) {
             LocalDateTimePickerDialog(
-                onDismissRequest = { showDailyNotificationPicker = false },
+                onDismissRequest = { showOneTimeNotificationPicker = false },
                 initialInstant = null,
                 onInstantSelected = { selectedTime ->
                     postInput(
@@ -333,6 +352,7 @@ public object PrayerFormScreen {
                             )
                         )
                     )
+                    showOneTimeNotificationPicker = false
                 },
                 timeZone = timeZone,
             )
@@ -350,6 +370,7 @@ public object PrayerFormScreen {
                             )
                         )
                     )
+                    showDailyNotificationPicker = false
                 },
                 timeZone = timeZone,
             )
@@ -387,7 +408,7 @@ public object PrayerFormScreen {
 
         if (showOneTimeNotificationPicker) {
             LocalDateTimePickerDialog(
-                onDismissRequest = { showDailyNotificationPicker = false },
+                onDismissRequest = { showOneTimeNotificationPicker = false },
                 initialInstant = dailyNotification.instant,
                 onInstantSelected = { selectedTime ->
                     postInput(
@@ -397,6 +418,7 @@ public object PrayerFormScreen {
                             )
                         )
                     )
+                    showOneTimeNotificationPicker = false
                 },
                 timeZone = timeZone,
             )
@@ -414,6 +436,7 @@ public object PrayerFormScreen {
                             )
                         )
                     )
+                    showDailyNotificationPicker = false
                 },
                 timeZone = timeZone,
             )
@@ -480,7 +503,7 @@ public object PrayerFormScreen {
 
         if (showOneTimeNotificationPicker) {
             LocalDateTimePickerDialog(
-                onDismissRequest = { showDailyNotificationPicker = false },
+                onDismissRequest = { showOneTimeNotificationPicker = false },
                 initialInstant = null,
                 onInstantSelected = { selectedTime ->
                     postInput(
@@ -490,6 +513,7 @@ public object PrayerFormScreen {
                             )
                         )
                     )
+                    showOneTimeNotificationPicker = false
                 },
                 timeZone = timeZone,
             )
@@ -504,6 +528,7 @@ public object PrayerFormScreen {
                             dailyNotification.copy(time = selectedTime)
                         )
                     )
+                    showDailyNotificationPicker = false
                 },
                 timeZone = timeZone,
             )

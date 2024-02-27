@@ -14,6 +14,7 @@ kotlin {
             dependencies {
                 api(project(":core:di"))
                 api(project(":core:routing"))
+                api(project(":core:logging"))
                 api("dev.chrisbanes.material3:material3-window-size-class-multiplatform:0.3.1")
                 api(compose.materialIconsExtended)
                 api(libs.kotlinx.datetime)

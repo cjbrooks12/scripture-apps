@@ -9,24 +9,36 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.caseyjbrooks.ui.koin.LocalKoin
+import com.caseyjbrooks.ui.logging.LocalLogger
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.toLocalDateTime
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 public fun LocalDatePickerDialog(
     onDismissRequest: () -> Unit,
     initialDate: Instant?,
+    requireFutureDate: Boolean = false,
     onDateSelected: (Instant) -> Unit,
     timeZone: TimeZone,
 ) {
+    val logger = LocalLogger.current.withTag("LocalDatePickerDialog1")
+
     LocalDatePickerDialog(
-        onDismissRequest = onDismissRequest,
+        onDismissRequest = {
+            logger.d("tossing up onDismissRequest")
+            onDismissRequest()
+        },
         initialDate = initialDate?.toLocalDateTime(timeZone)?.date,
-        onDateSelected = { onDateSelected(it.atStartOfDayIn(timeZone)) },
+        requireFutureDate = requireFutureDate,
+        onDateSelected = {
+            logger.d("tossing up onDateSelected")
+            onDateSelected(it.atStartOfDayIn(timeZone))
+        },
         timeZone = timeZone
     )
 }
@@ -36,44 +48,88 @@ public fun LocalDatePickerDialog(
 public fun LocalDatePickerDialog(
     onDismissRequest: () -> Unit,
     initialDate: LocalDate?,
+    requireFutureDate: Boolean,
     onDateSelected: (LocalDate) -> Unit,
     timeZone: TimeZone,
 ) {
+    val logger = LocalLogger.current.withTag("LocalDatePickerDialog2")
+    val clock: Clock = LocalKoin.current.get()
+    val currentDate = clock.now().toLocalDateTime(timeZone).date
+
     val datePickerState = rememberDatePickerState(
         initialSelectedDateMillis = initialDate?.atStartOfDayIn(timeZone)?.toEpochMilliseconds()
     )
+
+    val selectedDateIsValid = datePickerState
+        .selectedDateMillis
+        ?.let { selectedTimeMillis ->
+            val localDateInUtc = Instant
+                .fromEpochMilliseconds(selectedTimeMillis)
+                .toLocalDateTime(TimeZone.UTC)
+
+            val selectedDate = LocalDate(
+                year = localDateInUtc.year,
+                month = localDateInUtc.month,
+                dayOfMonth = localDateInUtc.dayOfMonth,
+            )
+
+            if (requireFutureDate) {
+                selectedDate > currentDate
+            } else {
+                true
+            }
+        }
+        ?: false
+
+    val postUpdateToLocalDate = {
+        if (selectedDateIsValid) {
+            datePickerState
+                .selectedDateMillis!!
+                .let { selectedTimeMillis ->
+                    val localDateInUtc = Instant
+                        .fromEpochMilliseconds(selectedTimeMillis)
+                        .toLocalDateTime(TimeZone.UTC)
+
+                    val selectedDate = LocalDate(
+                        year = localDateInUtc.year,
+                        month = localDateInUtc.month,
+                        dayOfMonth = localDateInUtc.dayOfMonth,
+                    )
+                    onDateSelected(selectedDate)
+                }
+        } else {
+            onDismissRequest()
+        }
+    }
+
     DatePickerDialog(
         modifier = Modifier,
-        onDismissRequest = { onDismissRequest() },
+        onDismissRequest = {
+            logger.d("Dialog dismissed")
+            onDismissRequest()
+        },
         confirmButton = {
-            Button({
-                val selectedLocalDateInTimeZone: LocalDate = datePickerState
-                    .selectedDateMillis!!
-                    .let {
-                        val localDateInUtc = Instant
-                            .fromEpochMilliseconds(it)
-                            .toLocalDateTime(TimeZone.UTC)
-                        LocalDate(
-                            year = localDateInUtc.year,
-                            month = localDateInUtc.month,
-                            dayOfMonth = localDateInUtc.dayOfMonth,
-                        )
-                    }
-
-                onDateSelected(selectedLocalDateInTimeZone)
-            }) {
+            Button(
+                enabled = selectedDateIsValid,
+                onClick = {
+                    logger.d("OK button clicked")
+                    postUpdateToLocalDate()
+                }
+            ) {
                 Text("Ok")
             }
         },
         dismissButton = {
             Button(
-                { onDismissRequest() },
+                onClick = {
+                    logger.d("Cancel button clicked")
+                    onDismissRequest()
+                },
                 colors = ButtonDefaults.textButtonColors()
             ) {
                 Text("Cancel")
             }
         },
-    ) {
-        DatePicker(datePickerState)
-    }
+        content = { DatePicker(datePickerState) },
+    )
 }

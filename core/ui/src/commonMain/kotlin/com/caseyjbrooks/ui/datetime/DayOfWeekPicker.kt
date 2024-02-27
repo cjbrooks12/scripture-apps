@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.caseyjbrooks.ui.logging.LocalLogger
 import kotlinx.datetime.DayOfWeek
 
 @Composable
@@ -21,6 +22,8 @@ public fun DayOfWeekPicker(
     modifier: Modifier = Modifier,
     startOnSunday: Boolean = true
 ) {
+    val logger = LocalLogger.current.withTag("DayOfWeekPicker1")
+
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceEvenly,

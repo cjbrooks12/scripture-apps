@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.caseyjbrooks.ui.logging.LocalLogger
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
@@ -22,6 +23,8 @@ public fun LocalDateTimePickerDialog(
     onInstantSelected: (Instant) -> Unit,
     timeZone: TimeZone,
 ) {
+    val logger = LocalLogger.current.withTag("LocalDateTimePickerDialog1")
+
     LocalDateTimePickerDialog(
         onDismissRequest = onDismissRequest,
         initialDateTime = initialInstant?.toLocalDateTime(timeZone),
@@ -40,9 +43,12 @@ private enum class LocalDateTimePickerDialogStep {
 public fun LocalDateTimePickerDialog(
     onDismissRequest: () -> Unit,
     initialDateTime: LocalDateTime?,
+    requireFutureDate: Boolean = false,
     onDateTimeSelected: (LocalDateTime) -> Unit,
     timeZone: TimeZone,
 ) {
+    val logger = LocalLogger.current.withTag("LocalDateTimePickerDialog2")
+
     var selectedDate: LocalDate? by remember { mutableStateOf(initialDateTime?.date) }
     var selectedTime: LocalTime? by remember { mutableStateOf(initialDateTime?.time) }
     var step: LocalDateTimePickerDialogStep by remember { mutableStateOf(LocalDateTimePickerDialogStep.DateStep) }
@@ -50,9 +56,14 @@ public fun LocalDateTimePickerDialog(
     when (step) {
         LocalDateTimePickerDialogStep.DateStep -> {
             LocalDatePickerDialog(
-                onDismissRequest = onDismissRequest,
+                onDismissRequest = {
+                    logger.d("Dismissing during DateStep")
+                    onDismissRequest()
+                },
                 initialDate = selectedDate,
+                requireFutureDate = requireFutureDate,
                 onDateSelected = {
+                    logger.d("Date selected during DateStep")
                     selectedDate = it
                     step = LocalDateTimePickerDialogStep.TimeStep
                 },
@@ -62,11 +73,14 @@ public fun LocalDateTimePickerDialog(
 
         LocalDateTimePickerDialogStep.TimeStep -> {
             LocalTimePickerDialog(
-                onDismissRequest = onDismissRequest,
+                onDismissRequest = {
+                    logger.d("Dismissing during TimeStep")
+                    onDismissRequest()
+                },
                 initialTime = selectedTime,
                 onTimeSelected = {
                     selectedTime = it
-                    if (selectedDate != null) {
+                    if (selectedDate != null && selectedTime != null) {
                         onDateTimeSelected(
                             LocalDateTime(selectedDate!!, selectedTime!!)
                         )
