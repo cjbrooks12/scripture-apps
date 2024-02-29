@@ -8,11 +8,16 @@ import kotlinx.coroutines.flow.asSharedFlow
 public class EventBusImpl(
     private val logger: Logger
 ) : EventBus {
-    private val _events = MutableSharedFlow<Any>()
+    private val _events = MutableSharedFlow<Any>(extraBufferCapacity = 64)
     override val events: SharedFlow<Any> get() = _events.asSharedFlow()
 
     override suspend fun send(event: Any) {
         logger.d { "Emitting event: $event" }
         _events.emit(event)
+    }
+
+    override fun trySend(event: Any) {
+        logger.d { "Emitting event: $event" }
+        _events.tryEmit(event)
     }
 }

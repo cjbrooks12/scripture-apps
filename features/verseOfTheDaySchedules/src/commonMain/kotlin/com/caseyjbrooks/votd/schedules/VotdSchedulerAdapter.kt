@@ -16,7 +16,7 @@ internal class VotdSchedulerAdapter : SchedulerAdapter<
             VotdSchedulesContract.Inputs,
             VotdSchedulesContract.Events,
             VotdSchedulesContract.State>.configureSchedules() {
-        val timeZone: TimeZone = GlobalKoinApplication.koinApplication.koin.get()
+        val timeZone: TimeZone = GlobalKoinApplication.get()
 
         onSchedule(
             key = "Prefetch Verse of the day",

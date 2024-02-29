@@ -11,24 +11,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinExperimentalAPI
-import org.koin.core.extension.coroutinesEngine
 import org.koin.dsl.binds
-import org.koin.dsl.koinApplication
 import org.koin.dsl.module
 
 class MainAndroidApplication : Application() {
 
     private val applicationCoroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
-    @OptIn(KoinExperimentalAPI::class)
     override fun onCreate() {
         super.onCreate()
 //        FirebaseApp.initializeApp(this)
         val variant = Variant(Variant.Environment.Local, Variant.BuildType.Debug)
 
-        GlobalKoinApplication.koinApplication = koinApplication {
-            coroutinesEngine()
+        GlobalKoinApplication.init {
             modules(AbideApplicationKoinModule(applicationCoroutineScope).getModulesForVariant(variant))
             modules(
                 module {
@@ -38,8 +33,8 @@ class MainAndroidApplication : Application() {
         }
 
         applicationCoroutineScope.launch {
-            val eventBusService: EventBusService = GlobalKoinApplication.koinApplication.koin.get()
-            val applicationStructure: AbideApplicationStructure = GlobalKoinApplication.koinApplication.koin.get()
+            val eventBusService: EventBusService = GlobalKoinApplication.get()
+            val applicationStructure: AbideApplicationStructure = GlobalKoinApplication.get()
 
             with(eventBusService) {
                 startSubscriptions(applicationStructure.eventBusSubscriptions)

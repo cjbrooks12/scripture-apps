@@ -5,7 +5,7 @@ internal class FakeNotificationService : NotificationService {
         TODO("Not yet implemented")
     }
 
-    override fun promptForPermission() {
+    override suspend fun promptForPermission() {
         TODO("Not yet implemented")
     }
 

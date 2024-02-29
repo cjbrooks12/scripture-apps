@@ -2,7 +2,7 @@ package com.caseyjbrooks.notifications
 
 public interface NotificationService {
     public fun isPermissionGranted(): Boolean
-    public fun promptForPermission()
+    public suspend fun promptForPermission()
 
     public fun showNotification(
         channelId: String,

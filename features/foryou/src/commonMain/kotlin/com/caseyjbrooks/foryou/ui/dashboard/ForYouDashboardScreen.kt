@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.caseyjbrooks.foryou.cards.dailyprayer.DailyPrayerDashboardCard
 import com.caseyjbrooks.foryou.cards.notice.NoticeDashboardCard
+import com.caseyjbrooks.foryou.cards.notifications.NotificationsCard
 import com.caseyjbrooks.foryou.cards.overview.OverviewDashboardCard
 import com.caseyjbrooks.foryou.cards.votd.VerseofTheDayDashboardCard
 import com.caseyjbrooks.ui.koin.LocalKoin
@@ -54,6 +55,13 @@ public object ForYouDashboardScreen {
                     noticeText = uiState.noticeText,
                     modifier = Modifier.fillMaxWidth().wrapContentHeight(),
                     onClick = { postInput(ForYouDashboardContract.Inputs.NoticeCardClicked) },
+                )
+            }
+
+            if (!uiState.notificationsEnabled) {
+                NotificationsCard(
+                    modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+                    onClick = { postInput(ForYouDashboardContract.Inputs.ShowNotificationPermissionPrompt) },
                 )
             }
 

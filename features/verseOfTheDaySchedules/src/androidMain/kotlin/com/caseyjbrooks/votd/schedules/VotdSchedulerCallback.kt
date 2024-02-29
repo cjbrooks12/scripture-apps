@@ -6,7 +6,7 @@ import com.copperleaf.ballast.scheduler.workmanager.SchedulerCallback
 internal class VotdSchedulerCallback : SchedulerCallback<VotdSchedulesContract.Inputs> {
 
     override suspend fun dispatchInput(input: VotdSchedulesContract.Inputs) {
-        val vm: VotdSchedulesViewModel = GlobalKoinApplication.koinApplication.koin.get()
+        val vm: VotdSchedulesViewModel = GlobalKoinApplication.get()
         vm.sendAndAwaitCompletion(input)
     }
 }

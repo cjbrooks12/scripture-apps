@@ -19,7 +19,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 internal actual suspend fun getWorkManagerJobInfo(): List<WorkManagerJobInfo> {
-    val context: Context = GlobalKoinApplication.koinApplication.koin.get<Context>().applicationContext
+    val context: Context = GlobalKoinApplication.get<Context>().applicationContext
     val workManager = WorkManager.getInstance(context)
 
     val jobs = workManager
@@ -108,7 +108,7 @@ internal fun WorkInfo.getLongFromTag(property: String, defaultValue: Long): Long
 
 @RequiresApi(Build.VERSION_CODES.O)
 internal actual suspend fun testWorkManagerJob(info: WorkManagerJobInfo) {
-    val context: Context = GlobalKoinApplication.koinApplication.koin.get<Context>().applicationContext
+    val context: Context = GlobalKoinApplication.get<Context>().applicationContext
 
     testScheduleNow(
         applicationContext = context,

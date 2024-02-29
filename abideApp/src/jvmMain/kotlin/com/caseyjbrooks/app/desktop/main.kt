@@ -10,18 +10,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import org.koin.core.extension.coroutinesEngine
-import org.koin.dsl.koinApplication
 
 public fun main() {
     val applicationCoroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     val variant = Variant(Variant.Environment.Local, Variant.BuildType.Debug)
 
-    GlobalKoinApplication.koinApplication = koinApplication {
+    GlobalKoinApplication.init {
         coroutinesEngine()
         modules(AbideApplicationKoinModule(applicationCoroutineScope).getModulesForVariant(variant))
     }
 
     singleWindowApplication {
-        ApplicationRoot(GlobalKoinApplication.koinApplication.koin, null)
+        ApplicationRoot(GlobalKoinApplication.koin, null)
     }
 }

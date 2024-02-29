@@ -14,6 +14,7 @@ kotlin {
             dependencies {
                 api(project(":core:di"))
                 api(project(":core:logging"))
+                api(libs.kotlinx.coroutines.core)
             }
         }
         val commonTest by getting {

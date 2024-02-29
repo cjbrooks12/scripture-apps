@@ -18,6 +18,11 @@ public interface EventBus {
      */
     public suspend fun send(event: Any)
 
+    /**
+     * Non-suspending version of [send].
+     */
+    public fun trySend(event: Any)
+
     public interface Subscription {
         public fun CoroutineScope.startSubscription(bus: EventBus)
     }

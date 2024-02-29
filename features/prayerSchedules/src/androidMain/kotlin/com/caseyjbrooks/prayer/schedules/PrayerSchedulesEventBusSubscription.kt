@@ -23,7 +23,7 @@ public actual class PrayerSchedulesEventBusSubscription : EventBus.Subscription 
             .onEach {
                 Log.d("PrayerSchedules", "Receiving event: $it")
                 WorkManager.getInstance(
-                    GlobalKoinApplication.koinApplication.koin.get()
+                    GlobalKoinApplication.get()
                 ).syncSchedulesOnStartup(
                     adapter = PrayerSchedulesAdapter(),
                     callback = PrayerSchedulesCallback(),

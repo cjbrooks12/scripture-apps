@@ -6,6 +6,8 @@ import com.copperleaf.ballast.repository.cache.Cached
 
 internal object ForYouDashboardContract {
     internal data class State(
+        val notificationsEnabled: Boolean = false,
+
         val verseOfTheDay: Cached<VerseOfTheDay> = Cached.NotLoaded(),
         val dailyPrayer: Cached<DailyPrayer> = Cached.NotLoaded(),
 
@@ -18,6 +20,9 @@ internal object ForYouDashboardContract {
 
     internal sealed interface Inputs {
         data object Initialize : Inputs
+
+        data class NotificationPermissionUpdated(val notificationsEnabled: Boolean) : Inputs
+        data object ShowNotificationPermissionPrompt : Inputs
 
         data object OverviewCardClicked : Inputs
 

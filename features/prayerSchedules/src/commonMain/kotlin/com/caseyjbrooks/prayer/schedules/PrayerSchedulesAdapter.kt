@@ -26,7 +26,7 @@ internal class PrayerSchedulesAdapter : SchedulerAdapter<
             PrayerSchedulesContract.Inputs,
             PrayerSchedulesContract.Events,
             PrayerSchedulesContract.State>.configureSchedules() {
-        val koin = GlobalKoinApplication.koinApplication.koin
+        val koin = GlobalKoinApplication.koin
         val timeZone: TimeZone = koin.get()
         val getPrayersWithNotificationsUseCase: GetPrayersWithNotificationsUseCase = koin.get()
         val logger: Logger = koin.get { parametersOf("BallastWorkManager") }

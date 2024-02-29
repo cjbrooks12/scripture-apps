@@ -7,31 +7,56 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.activity.ComponentActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import co.touchlab.kermit.Logger
 import com.copperleaf.notifications.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 internal class AndroidNotificationService(
     private val applicationContext: Context,
+    private val activityContext: ComponentActivity?,
     private val logger: Logger,
 ) : NotificationService {
 
     @SuppressLint("NewApi")
     override fun isPermissionGranted(): Boolean {
+        val cxt = activityContext ?: applicationContext
+
         val notificationEnabled = NotificationManagerCompat
-            .from(applicationContext)
+            .from(cxt)
             .areNotificationsEnabled()
-        val permissionGranted =
-            (ActivityCompat.checkSelfPermission(applicationContext, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED)
+
+        val permissionGranted = (ActivityCompat.checkSelfPermission(
+            cxt,
+            Manifest.permission.POST_NOTIFICATIONS
+        ) == PackageManager.PERMISSION_GRANTED)
 
         logger.i("notificationEnabled=$notificationEnabled, permissionGranted=$permissionGranted")
         return notificationEnabled && permissionGranted
     }
 
-    override fun promptForPermission() {
+    override suspend fun promptForPermission() = withContext(Dispatchers.Main) {
+        checkNotNull(activityContext)
+        when {
+            hasPermission() -> {
+                // You can use the API that requires the permission.
+            }
+
+            else -> {
+                // You can directly ask for the permission.
+                // The registered ActivityResultCallback gets the result of this request.
+                prompt()
+            }
+        }
     }
+
+// Display Notifications
+// ---------------------------------------------------------------------------------------------------------------------
 
     override fun showNotification(
         channelId: String,
@@ -75,5 +100,34 @@ internal class AndroidNotificationService(
                     }
                 )
         }
+    }
+
+// Check and request Notification permissions
+// ---------------------------------------------------------------------------------------------------------------------
+
+    @SuppressLint("InlinedApi")
+    private fun hasPermission(): Boolean {
+        val cxt = activityContext ?: applicationContext
+        return ContextCompat
+            .checkSelfPermission(cxt, Manifest.permission.POST_NOTIFICATIONS) ==
+                PackageManager.PERMISSION_GRANTED
+    }
+
+    @SuppressLint("InlinedApi")
+    private fun shouldShowRationaleUi(): Boolean {
+        checkNotNull(activityContext)
+        return ActivityCompat
+            .shouldShowRequestPermissionRationale(activityContext, Manifest.permission.POST_NOTIFICATIONS)
+    }
+
+    @SuppressLint("InlinedApi")
+    private suspend fun prompt() {
+        checkNotNull(activityContext)
+
+        ActivityCompat.requestPermissions(
+            activityContext,
+            arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+            PermissionsDomainEvents.PermissionType.Notifications.ordinal,
+        )
     }
 }

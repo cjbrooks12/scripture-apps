@@ -10,6 +10,7 @@ public actual class NotificationsKoinPlatformModule : KoinModule {
         factory<NotificationService> {
             AndroidNotificationService(
                 get(),
+                getOrNull(),
                 get { parametersOf("Notifications") },
             )
         }

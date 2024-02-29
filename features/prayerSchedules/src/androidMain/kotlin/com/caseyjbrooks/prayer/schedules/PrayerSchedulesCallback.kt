@@ -6,7 +6,7 @@ import com.copperleaf.ballast.scheduler.workmanager.SchedulerCallback
 internal class PrayerSchedulesCallback : SchedulerCallback<PrayerSchedulesContract.Inputs> {
 
     override suspend fun dispatchInput(input: PrayerSchedulesContract.Inputs) {
-        val vm: PrayerSchedulesViewModel = GlobalKoinApplication.koinApplication.koin.get()
+        val vm: PrayerSchedulesViewModel = GlobalKoinApplication.get()
         vm.sendAndAwaitCompletion(input)
     }
 }

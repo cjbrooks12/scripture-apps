@@ -30,7 +30,7 @@ import org.koin.core.parameter.parametersOf
 public class VerseOfTheDayWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val koin = GlobalKoinApplication.koinApplication.koin
+        val koin = GlobalKoinApplication.koin
         val logger: Logger = koin.get { parametersOf("VerseOfTheDayWidget") }
 
         logger.d { "Providing VerseOfTheDayWidget for id '$id'" }

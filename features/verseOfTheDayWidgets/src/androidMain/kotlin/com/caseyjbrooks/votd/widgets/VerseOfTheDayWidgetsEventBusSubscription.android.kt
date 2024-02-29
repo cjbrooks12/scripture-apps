@@ -17,7 +17,7 @@ public actual class VerseOfTheDayWidgetsEventBusSubscription : EventBus.Subscrip
             .events
             .filterIsInstance<VerseOfTheDayDomainEvents.VerseOfTheDayUpdated>()
             .onEach {
-                val context: Context = GlobalKoinApplication.koinApplication.koin.get()
+                val context: Context = GlobalKoinApplication.get()
                 Log.d("VotdSchedules", "Receiving event: $it")
                 val manager = GlanceAppWidgetManager(context)
                 val widget = VerseOfTheDayWidget()
