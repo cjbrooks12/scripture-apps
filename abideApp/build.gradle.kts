@@ -22,7 +22,7 @@ android {
     namespace = "com.caseyjbrooks.app"
 
     defaultConfig {
-        minSdk = 26
+        minSdk = 31
 
         val projectVersion = ConventionConfig.projectVersion(project)
         versionName = projectVersion.projectVersion
@@ -33,6 +33,18 @@ android {
         val hour = "${now.hour}".padStart(2, '0')
         val minute = "${now.minute}".padStart(2, '0')
         versionCode = "$year$day$hour$minute".toInt()
+    }
+
+    bundle {
+        language {
+            enableSplit = true
+        }
+        density {
+            enableSplit = true
+        }
+        abi {
+            enableSplit = true
+        }
     }
 
     signingConfigs {
