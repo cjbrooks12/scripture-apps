@@ -2,7 +2,7 @@
 
 import com.copperleaf.gradle.ConventionConfig
 import com.google.firebase.appdistribution.gradle.AppDistributionExtension
-import org.gradle.internal.impldep.org.joda.time.LocalDateTime
+import java.time.LocalDateTime
 
 plugins {
     id("copper-leaf-base")
@@ -30,8 +30,8 @@ android {
         val now = LocalDateTime.now()
         val year = "${now.year.toString().takeLast(2)}".padStart(3, '0')
         val day = "${now.dayOfYear}".padStart(3, '0')
-        val hour = "${now.hourOfDay}".padStart(2, '0')
-        val minute = "${now.minuteOfHour}".padStart(2, '0')
+        val hour = "${now.hour}".padStart(2, '0')
+        val minute = "${now.minute}".padStart(2, '0')
         versionCode = "$year$day$hour$minute".toInt()
     }
 
@@ -166,7 +166,7 @@ kotlin {
                 implementation(libs.androidx.activityCompose)
                 implementation("androidx.core:core-splashscreen:1.0.0-beta02")
                 implementation(libs.ktor.client.cio)
-                implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
+                implementation(project.dependencies.platform("com.google.firebase:firebase-bom:32.5.0"))
                 implementation("com.google.firebase:firebase-analytics")
                 implementation("com.google.firebase:firebase-auth")
                 implementation("com.google.firebase:firebase-firestore")
