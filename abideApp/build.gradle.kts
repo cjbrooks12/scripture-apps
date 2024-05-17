@@ -2,6 +2,7 @@
 
 import com.copperleaf.gradle.ConventionConfig
 import com.google.firebase.appdistribution.gradle.AppDistributionExtension
+import org.gradle.internal.impldep.org.joda.time.LocalDateTime
 
 plugins {
     id("copper-leaf-base")
@@ -25,7 +26,13 @@ android {
 
         val projectVersion = ConventionConfig.projectVersion(project)
         versionName = projectVersion.projectVersion
-        versionCode = projectVersion.projectVersionInt
+
+        val now = LocalDateTime.now()
+        val year = "${now.year.toString().takeLast(2)}".padStart(3, '0')
+        val day = "${now.dayOfYear}".padStart(3, '0')
+        val hour = "${now.hourOfDay}".padStart(2, '0')
+        val minute = "${now.minuteOfHour}".padStart(2, '0')
+        versionCode = "$year$day$hour$minute".toInt()
     }
 
     signingConfigs {
