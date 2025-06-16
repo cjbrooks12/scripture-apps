@@ -2,7 +2,7 @@ environment: "$APP__ENVIRONMENT:dev"
 ktor:
   application:
     modules:
-      - com.caseyjbrooks.gradebook.ApplicationKt.module
+      - com.copperleaf.biblebits.ApplicationKt.module
   deployment:
     port: 9001
 
