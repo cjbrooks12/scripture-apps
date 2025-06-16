@@ -4,9 +4,12 @@ import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.js.Js
 import io.ktor.client.plugins.defaultRequest
+import kotlinx.browser.window
 
 class WasmPlatform: Platform {
-    override val name: String = "Web with Kotlin/Wasm"
+    override val name: String get() {
+        return "Web with Kotlin/Wasm (${window.location.origin})"
+    }
 }
 
 actual fun getPlatform(): Platform = WasmPlatform()
