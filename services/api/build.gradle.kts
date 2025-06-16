@@ -6,7 +6,7 @@ plugins {
 //    alias(libs.plugins.ksp)
 }
 
-group = "com.copperleaf.abide"
+group = "com.copperleaf.biblebits"
 version = "0.0.1"
 
 dependencies {

@@ -31,7 +31,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "abide"
+rootProject.name = "biblebits"
 
 include(":lib:dto")
 include(":lib:ktor-server-platform")

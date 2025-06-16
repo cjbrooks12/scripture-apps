@@ -97,11 +97,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.copperleaf.abide"
+    namespace = "com.copperleaf.biblebits"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.copperleaf.abide"
+        applicationId = "com.copperleaf.biblebits"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
