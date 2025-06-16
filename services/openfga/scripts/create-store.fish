@@ -2,7 +2,7 @@
 
 set FGA_API_URL http://localhost:8080
 
-set FGA_STORE_ID $(fga store create --name="Gradebook Store" | jq -r .store.id)
+set FGA_STORE_ID $(fga store create --name="Biblebits Store" | jq -r .store.id)
 
 mkdir ./build/
 mkdir ./build/tmp/

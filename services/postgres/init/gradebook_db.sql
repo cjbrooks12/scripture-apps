@@ -1,3 +1,3 @@
-CREATE USER gradebook;
-CREATE DATABASE gradebook;
-GRANT ALL PRIVILEGES ON DATABASE gradebook TO gradebook;
+CREATE USER biblebits;
+CREATE DATABASE biblebits;
+GRANT ALL PRIVILEGES ON DATABASE biblebits TO biblebits;

@@ -1,5 +1,5 @@
 ---
-name: Gradebook Store
+name: Biblebits Store
 model_file: ./model.fga
 tuple_file: ./initial-data.yaml
 

@@ -1,6 +1,6 @@
 {
-    "id": "gradebook",
-    "realm": "gradebook",
+    "id": "biblebits",
+    "realm": "biblebits",
     "sslRequired": "none",
     "registrationAllowed": true,
     "registrationEmailAsUsername": true,

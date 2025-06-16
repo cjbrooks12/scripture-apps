@@ -8,16 +8,16 @@ ktor:
 
 security:
   jwt:
-    issuer: "http://localhost:9080/auth/realms/gradebook"
-    jwksUrl: "http://apisix:9080/auth/realms/gradebook/protocol/openid-connect/certs"
-    realm: "gradebook"
+    issuer: "http://localhost:9080/auth/realms/biblebits"
+    jwksUrl: "http://apisix:9080/auth/realms/biblebits/protocol/openid-connect/certs"
+    realm: "biblebits"
 
 connections:
   redis:
     redisConnectionString: "redis://:redis@redis/0"
   db:
     driver: "Postgres"
-    postgresConnectionString: "jdbc:postgresql://postgres:5432/gradebook?user=postgres&password=postgres"
+    postgresConnectionString: "jdbc:postgresql://postgres:5432/biblebits?user=postgres&password=postgres"
 
 services:
   cache:

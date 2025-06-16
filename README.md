@@ -11,7 +11,7 @@
 | OpenFGA    | 8080          | 8080          |                                     | OpenFGA HTTP API         |          |          |                              |
 | OpenFGA    | 8081          | 8081          |                                     | OpenFGA gRPC API         |          |          |                              |
 | OpenFGA    | 3000          | 3000          | http://localhost:9080/admin/openfga | OpenFGA Playground       |          |          |                              |
-| Postgres   | 5432          | 5432          |                                     | Primary DB               | postgres | postgres | gradebook, keycloak, openfga |
+| Postgres   | 5432          | 5432          |                                     | Primary DB               | postgres | postgres | biblebits, keycloak, openfga |
 | PGAdmin    | 5080          | 5080          | http://localhost:9080/admin/pgadmin | DB Administration        | postgres | postgres |                              |
 | Prometheus | 9090          | 9090          |                                     | Metrics Aggregator       |          |          |                              |
 | Redis      | 6379          | 6379          |                                     | Cache, Pub/Sub           |          | redis    | redis                        |

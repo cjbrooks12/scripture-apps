@@ -1,6 +1,6 @@
 {
-  "id": "gradebook",
-  "realm": "gradebook",
+  "id": "biblebits",
+  "realm": "biblebits",
   "notBefore": 0,
   "defaultSignatureAlgorithm": "RS256",
   "revokeRefreshToken": false,
@@ -52,7 +52,7 @@
         "description": "Grants permissions to most of the system, but not necessarily everything. Typically used for Admin users of the system who may need to arbitrarily update anything in the system, but may need some guardrails to prevent accidentally destroying it.",
         "composite": false,
         "clientRole": false,
-        "containerId": "gradebook",
+        "containerId": "biblebits",
         "attributes": {}
       },
       {
@@ -61,12 +61,12 @@
         "description": "${role_offline-access}",
         "composite": false,
         "clientRole": false,
-        "containerId": "gradebook",
+        "containerId": "biblebits",
         "attributes": {}
       },
       {
         "id": "287f7fbd-d4fa-47b5-bb5d-e04772890c88",
-        "name": "default-roles-gradebook",
+        "name": "default-roles-biblebits",
         "description": "${role_default-roles}",
         "composite": true,
         "composites": {
@@ -83,7 +83,7 @@
           }
         },
         "clientRole": false,
-        "containerId": "gradebook",
+        "containerId": "biblebits",
         "attributes": {}
       },
       {
@@ -92,7 +92,7 @@
         "description": "${role_uma_authorization}",
         "composite": false,
         "clientRole": false,
-        "containerId": "gradebook",
+        "containerId": "biblebits",
         "attributes": {}
       },
       {
@@ -101,7 +101,7 @@
         "description": "Grants full access to everything in the system. Typically used for Service Accounts (machine-to-machine communication).",
         "composite": false,
         "clientRole": false,
-        "containerId": "gradebook",
+        "containerId": "biblebits",
         "attributes": {}
       },
       {
@@ -110,7 +110,7 @@
         "description": "Default role for end-users of the application. Grants read/write access to their own resources, but restricted from viewing resources they are not explicitly granted access to.",
         "composite": false,
         "clientRole": false,
-        "containerId": "gradebook",
+        "containerId": "biblebits",
         "attributes": {}
       }
     ],
@@ -436,11 +436,11 @@
   "groups": [],
   "defaultRole": {
     "id": "287f7fbd-d4fa-47b5-bb5d-e04772890c88",
-    "name": "default-roles-gradebook",
+    "name": "default-roles-biblebits",
     "description": "${role_default-roles}",
     "composite": true,
     "clientRole": false,
-    "containerId": "gradebook"
+    "containerId": "biblebits"
   },
   "requiredCredentials": [
     "password"
@@ -496,7 +496,7 @@
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
-        "default-roles-gradebook"
+        "default-roles-biblebits"
       ],
       "notBefore": 0,
       "groups": []
@@ -512,7 +512,7 @@
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
-        "default-roles-gradebook"
+        "default-roles-biblebits"
       ],
       "notBefore": 0,
       "groups": []
@@ -543,13 +543,13 @@
       "clientId": "account",
       "name": "${client_account}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/gradebook/account/",
+      "baseUrl": "/realms/biblebits/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "/realms/gradebook/account/*"
+        "/realms/biblebits/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -588,13 +588,13 @@
       "clientId": "account-console",
       "name": "${client_account-console}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/gradebook/account/",
+      "baseUrl": "/realms/biblebits/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "/realms/gradebook/account/*"
+        "/realms/biblebits/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -971,13 +971,13 @@
       "clientId": "security-admin-console",
       "name": "${client_security-admin-console}",
       "rootUrl": "${authAdminUrl}",
-      "baseUrl": "/admin/gradebook/console/",
+      "baseUrl": "/admin/biblebits/console/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "/admin/gradebook/console/*"
+        "/admin/biblebits/console/*"
       ],
       "webOrigins": [
         "+"
