@@ -1,0 +1,13 @@
+#- { user: tenant:1, relation: tenant, object: course:1 }
+#- { user: tenant:1, relation: tenant, object: course:2 }
+
+- { user: course:*, relation: tenant, object: tenant:1 }
+
+- { user: user:1, relation: creator, object: course:1 }
+- { user: user:1, relation: viewer, object: course:2 }
+
+- { user: user:2, relation: creator, object: course:2 }
+
+- { user: user:3, relation: admin, object: tenant:1 }
+- { user: user:4, relation: auditor, object: tenant:1 }
+

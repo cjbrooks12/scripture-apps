@@ -1,0 +1,15 @@
+services:
+  flyway:
+    image: flyway/flyway:latest
+    attach: false
+    volumes:
+      - './migrations/:/flyway/sql/'
+    environment:
+      FLYWAY_USER: 'postgres'
+      FLYWAY_PASSWORD: 'postgres'
+      FLYWAY_URL: 'jdbc:postgresql://postgres:5432/gradebook'
+      FLYWAY_GROUP: 'true'
+    command: -locations=filesystem:/flyway/sql -connectRetries=60 migrate
+    depends_on:
+      postgres: { condition: service_healthy }
+

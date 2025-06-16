@@ -1,7 +1,0 @@
-### Get today's Verse of the Day from OurManna.com
-GET https://beta.ourmanna.com/api/v1/get?format=json&order=daily
-accept: application/json
-
-### Get a random Verse of the Day from OurManna.com
-GET https://beta.ourmanna.com/api/v1/get?format=asdf&order=random
-accept: application/json

@@ -1,0 +1,15 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "Main",
+            "Group": "Servers",
+            "Host": "postgres",
+            "Port": 5432,
+            "MaintenanceDB": "postgres",
+            "Username": "postgres",
+            "Shared": true,
+            "SharedUsername": "postgres",
+            "PasswordExecCommand": "echo 'postgres'"
+        }
+    }
+}

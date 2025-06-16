@@ -1,0 +1,3 @@
+CREATE USER gradebook;
+CREATE DATABASE gradebook;
+GRANT ALL PRIVILEGES ON DATABASE gradebook TO gradebook;

@@ -1,0 +1,6 @@
+FROM pierrezemb/gostatic
+
+COPY ./headerConfig.json /config/headerConfig.json
+COPY ./build/dist/hugo/ /srv/http
+
+CMD [ "-enable-health", "-log-level", "debug", "-fallback", "/index.html", "-port", "9000" ]

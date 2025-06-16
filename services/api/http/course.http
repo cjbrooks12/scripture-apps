@@ -1,0 +1,55 @@
+#@courseId = 098cdb8f-74f2-40b2-86b8-0b0a568b1fdb
+
+# Basic CRUD Operations
+# ----------------------------------------------------------------------------------------------------------------------
+
+// Get Courses
+GET {{apiBaseUrl}}/protected/courses/
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{$auth.token("keycloak_service_account")}}
+
+> {%
+    client.global.set("courseId", response.body[0].id);
+%}
+###
+
+// Get Course By ID
+GET {{apiBaseUrl}}/protected/courses/{{courseId}}
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{$auth.token("keycloak_service_account")}}
+###
+
+// Create Course
+POST {{apiBaseUrl}}/protected/courses
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{$auth.token("keycloak_service_account")}}
+
+{
+    "name": "Essay Writing"
+}
+
+> {%
+    client.global.set("courseId", response.body.id);
+%}
+###
+
+// Update Course
+PUT {{apiBaseUrl}}/protected/courses/{{courseId}}
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{$auth.token("keycloak_service_account")}}
+
+{
+    "name": "Essay Writing 3"
+}
+###
+
+// Delete Course
+DELETE {{apiBaseUrl}}/protected/courses/{{courseId}}
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{$auth.token("keycloak_service_account")}}
+###

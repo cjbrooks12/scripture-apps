@@ -1,64 +1,47 @@
+@file:Suppress("UnstableApiUsage")
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 pluginManagement {
     repositories {
-        google()
+        google {
+            mavenContent {
+                includeGroupAndSubgroups("androidx")
+                includeGroupAndSubgroups("com.android")
+                includeGroupAndSubgroups("com.google")
+            }
+        }
         mavenCentral()
         gradlePluginPortal()
+        mavenLocal()
     }
 }
-
-//val conventionDir = "./../../copperleaf/gradle-convention-plugins"
-val conventionDir = ".//gradle-convention-plugins"
 
 dependencyResolutionManagement {
-    versionCatalogs {
-        create("libs") {
-            from(files("$conventionDir/gradle/conventionLibs.versions.toml"))
+    repositories {
+        google {
+            mavenContent {
+                includeGroupAndSubgroups("androidx")
+                includeGroupAndSubgroups("com.android")
+                includeGroupAndSubgroups("com.google")
+            }
         }
+        mavenCentral()
+        maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
+        mavenLocal()
     }
 }
 
-includeBuild(conventionDir)
+rootProject.name = "abide"
 
-rootProject.name = "scripture-now"
+include(":lib:dto")
+include(":lib:ktor-server-platform")
 
-include(":core:api")
-include(":core:ballast")
-include(":core:database")
-include(":core:datetime")
-include(":core:domain")
-include(":core:logging")
-include(":core:notifications")
-include(":core:di")
-include(":core:routing")
-include(":core:ui")
+include(":services:api")
+include(":services:flyway")
+include(":services:keycloak")
+include(":services:openfga")
+include(":services:postgres")
+include(":services:redis")
+include(":services:site")
 
-// Prayer pillar
-include(":data:prayerData")
-include(":domain:prayerDomain")
-include(":features:prayerSchedules")
-include(":features:prayerScreens")
-include(":features:prayerWidgets")
-include(":pillars:prayerPillar")
-
-// Prayer pillar
-include(":data:verseOfTheDayData")
-include(":domain:verseOfTheDayDomain")
-include(":features:verseOfTheDaySchedules")
-include(":features:verseOfTheDayScreens")
-include(":features:verseOfTheDayWidgets")
-include(":pillars:verseOfTheDayPillar")
-
-// Scripture Memory Pillar
-include(":data:verseData")
-include(":domain:verseDomain")
-include(":features:scriptureMemoryScreens")
-include(":pillars:scriptureMemoryPillar")
-
-include(":features:bible")
-include(":features:foryou")
-include(":features:settings")
-include(":features:topicalBible")
-include(":features:debugScreens")
-
-include(":abideApp")
-//include(":topicalBibleApp")
+include(":app:composeApp")

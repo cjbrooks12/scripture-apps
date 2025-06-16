@@ -1,0 +1,17 @@
+services:
+  api:
+    image: 'localhost/api:latest'
+    ports: [ '9001:9001' ]
+    volumes:
+      - './build/blob/:/blob'
+      - './../openfga/build/tmp/:/openfga'
+    healthcheck:
+      test: curl --silent --fail http://server:18080/health || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+      openfga_migrate: { condition: service_completed_successfully }
+      flyway: { condition: service_completed_successfully }

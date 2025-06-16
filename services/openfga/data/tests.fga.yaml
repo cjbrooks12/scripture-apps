@@ -1,0 +1,93 @@
+---
+name: Gradebook Store
+model_file: ./model.fga
+tuple_file: ./initial-data.yaml
+
+tests: # required
+  - name: person-relationships
+    description: Testing person relationships to other persons
+    tuple_file: ./test-data.yaml
+    check:
+      - user: user:1
+        object: tenant:1
+        assertions:
+          can_view_all: false
+          can_create: false
+          can_manage_access: false
+      - user: user:1
+        object: course:1
+        assertions:
+          can_view: true
+          can_update: true
+          can_delete: true
+          can_manage_access: true
+      - user: user:1
+        object: course:2
+        assertions:
+          can_view: true
+          can_update: false
+          can_delete: false
+          can_manage_access: false
+
+      - user: user:2
+        object: tenant:1
+        assertions:
+          can_view_all: false
+          can_create: false
+          can_manage_access: false
+      - user: user:2
+        object: course:1
+        assertions:
+          can_view: false
+          can_update: false
+          can_delete: false
+          can_manage_access: false
+      - user: user:2
+        object: course:2
+        assertions:
+          can_view: true
+          can_update: true
+          can_delete: true
+          can_manage_access: true
+
+      - user: user:3
+        object: tenant:1
+        assertions:
+          can_view_all: true
+          can_create: true
+          can_manage_access: true
+      - user: user:3
+        object: course:1
+        assertions:
+          can_view: true
+          can_update: false
+          can_delete: false
+          can_manage_access: true
+      - user: user:3
+        object: course:2
+        assertions:
+          can_view: true
+          can_update: false
+          can_delete: false
+          can_manage_access: true
+
+      - user: user:4
+        object: tenant:1
+        assertions:
+          can_view_all: true
+          can_create: false
+          can_manage_access: false
+      - user: user:4
+        object: course:1
+        assertions:
+          can_view: true
+          can_update: false
+          can_delete: false
+          can_manage_access: false
+      - user: user:4
+        object: course:2
+        assertions:
+          can_view: true
+          can_update: false
+          can_delete: false
+          can_manage_access: false

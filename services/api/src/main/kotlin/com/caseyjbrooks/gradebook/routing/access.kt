@@ -1,0 +1,56 @@
+package com.caseyjbrooks.gradebook.routing
+
+import com.caseyjbrooks.dto.AccessPath
+import com.caseyjbrooks.dto.InviteAccessRequestDto
+import com.caseyjbrooks.dto.ListMembersRequestDto
+import com.caseyjbrooks.dto.RevokeAccessRequestDto
+import com.caseyjbrooks.gradebook.controller.AccessController
+import com.caseyjbrooks.platform.services.authorization.authorize
+import com.caseyjbrooks.platform.util.GET
+import com.caseyjbrooks.platform.util.POST
+import com.caseyjbrooks.platform.util.routing.extractPath
+import com.caseyjbrooks.platform.util.routing.extractQuery
+import io.ktor.server.request.receive
+import io.ktor.server.routing.Route
+
+private fun Route.authorize(
+    action: String,
+    build: Route.() -> Unit
+) {
+    authorize({
+        this.action = { action }
+        this.resource = {
+            extractPath<AccessPath>().objectType.openfgaObjectName
+        }
+        this.resourceId = {
+            extractPath<AccessPath>().objectId.toString()
+        }
+    }, build)
+}
+
+fun Route.accessRouter() {
+    authorize("can_manage_access") {
+        POST("/{objectType}/{objectId}/invite") {
+            AccessController(call).inviteAccess(
+                path = call.extractPath<AccessPath>(),
+                body = call.receive<InviteAccessRequestDto>(),
+            )
+        }
+    }
+    authorize("can_manage_access") {
+        POST("/{objectType}/{objectId}/revoke") {
+            AccessController(call).revokeAccess(
+                path = call.extractPath<AccessPath>(),
+                body = call.receive<RevokeAccessRequestDto>(),
+            )
+        }
+    }
+    authorize("can_manage_access") {
+        GET("/{objectType}/{objectId}/members") {
+            AccessController(call).listMembers(
+                path = call.extractPath<AccessPath>(),
+                query = call.extractQuery<ListMembersRequestDto>()
+            )
+        }
+    }
+}

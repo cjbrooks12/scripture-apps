@@ -1,0 +1,5 @@
+services:
+  site:
+    image: 'localhost/site:latest'
+    attach: false
+    ports: [ '9000:9000' ]

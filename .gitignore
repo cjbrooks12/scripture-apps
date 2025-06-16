@@ -85,3 +85,6 @@ release.keystore
 
 
 *.private.env.json
+
+.kotlin
+.hugo_build.lock

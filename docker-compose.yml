@@ -1,0 +1,8 @@
+include:
+  - './services/api/docker-compose.yml'
+  - './services/flyway/docker-compose.yml'
+  - './services/keycloak/docker-compose.yml'
+  - './services/openfga/docker-compose.yml'
+  - './services/postgres/docker-compose.yml'
+  - './services/redis/docker-compose.yml'
+  - './services/site/docker-compose.yml'

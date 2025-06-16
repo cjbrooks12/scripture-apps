@@ -1,0 +1,11 @@
+//
+GET {{apiBaseUrl}}/public/health
+Content-Type: application/json
+Accept: application/json
+###
+
+//
+GET {{apiBaseUrl}}/public/metrics
+Content-Type: application/json
+Accept: application/json
+###

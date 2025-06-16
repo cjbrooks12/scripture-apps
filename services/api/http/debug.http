@@ -1,0 +1,42 @@
+
+//
+GET {{apiBaseUrl}}/protected/debug/server-info
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{$auth.token("keycloak_service_account")}}
+###
+
+//
+GET {{apiBaseUrl}}/protected/debug/headers
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{$auth.token("keycloak_service_account")}}
+###
+
+//
+GET {{apiBaseUrl}}/protected/debug/me
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{$auth.token("keycloak_service_account")}}
+###
+
+//
+GET {{apiBaseUrl}}/protected/debug/me
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{$auth.token("keycloak_user_account")}}
+###
+
+//
+GET {{apiBaseUrl}}/protected/debug/db-test
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{$auth.token("keycloak_service_account")}}
+###
+
+//
+GET {{apiBaseUrl}}/protected/debug/cache-test
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{$auth.token("keycloak_service_account")}}
+###

@@ -1,0 +1,16 @@
+services:
+  redis:
+    image: 'bitnami/redis:latest'
+    attach: false
+    ports: [ '6379:6379' ]
+    volumes:
+      - './build/redis/data/:/bitnami/redis/data'
+    environment:
+      REDIS_PORT: '6379'
+      REDIS_DATABASE: 'redis'
+      REDIS_PASSWORD: 'redis'
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      interval: '5s'
+      timeout: '5s'
+      retries: 5

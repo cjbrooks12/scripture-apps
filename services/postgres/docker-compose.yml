@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    attach: false
+    ports: [ '5432:5432' ]
+    volumes:
+      - './init/:/docker-entrypoint-initdb.d/'
+      - './build/postgresql/data/:/var/lib/postgresql/data'
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+    healthcheck:
+      test: [ 'CMD-SHELL', 'pg_isready -U postgres' ]
+      interval: '5s'
+      timeout: '5s'
+      retries: '5'

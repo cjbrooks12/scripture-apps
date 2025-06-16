@@ -1,0 +1,31 @@
+services:
+  openfga_migrate:
+    image: 'openfga/openfga:latest'
+    attach: false
+    command: 'migrate'
+    environment:
+      OPENFGA_DATASTORE_ENGINE: 'postgres'
+      OPENFGA_DATASTORE_URI: 'postgres://postgres:postgres@postgres:5432/openfga?sslmode=disable'
+    depends_on:
+      postgres: { condition: service_healthy }
+  openfga:
+    image: 'openfga/openfga:latest'
+    attach: false
+    ports: [ '8080:8080', '8081:8081', '3000:3000', '2112:2112' ]
+    environment:
+      OPENFGA_DATASTORE_ENGINE: 'postgres'
+      OPENFGA_DATASTORE_URI: 'postgres://postgres:postgres@postgres:5432/openfga?sslmode=disable'
+      OPENFGA_LOG_FORMAT: 'json'
+    command: run
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "/usr/local/bin/grpc_health_probe",
+          "-addr=openfga:8081"
+        ]
+      interval: 5s
+      timeout: 30s
+      retries: 3
+    depends_on:
+      openfga_migrate: { condition: service_completed_successfully }

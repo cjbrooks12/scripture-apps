@@ -1,0 +1,22 @@
+model
+  schema 1.1
+
+type user
+
+type tenant
+  relations
+    define admin: [user]
+    define auditor: [user]
+    define can_view_all: admin or auditor
+    define can_create: admin
+    define can_manage_access: admin
+
+type course
+  relations
+    define tenant: [tenant]
+    define creator: [user]
+    define viewer: [user]
+    define can_view: creator or viewer or (can_view_all from tenant)
+    define can_update: creator
+    define can_delete: creator
+    define can_manage_access: creator or (can_manage_access from tenant)

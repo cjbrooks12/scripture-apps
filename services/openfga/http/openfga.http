@@ -1,0 +1,601 @@
+@storeId = 01JDQ54K7M71WVV5YAVVJ2A4ZX
+@authorizationModelId = 01JDQ54KK8VWJS5RZR8ZN4WZQY
+
+# Stores
+# ----------------------------------------------------------------------------------------------------------------------
+
+// List All Stores
+GET {{openfgaBaseUrl}}/stores?
+    page_size=<integer>&
+    continuation_token=<string>
+Accept: application/json
+
+###
+
+// Create a store
+POST {{openfgaBaseUrl}}/stores
+Content-Type: application/json
+Accept: application/json
+
+{
+    "name": "<string>"
+}
+
+###
+
+// Get a store
+GET {{openfgaBaseUrl}}/stores/{{storeId}}
+Accept: application/json
+
+###
+
+// Delete a store
+DELETE {{openfgaBaseUrl}}/stores/{{storeId}}
+Accept: application/json
+
+###
+
+# Authorization Models
+# ----------------------------------------------------------------------------------------------------------------------
+
+// Return all the authorization models for a particular store
+GET {{openfgaBaseUrl}}/stores/{{storeId}}/authorization-models?
+    page_size=<integer>&
+    continuation_token=<string>
+Accept: application/json
+
+###
+
+// Create a new authorization model
+POST {{openfgaBaseUrl}}/stores/{{storeId}}/authorization-models
+Content-Type: application/json
+Accept: application/json
+
+{
+    "type_definitions": [
+        {
+            "type": "<string>",
+            "relations": {
+                "voluptate_b": {
+                    "this": {},
+                    "computedUserset": {
+                        "object": "<string>",
+                        "relation": "<string>"
+                    },
+                    "tupleToUserset": {
+                        "tupleset": {
+                            "object": "<string>",
+                            "relation": "<string>"
+                        },
+                        "computedUserset": {
+                            "object": "<string>",
+                            "relation": "<string>"
+                        }
+                    },
+                    "union": {
+                        "child": [
+                            {
+                                "value": "<Circular reference to #/components/schemas/Userset detected>"
+                            },
+                            {
+                                "value": "<Circular reference to #/components/schemas/Userset detected>"
+                            }
+                        ]
+                    },
+                    "intersection": {
+                        "child": [
+                            {
+                                "value": "<Circular reference to #/components/schemas/Userset detected>"
+                            },
+                            {
+                                "value": "<Circular reference to #/components/schemas/Userset detected>"
+                            }
+                        ]
+                    },
+                    "difference": {
+                        "base": {
+                            "value": "<Circular reference to #/components/schemas/Userset detected>"
+                        },
+                        "subtract": {
+                            "value": "<Circular reference to #/components/schemas/Userset detected>"
+                        }
+                    }
+                }
+            },
+            "metadata": {
+                "relations": {
+                    "et_b": {
+                        "directly_related_user_types": [
+                            {
+                                "type": "<string>",
+                                "relation": "<string>",
+                                "wildcard": {},
+                                "condition": "<string>"
+                            },
+                            {
+                                "type": "<string>",
+                                "relation": "<string>",
+                                "wildcard": {},
+                                "condition": "<string>"
+                            }
+                        ],
+                        "module": "<string>",
+                        "source_info": {
+                            "file": "<string>"
+                        }
+                    },
+                    "do_": {
+                        "directly_related_user_types": [
+                            {
+                                "type": "<string>",
+                                "relation": "<string>",
+                                "wildcard": {},
+                                "condition": "<string>"
+                            },
+                            {
+                                "type": "<string>",
+                                "relation": "<string>",
+                                "wildcard": {},
+                                "condition": "<string>"
+                            }
+                        ],
+                        "module": "<string>",
+                        "source_info": {
+                            "file": "<string>"
+                        }
+                    }
+                },
+                "module": "<string>",
+                "source_info": {
+                    "file": "<string>"
+                }
+            }
+        }
+    ],
+    "schema_version": "<string>",
+    "conditions": {
+        "dolor19": {
+            "name": "<string>",
+            "expression": "<string>",
+            "parameters": {
+                "aute__87": {
+                    "type_name": "TYPE_NAME_UNSPECIFIED",
+                    "generic_types": [
+                        {
+                            "value": "<Circular reference to #/components/schemas/ConditionParamTypeRef detected>"
+                        },
+                        {
+                            "value": "<Circular reference to #/components/schemas/ConditionParamTypeRef detected>"
+                        }
+                    ]
+                }
+            },
+            "metadata": {
+                "module": "<string>",
+                "source_info": {
+                    "file": "<string>"
+                }
+            }
+        },
+        "officiae8d": {
+            "name": "<string>",
+            "expression": "<string>",
+            "parameters": {
+                "anima28": {
+                    "type_name": "TYPE_NAME_UNSPECIFIED",
+                    "generic_types": [
+                        {
+                            "value": "<Circular reference to #/components/schemas/ConditionParamTypeRef detected>"
+                        },
+                        {
+                            "value": "<Circular reference to #/components/schemas/ConditionParamTypeRef detected>"
+                        }
+                    ]
+                }
+            },
+            "metadata": {
+                "module": "<string>",
+                "source_info": {
+                    "file": "<string>"
+                }
+            }
+        }
+    }
+}
+
+###
+
+// Return a particular version of an authorization model
+GET {{openfgaBaseUrl}}/stores/{{storeId}}/authorization-models/{{authorizationModelId}}
+Accept: application/json
+
+###
+
+# Relationship Tuples
+# ----------------------------------------------------------------------------------------------------------------------
+
+// Return a list of all the tuple changes
+GET {{openfgaBaseUrl}}/stores/{{storeId}}/changes?
+    type=<string>&
+    page_size=<integer>&
+    continuation_token=<string>&
+    start_time=<dateTime>
+Accept: application/json
+
+###
+
+// Get tuples from the store that matches a query, without following userset rewrite rules
+POST {{openfgaBaseUrl}}/stores/{{storeId}}/read
+Content-Type: application/json
+Accept: application/json
+
+{
+    "tuple_key": {
+        "user": "<string>",
+        "relation": "<string>",
+        "object": "<string>"
+    },
+    "page_size": "<integer>",
+    "continuation_token": "<string>",
+    "consistency": "UNSPECIFIED"
+}
+
+###
+
+// Add or delete tuples from the store
+POST {{openfgaBaseUrl}}/stores/{{storeId}}/write
+Content-Type: application/json
+Accept: application/json
+
+{
+    "writes": {
+        "tuple_keys": [
+            {
+                "user": "<string>",
+                "relation": "<string>",
+                "object": "<string>",
+                "condition": {
+                    "name": "<string>",
+                    "context": {}
+                }
+            }
+        ]
+    },
+    "deletes": {
+        "tuple_keys": [
+            {
+                "user": "<string>",
+                "relation": "<string>",
+                "object": "<string>"
+            }
+        ]
+    },
+    "authorization_model_id": "{{authorizationModelId}}"
+}
+
+###
+
+# Relationship Queries
+# ----------------------------------------------------------------------------------------------------------------------
+
+// Send a list of `check` operations in a single request
+POST {{openfgaBaseUrl}}/stores/{{storeId}}/batch-check
+Content-Type: application/json
+Accept: application/json
+
+{
+    "checks": [
+        {
+            "tuple_key": {
+                "user": "<string>",
+                "relation": "<string>",
+                "object": "<string>"
+            },
+            "correlation_id": "<string>",
+            "contextual_tuples": {
+                "tuple_keys": [
+                    {
+                        "user": "<string>",
+                        "relation": "<string>",
+                        "object": "<string>",
+                        "condition": {
+                            "name": "<string>",
+                            "context": {}
+                        }
+                    },
+                    {
+                        "user": "<string>",
+                        "relation": "<string>",
+                        "object": "<string>",
+                        "condition": {
+                            "name": "<string>",
+                            "context": {}
+                        }
+                    }
+                ]
+            },
+            "context": {}
+        }
+    ],
+    "authorization_model_id": "{{authorizationModelId}}",
+    "consistency": "UNSPECIFIED"
+}
+
+###
+
+// Check whether a user is authorized to access an object
+POST {{openfgaBaseUrl}}/stores/{{storeId}}/check
+Content-Type: application/json
+Accept: application/json
+
+{
+    "tuple_key": {
+        "user": "<string>",
+        "relation": "<string>",
+        "object": "<string>"
+    },
+    "contextual_tuples": {
+        "tuple_keys": [
+            {
+                "user": "<string>",
+                "relation": "<string>",
+                "object": "<string>",
+                "condition": {
+                    "name": "<string>",
+                    "context": {}
+                }
+            },
+            {
+                "user": "<string>",
+                "relation": "<string>",
+                "object": "<string>",
+                "condition": {
+                    "name": "<string>",
+                    "context": {}
+                }
+            }
+        ]
+    },
+    "authorization_model_id": "{{authorizationModelId}}",
+    "context": {},
+    "consistency": "UNSPECIFIED"
+}
+
+###
+
+// Expand all relationships in userset tree format, and following userset rewrite rules. Useful to reason about and debug a certain relationship
+POST {{openfgaBaseUrl}}/stores/{{storeId}}/expand
+Content-Type: application/json
+Accept: application/json
+
+{
+    "tuple_key": {
+        "relation": "<string>",
+        "object": "<string>"
+    },
+    "authorization_model_id": "{{authorizationModelId}}",
+    "consistency": "UNSPECIFIED",
+    "contextual_tuples": {
+        "tuple_keys": [
+            {
+                "user": "<string>",
+                "relation": "<string>",
+                "object": "<string>",
+                "condition": {
+                    "name": "<string>",
+                    "context": {}
+                }
+            },
+            {
+                "user": "<string>",
+                "relation": "<string>",
+                "object": "<string>",
+                "condition": {
+                    "name": "<string>",
+                    "context": {}
+                }
+            }
+        ]
+    }
+}
+
+###
+
+// List all objects of the given type that the user has a relation with
+POST {{openfgaBaseUrl}}/stores/{{storeId}}/list-objects
+Content-Type: application/json
+Accept: application/json
+
+{
+    "type": "<string>",
+    "relation": "<string>",
+    "user": "<string>",
+    "authorization_model_id": "{{authorizationModelId}}",
+    "contextual_tuples": {
+        "tuple_keys": [
+            {
+                "user": "<string>",
+                "relation": "<string>",
+                "object": "<string>",
+                "condition": {
+                    "name": "<string>",
+                    "context": {}
+                }
+            },
+            {
+                "user": "<string>",
+                "relation": "<string>",
+                "object": "<string>",
+                "condition": {
+                    "name": "<string>",
+                    "context": {}
+                }
+            }
+        ]
+    },
+    "context": {},
+    "consistency": "UNSPECIFIED"
+}
+
+###
+
+// List the users matching the provided filter who have a certain relation to a particular type.
+POST {{openfgaBaseUrl}}/stores/{{storeId}}/list-users
+Content-Type: application/json
+Accept: application/json
+
+{
+    "object": {
+        "type": "<string>",
+        "id": "<string>"
+    },
+    "relation": "<string>",
+    "user_filters": [
+        {
+            "type": "<string>",
+            "relation": "<string>"
+        }
+    ],
+    "authorization_model_id": "{{authorizationModelId}}",
+    "contextual_tuples": [
+        {
+            "user": "<string>",
+            "relation": "<string>",
+            "object": "<string>",
+            "condition": {
+                "name": "<string>",
+                "context": {}
+            }
+        },
+        {
+            "user": "<string>",
+            "relation": "<string>",
+            "object": "<string>",
+            "condition": {
+                "name": "<string>",
+                "context": {}
+            }
+        }
+    ],
+    "context": {},
+    "consistency": "UNSPECIFIED"
+}
+
+###
+
+// Stream all objects of the given type that the user has a relation with
+POST {{openfgaBaseUrl}}/stores/{{storeId}}/streamed-list-objects
+Content-Type: application/json
+Accept: application/json
+
+{
+    "type": "<string>",
+    "relation": "<string>",
+    "user": "<string>",
+    "authorization_model_id": "{{authorizationModelId}}",
+    "contextual_tuples": {
+        "tuple_keys": [
+            {
+                "user": "<string>",
+                "relation": "<string>",
+                "object": "<string>",
+                "condition": {
+                    "name": "<string>",
+                    "context": {}
+                }
+            },
+            {
+                "user": "<string>",
+                "relation": "<string>",
+                "object": "<string>",
+                "condition": {
+                    "name": "<string>",
+                    "context": {}
+                }
+            }
+        ]
+    },
+    "context": {},
+    "consistency": "UNSPECIFIED"
+}
+
+###
+
+# Assertions
+# ----------------------------------------------------------------------------------------------------------------------
+
+// Read assertions for an authorization model ID
+GET {{openfgaBaseUrl}}/stores/{{storeId}}/assertions/{{authorizationModelId}}
+Accept: application/json
+
+###
+
+// Upsert assertions for an authorization model ID
+PUT {{openfgaBaseUrl}}/stores/{{storeId}}/assertions/{{authorizationModelId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+    "assertions": [
+        {
+            "tuple_key": {
+                "object": "<string>",
+                "relation": "<string>",
+                "user": "<string>"
+            },
+            "expectation": "<boolean>",
+            "contextual_tuples": [
+                {
+                    "user": "<string>",
+                    "relation": "<string>",
+                    "object": "<string>",
+                    "condition": {
+                        "name": "<string>",
+                        "context": {}
+                    }
+                },
+                {
+                    "user": "<string>",
+                    "relation": "<string>",
+                    "object": "<string>",
+                    "condition": {
+                        "name": "<string>",
+                        "context": {}
+                    }
+                }
+            ],
+            "context": {}
+        },
+        {
+            "tuple_key": {
+                "object": "<string>",
+                "relation": "<string>",
+                "user": "<string>"
+            },
+            "expectation": "<boolean>",
+            "contextual_tuples": [
+                {
+                    "user": "<string>",
+                    "relation": "<string>",
+                    "object": "<string>",
+                    "condition": {
+                        "name": "<string>",
+                        "context": {}
+                    }
+                },
+                {
+                    "user": "<string>",
+                    "relation": "<string>",
+                    "object": "<string>",
+                    "condition": {
+                        "name": "<string>",
+                        "context": {}
+                    }
+                }
+            ],
+            "context": {}
+        }
+    ]
+}
+
+###

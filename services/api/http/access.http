@@ -1,0 +1,36 @@
+@objectType = course
+@objectId = {{courseId}}
+@email = 1@gmail.com
+@role = viewer
+
+// Invite member to course
+POST {{apiBaseUrl}}/protected/access/{{objectType}}/{{objectId}}/invite
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{$auth.token("keycloak_service_account")}}
+
+{
+    "userId": "{{email}}",
+    "role": "{{role}}"
+}
+
+###
+
+// Revoke member access to course
+POST {{apiBaseUrl}}/protected/access/{{objectType}}/{{objectId}}/revoke
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{$auth.token("keycloak_service_account")}}
+
+{
+    "userId": "{{email}}",
+    "role": "{{role}}"
+}
+###
+
+// List members who have access to the course
+GET {{apiBaseUrl}}/protected/access/{{objectType}}/{{objectId}}/members
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{$auth.token("keycloak_service_account")}}
+###
