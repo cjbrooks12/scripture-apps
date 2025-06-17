@@ -7,6 +7,7 @@ import com.caseyjbrooks.platform.services.authorization.authorization
 import com.caseyjbrooks.platform.services.authorization.openFga
 import com.caseyjbrooks.platform.util.extractConfiguration
 import io.ktor.server.application.Application
+import io.ktor.server.auth.AuthenticationConfig
 import io.ktor.server.auth.authenticate
 import io.ktor.server.auth.authentication
 import io.ktor.server.auth.jwt.JWTPrincipal
@@ -23,25 +24,9 @@ fun Application.configureSecurity(koinApplication: KoinApplication) {
     val authenticationDriver: AuthenticationDriver = environment.config.extractConfiguration("security.jwt");
 
     authentication {
-        jwt {
-            realm = authenticationDriver.realm
-
-            with(authenticationDriver) {
-                val jwkProvider = JwkProviderBuilder(URL(jwksUrl))
-                    .cached(jwkCacheSize, jwkCacheDuration.toJavaDuration())
-                    .rateLimited(jwkCacheSize, 1, TimeUnit.MINUTES)
-                    .build()
-
-                verifier(jwkProvider) {
-                    withIssuer(*authenticationDriver.issuer.toTypedArray())
-                    acceptLeeway(3)
-                }
-            }
-
-            validate { credential ->
-                JWTPrincipal(credential.payload)
-            }
-        }
+        jwtWithScope(authenticationDriver,"protected", "api:protected")
+        jwtWithScope(authenticationDriver,"secure", "api:secure")
+        jwtWithScope(authenticationDriver,"admin", "api:admin")
     }
     authorization {
         openFga(
@@ -52,11 +37,45 @@ fun Application.configureSecurity(koinApplication: KoinApplication) {
     }
 }
 
+private fun AuthenticationConfig.jwtWithScope(
+    authenticationDriver: AuthenticationDriver,
+    name: String,
+    scope: String,
+) {
+    jwt(name = name) {
+        realm = authenticationDriver.realm
+
+        with(authenticationDriver) {
+            val jwkProvider = JwkProviderBuilder(URL(jwksUrl))
+                .cached(jwkCacheSize, jwkCacheDuration.toJavaDuration())
+                .rateLimited(jwkCacheSize, 1, TimeUnit.MINUTES)
+                .build()
+
+            verifier(jwkProvider) {
+                withIssuer(*authenticationDriver.issuer.toTypedArray())
+                acceptLeeway(3)
+            }
+        }
+
+        validate { credential ->
+            val jwtScope = credential.payload.getClaim("scope").asString().split(" ")
+            if (scope in jwtScope) {
+                // Scope is valid, return the principal
+                JWTPrincipal(credential.payload)
+            } else {
+                // Scope is invalid, reject the token
+                null
+            }
+        }
+    }
+}
+
 // Authentication Routing
 // ---------------------------------------------------------------------------------------------------------------------
 
-public fun Route.authenticateRoutes(required: Boolean, block: Route.() -> Unit) {
-    authenticate(optional = !required) {
+public fun Route.authenticateRoutes(required: Boolean, name: String? = null, block: Route.() -> Unit) {
+    authenticate(name, optional = !required) {
         block()
     }
 }
+

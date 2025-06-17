@@ -29,14 +29,17 @@ fun Application.module() {
             controllersKoinModule,
             routingKoinModule,
         ),
-        publicAccessRoutes = {
+        publicRoutes = {
             healthCheckRouter()
             metricsRouter()
         },
-        authenticatedRoutes = {
+        protectedRoutes = {
             healthCheckRouter()
             route("/access") { accessRouter() }
             route("/debug") { debugRouter() }
+        },
+        secureRoutes = {
+            healthCheckRouter()
         },
         adminRoutes = {
             healthCheckRouter()

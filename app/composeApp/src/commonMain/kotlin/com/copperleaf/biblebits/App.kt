@@ -1,9 +1,13 @@
 package com.copperleaf.biblebits
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.caseyjbrooks.dto.HealthCheckResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -31,6 +36,7 @@ import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.encodedPath
 import io.ktor.http.formUrlEncode
+import io.ktor.http.isSuccess
 import io.ktor.http.parameters
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.SerialName
@@ -74,15 +80,16 @@ fun App(
                         platform.bearerTokenStorage.lastOrNull()
                     }
 
-                    refreshTokens { // this: RefreshTokensParams
+                    refreshTokens {
                         val refreshTokenInfo: TokenInfo = client.submitForm(
-                            url = "https://accounts.google.com/o/oauth2/token",
+                            url = "http://10.0.2.2:4567/auth/realms/biblebits/protocol/openid-connect/token",
                             formParameters = parameters {
                                 append("grant_type", "refresh_token")
                                 append("client_id", "end_users")
                                 append("refresh_token", oldTokens?.refreshToken ?: "")
                             }
-                        ) { markAsRefreshTokenRequest() }.body()
+                        ){ markAsRefreshTokenRequest() }.body()
+
                         platform.bearerTokenStorage.add(BearerTokens(refreshTokenInfo.accessToken, oldTokens?.refreshToken!!))
                         platform.bearerTokenStorage.last()
                     }
@@ -128,6 +135,7 @@ private fun App(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             var key: Int by remember { mutableStateOf(0) }
+            var scopes: List<String> by remember { mutableStateOf(listOf("api:protected")) }
 
             Text("Hello, ${platform.name}!")
             if(platform.redirectContent != null) {
@@ -142,13 +150,37 @@ private fun App(
             HttpRequest<HealthCheckResponse>(httpClient, path = "/api/v1/protected/health", key = key)
             HorizontalDivider()
 
+            HttpRequest<HealthCheckResponse>(httpClient, path = "/api/v1/secure/health", key = key)
+            HorizontalDivider()
+
             HttpRequest<HealthCheckResponse>(httpClient, path = "/api/v1/admin/health", key = key)
             HorizontalDivider()
 
             RetryApisButton(
                 onClick = { key++ }
             )
-            LogInButton(platform, httpClient)
+            LogInButton(platform, httpClient, scopes)
+
+            Text("Token Scopes")
+            listOf(
+                "api:protected",
+                "api:secure",
+                "api:admin",
+            ).forEach { scope ->
+                Row {
+                    Checkbox(
+                        checked = scope in scopes,
+                        onCheckedChange = {
+                            if(it) {
+                                scopes += scope
+                            } else {
+                                scopes -= scope
+                            }
+                        }
+                    )
+                    Text(scope)
+                }
+            }
         }
     }
 }
@@ -168,12 +200,18 @@ private inline fun <reified T> HttpRequest(
     }
     val (publicResponse, publicBody) = response
 
-    Text(path, style = MaterialTheme.typography.bodyLarge)
-    publicResponse?.let { response ->
-        Text("Status Code: ${response.status}")
-    }
-    publicBody?.let { body ->
-        Text("Body: $body")
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(if(publicResponse?.status?.isSuccess() == true) Color.Green.copy(alpha = 0.1f) else Color.Red.copy(alpha = 0.1f))
+    ) {
+        Text(path, style = MaterialTheme.typography.bodyLarge)
+        publicResponse?.let { response ->
+            Text("Status Code: ${response.status}")
+        }
+        publicBody?.let { body ->
+            Text("Body: $body")
+        }
     }
 }
 
@@ -181,11 +219,12 @@ private inline fun <reified T> HttpRequest(
 private fun LogInButton(
     platform: Platform,
     httpClient: HttpClient,
+    scopes: List<String>,
 ) {
     Button(onClick = {
         val authorizationUrlQuery = parameters {
             append("client_id", "end_users")
-            append("scope", "profile")
+            append("scope", scopes.joinToString(" "))
             append("response_type", "code")
             append("redirect_uri", "bibleBits://app/login")
             append("access_type", "offline")
@@ -205,7 +244,6 @@ private fun LogInButton(
                     append("grant_type", "authorization_code")
                     append("code", platform.redirectContent!!)
                     append("client_id", "end_users")
-//                    append("client_secret", "DFuAReAUjTK8Jg1bmzvToNrS6F0G40Xy")
                     append("redirect_uri", "bibleBits://app/login")
                 }
             ).body()

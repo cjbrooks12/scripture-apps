@@ -13,9 +13,11 @@ import io.ktor.server.routing.routing
 import org.koin.core.KoinApplication
 
 fun Application.configureRouting(
+    apiVersion: Int,
     koinApplication: KoinApplication,
-    publicAccessRoutes: Route.() -> Unit,
-    authenticatedRoutes: Route.() -> Unit,
+    publicRoutes: Route.() -> Unit,
+    protectedRoutes: Route.() -> Unit,
+    secureRoutes: Route.() -> Unit,
     adminRoutes: Route.() -> Unit,
 ) {
     install(IgnoreTrailingSlash)
@@ -32,22 +34,24 @@ fun Application.configureRouting(
 
         // public routes may be accessed without logging in. However, logged in users may also access these accounts, and
         // their account credentials will be available to the endpoint for logging purposes
-        route("/api/v1/public") {
-            authenticateRoutes(required = false) {
-                publicAccessRoutes()
+        route("/api/v$apiVersion/public") {
+            publicRoutes()
+        }
+
+        route("/api/v$apiVersion/protected") {
+            authenticateRoutes(name = "protected", required = true) {
+                protectedRoutes()
             }
         }
 
-        // public routes may only be accessed by a logged-in user. Fine-grained authorization checks will be applied to
-        // every route in addition to basic authentication.
-        route("/api/v1/protected") {
-            authenticateRoutes(required = true) {
-                authenticatedRoutes()
+        route("/api/v$apiVersion/secure") {
+            authenticateRoutes(name = "secure", required = true) {
+                secureRoutes()
             }
         }
 
-        route("/api/v1/admin") {
-            authenticateRoutes(required = true) {
+        route("/api/v$apiVersion/admin") {
+            authenticateRoutes(name = "admin", required = true) {
                 adminRoutes()
             }
         }
