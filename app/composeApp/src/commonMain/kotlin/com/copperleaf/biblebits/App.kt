@@ -160,6 +160,7 @@ private fun App(
                 onClick = { key++ }
             )
             LogInButton(platform, httpClient, scopes)
+            LogOutButton(platform, httpClient)
 
             Text("Token Scopes")
             listOf(
@@ -215,6 +216,16 @@ private inline fun <reified T> HttpRequest(
     }
 }
 
+
+@Composable
+private fun RetryApisButton(
+    onClick: () -> Unit,
+) {
+    Button(onClick = onClick) {
+        Text("Retry APIs")
+    }
+}
+
 @Composable
 private fun LogInButton(
     platform: Platform,
@@ -254,11 +265,23 @@ private fun LogInButton(
     }
 }
 
+
 @Composable
-private fun RetryApisButton(
-    onClick: () -> Unit,
+private fun LogOutButton(
+    platform: Platform,
+    httpClient: HttpClient,
 ) {
-    Button(onClick = onClick) {
-        Text("Retry APIs")
+    Button(onClick = {
+        val authorizationUrlQuery = parameters {
+            append("client_id", "end_users")
+            append("post_logout_redirect_uri", "bibleBits://app/login")
+        }.formUrlEncode()
+        val url = "http://10.0.2.2:4567/auth/realms/biblebits/protocol/openid-connect/logout?$authorizationUrlQuery"
+        platform.log("opening URL: $url")
+        platform.openWebpage(url)
+        platform.bearerTokenStorage.clear()
+    }) {
+        Text("Log Out")
     }
 }
+
