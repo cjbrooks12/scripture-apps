@@ -6,9 +6,9 @@ import kotlin.time.Duration.Companion.hours
 
 @Serializable
 data class AuthenticationDriver(
-    val issuer: String,
     val jwksUrl: String,
     val realm: String,
+    val issuer: List<String>,
     val jwkCacheDuration: Duration = 24.hours,
     val jwkCacheSize: Long = 10L,
 )

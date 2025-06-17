@@ -16,6 +16,7 @@ fun Application.configureRouting(
     koinApplication: KoinApplication,
     publicAccessRoutes: Route.() -> Unit,
     authenticatedRoutes: Route.() -> Unit,
+    adminRoutes: Route.() -> Unit,
 ) {
     install(IgnoreTrailingSlash)
     install(AutoHeadResponse)
@@ -42,6 +43,12 @@ fun Application.configureRouting(
         route("/api/v1/protected") {
             authenticateRoutes(required = true) {
                 authenticatedRoutes()
+            }
+        }
+
+        route("/api/v1/admin") {
+            authenticateRoutes(required = true) {
+                adminRoutes()
             }
         }
     }

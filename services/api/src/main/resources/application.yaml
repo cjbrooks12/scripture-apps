@@ -8,9 +8,11 @@ ktor:
 
 security:
   jwt:
-    issuer: "http://localhost:9080/auth/realms/biblebits"
-    jwksUrl: "http://apisix:9080/auth/realms/biblebits/protocol/openid-connect/certs"
+    jwksUrl: "http://keycloak:4567/auth/realms/biblebits/protocol/openid-connect/certs"
     realm: "biblebits"
+    issuer:
+      - "http://localhost:4567/auth/realms/biblebits"
+      - "http://10.0.2.2:4567/auth/realms/biblebits"
 
 connections:
   redis:

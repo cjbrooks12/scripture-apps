@@ -14,7 +14,7 @@
         <Logger name="io.netty" level="warn"/>
         <Logger name="io.lettuce" level="warn"/>
         <Logger name="reactor.util.Loggers" level="warn"/>
-        <Logger name="io.ktor.auth.jwt" level="warn"/>
+        <Logger name="io.ktor.auth.jwt" level="trace"/>
 <!--        <Logger name="main" level="warn"/>-->
     </Loggers>
 </Configuration>

@@ -23,6 +23,7 @@ fun Application.applicationModuleLayout(
     additionalModules: List<Module> = emptyList(),
     publicAccessRoutes: Route.() -> Unit = { },
     authenticatedRoutes: Route.() -> Unit = { },
+    adminRoutes: Route.() -> Unit = { },
     schedules: BallastSchedulesPluginConfiguration.() -> Unit = { },
     queues: BallastQueuePluginConfiguration.() -> Unit,
 ) {
@@ -46,5 +47,5 @@ fun Application.applicationModuleLayout(
     configureBallastQueues(koinApplication, queues)
     configureWebsockets(koinApplication)
 
-    configureRouting(koinApplication, publicAccessRoutes, authenticatedRoutes)
+    configureRouting(koinApplication, publicAccessRoutes, authenticatedRoutes, adminRoutes)
 }

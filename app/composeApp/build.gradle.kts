@@ -62,9 +62,14 @@ kotlin {
                 implementation(compose.components.uiToolingPreview)
                 implementation(libs.androidx.lifecycle.viewmodel)
                 implementation(libs.androidx.lifecycle.runtimeCompose)
+                implementation(project(":lib:dto"))
 
                 api(project.dependencies.platform(libs.ktor.bom))
                 api("io.ktor:ktor-client-core")
+                api("io.ktor:ktor-client-auth")
+                api("io.ktor:ktor-client-logging")
+                api("io.ktor:ktor-client-content-negotiation")
+                api("io.ktor:ktor-serialization-kotlinx-json")
             }
         }
 

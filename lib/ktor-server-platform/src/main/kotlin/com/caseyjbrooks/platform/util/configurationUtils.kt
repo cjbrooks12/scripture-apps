@@ -2,6 +2,7 @@ package com.caseyjbrooks.platform.util
 
 import io.ktor.server.config.ApplicationConfig
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
@@ -27,6 +28,9 @@ fun Any?.toJsonElement(): JsonElement {
         is Long -> JsonPrimitive(this)
         is Float -> JsonPrimitive(this)
         is Double -> JsonPrimitive(this)
+
+        is List<*> -> JsonArray(this.map { it.toJsonElement() })
+
         else -> error("Undefined data type: $this")
     }
 }

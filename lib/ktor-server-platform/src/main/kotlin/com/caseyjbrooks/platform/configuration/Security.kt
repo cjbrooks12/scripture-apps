@@ -25,13 +25,19 @@ fun Application.configureSecurity(koinApplication: KoinApplication) {
     authentication {
         jwt {
             realm = authenticationDriver.realm
-            val jwkProvider = JwkProviderBuilder(URL(authenticationDriver.jwksUrl))
-                .cached(authenticationDriver.jwkCacheSize, authenticationDriver.jwkCacheDuration.toJavaDuration())
-                .rateLimited(authenticationDriver.jwkCacheSize, 1, TimeUnit.MINUTES)
-                .build()
-            verifier(jwkProvider, authenticationDriver.issuer) {
-                acceptLeeway(3)
+
+            with(authenticationDriver) {
+                val jwkProvider = JwkProviderBuilder(URL(jwksUrl))
+                    .cached(jwkCacheSize, jwkCacheDuration.toJavaDuration())
+                    .rateLimited(jwkCacheSize, 1, TimeUnit.MINUTES)
+                    .build()
+
+                verifier(jwkProvider) {
+                    withIssuer(*authenticationDriver.issuer.toTypedArray())
+                    acceptLeeway(3)
+                }
             }
+
             validate { credential ->
                 JWTPrincipal(credential.payload)
             }

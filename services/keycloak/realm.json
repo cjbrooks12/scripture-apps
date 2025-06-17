@@ -32,6 +32,7 @@
             "clientAuthenticatorType": "client-secret",
             "secret": "DFuAReAUjTK8Jg1bmzvToNrS6F0G40Xy",
             "redirectUris": [
+                "bibleBits://app/login",
                 "/*"
             ],
             "webOrigins": [
@@ -44,7 +45,7 @@
             "implicitFlowEnabled": true,
             "directAccessGrantsEnabled": true,
             "serviceAccountsEnabled": true,
-            "publicClient": false,
+            "publicClient": true,
             "frontchannelLogout": true,
             "protocol": "openid-connect",
             "attributes": {
