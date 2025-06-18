@@ -70,6 +70,8 @@ kotlin {
                 api("io.ktor:ktor-client-logging")
                 api("io.ktor:ktor-client-content-negotiation")
                 api("io.ktor:ktor-serialization-kotlinx-json")
+
+                implementation("com.russhwolf:multiplatform-settings:1.3.0")
             }
         }
 

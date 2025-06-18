@@ -10,18 +10,21 @@ import androidx.core.net.toUri
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.okhttp.OkHttp
-import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.defaultRequest
 import java.util.concurrent.TimeUnit
 
 
 class AndroidPlatform(
     private val appContext: Context,
-    override val redirectContent: String?,
-) : Platform {
+) : Platform() {
     override val name: String = "Android ${Build.VERSION.SDK_INT}"
 
-    override val bearerTokenStorage: MutableList<BearerTokens> = mutableListOf()
+    private val authBaseUrl: String = "http://10.0.2.2:4567/auth/realms/biblebits/protocol/openid-connect"
+    override val authLogInEndpoint: String = "$authBaseUrl/auth"
+    override val authLogOutEndpoint: String = "$authBaseUrl/logout"
+    override val authTokenEndpoint: String = "$authBaseUrl/token"
+    override val authClientId: String = "end_users"
+    override val authRedirectUri: String = "bibleBits://app/login"
 
     override fun openWebpage(url: String) {
         startActivity(

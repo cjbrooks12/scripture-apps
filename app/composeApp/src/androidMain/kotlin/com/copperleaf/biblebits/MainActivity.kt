@@ -1,12 +1,12 @@
 package com.copperleaf.biblebits
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 
 
 class MainActivity : ComponentActivity() {
@@ -14,20 +14,24 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
+        val platform = AndroidPlatform(applicationContext)
+
         val intent = getIntent()
-        val redirectContent = if (Intent.ACTION_VIEW == intent.action) {
-            val uri: Uri = intent.data!!
-            Log.i("Android", "uri.queryParameterNames: ${uri.queryParameterNames}")
-            val code = uri.getQueryParameter("code")
-            code
+        val authorizationCode = if (Intent.ACTION_VIEW == intent.action) {
+            intent.data?.getQueryParameter("code")
         } else {
             null
         }
 
         setContent {
-            App(
-                AndroidPlatform(applicationContext, redirectContent),
-            )
+            val appReady by produceState(false) {
+                platform.authService.getAuthToken(authorizationCode)
+                value = true
+            }
+
+            if(appReady) {
+                App(platform)
+            }
         }
     }
 }
