@@ -1,6 +1,7 @@
 package com.copperleaf.biblebits
 
 import com.copperleaf.biblebits.auth.AuthServiceImpl
+import com.russhwolf.settings.Settings
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.plugins.auth.Auth
@@ -10,6 +11,7 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.host
+import io.ktor.http.encodedPath
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
@@ -30,12 +32,12 @@ abstract class Platform {
                     }
 
                     sendWithoutRequest {
-                        it.host == "10.0.2.2"
+                        it.host == "http://10.0.2.2:4567" || it.url.encodedPath.startsWith("/api/v1/public")
                     }
                 }
             }
             install(Logging) {
-                level = LogLevel.ALL
+                level = LogLevel.NONE
                 logger = object : Logger {
                     override fun log(message: String) {
                         this@Platform.log(message)
@@ -52,6 +54,10 @@ abstract class Platform {
 
     val authService by lazy {
         AuthServiceImpl(this@Platform)
+    }
+
+    val settings: Settings by lazy {
+        Settings()
     }
 
     abstract val authLogInEndpoint: String

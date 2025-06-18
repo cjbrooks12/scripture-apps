@@ -168,7 +168,7 @@ private fun LogOutButton(
             platform.authService.requestLogOut()
         }
     }) {
-        Text("Log In")
+        Text("Log Out")
     }
 }
 

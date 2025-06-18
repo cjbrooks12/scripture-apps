@@ -13,7 +13,6 @@ import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.defaultRequest
 import java.util.concurrent.TimeUnit
 
-
 class AndroidPlatform(
     private val appContext: Context,
 ) : Platform() {
@@ -27,6 +26,7 @@ class AndroidPlatform(
     override val authRedirectUri: String = "bibleBits://app/login"
 
     override fun openWebpage(url: String) {
+        log("opening webpage: $url")
         startActivity(
             appContext,
             Intent(Intent.ACTION_VIEW, url.toUri()).apply {
@@ -37,11 +37,11 @@ class AndroidPlatform(
     }
 
     override fun log(text: String) {
-        Log.i("Android", text)
+        Log.i("[Android]", text)
     }
 
     override fun error(text: String) {
-        Log.e("Android", text)
+        Log.e("[Android]", text)
     }
 }
 
