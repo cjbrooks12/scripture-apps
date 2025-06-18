@@ -25,7 +25,9 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val appReady by produceState(false) {
-                platform.authService.getAuthToken(authorizationCode)
+                if(authorizationCode != null) {
+                    platform.authService.getAuthToken(authorizationCode)
+                }
                 value = true
             }
 

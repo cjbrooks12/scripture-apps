@@ -37,7 +37,7 @@ abstract class Platform {
                 }
             }
             install(Logging) {
-                level = LogLevel.NONE
+                level = LogLevel.ALL
                 logger = object : Logger {
                     override fun log(message: String) {
                         this@Platform.log(message)
@@ -71,6 +71,9 @@ abstract class Platform {
     abstract fun log(text: String)
 
     abstract fun error(text: String)
+
+    abstract fun secureRandomString(length: Int): String
+    abstract fun sha256(input: String): String
 }
 
 expect fun httpClient(config: HttpClientConfig<*>.() -> Unit = {}): HttpClient

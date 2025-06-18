@@ -7,7 +7,6 @@ import io.ktor.client.plugins.auth.providers.RefreshTokensParams
 import io.ktor.client.request.forms.submitForm
 import io.ktor.http.formUrlEncode
 import io.ktor.http.parameters
-import kotlinx.serialization.json.Json
 
 interface AuthService {
 
@@ -24,7 +23,7 @@ interface AuthService {
     ): BearerTokens?
 
     suspend fun getAuthToken(
-        authorizationCode: String?,
+        authorizationCode: String,
     )
 }
 
@@ -40,7 +39,7 @@ class AuthServiceImpl(
             key = "accessToken",
             value = token.accessToken
         )
-        if(token.refreshToken != null) {
+        if (token.refreshToken != null) {
             platform.settings.putString(
                 key = "refreshToken",
                 value = token.refreshToken!!
@@ -51,14 +50,41 @@ class AuthServiceImpl(
     }
 
     private fun getBearerToken(): BearerTokens? {
-        val accessToken = platform.settings.getString(key = "accessToken", defaultValue = "")
-        val refreshToken = platform.settings.getString(key = "refreshToken", defaultValue = "")
+        val accessToken = platform.settings.getStringOrNull(key = "accessToken")
+        val refreshToken = platform.settings.getStringOrNull(key = "refreshToken")
 
-        if(accessToken.isNotEmpty() && refreshToken.isNotEmpty()) {
+        if (accessToken != null && refreshToken != null) {
             return BearerTokens(accessToken, refreshToken)
         }
 
         return null
+    }
+
+    private fun saveCodeVerifier(codeVerifier: String) {
+        platform.log("Saving codeVerifier: $codeVerifier")
+        platform.settings.putString(
+            key = "codeVerifier",
+            value = codeVerifier
+        )
+    }
+
+    private fun getCodeVerifier(): String {
+        return platform.settings.getString(
+            key = "codeVerifier",
+            defaultValue = ""
+        )
+    }
+
+    private fun createCodeVerifier(): String {
+        return platform.secureRandomString(128).also {
+            platform.log("new code verifier: $it")
+        }
+    }
+
+    private fun createCodeChallenge(codeVerifier: String): String {
+        return platform.sha256(codeVerifier).also {
+            platform.log("new code challenge: $it")
+        }
     }
 
     private fun clearBearerToken() {
@@ -71,6 +97,10 @@ class AuthServiceImpl(
     override suspend fun requestLogIn(
         scopes: List<String>,
     ) {
+        val codeVerifier = createCodeVerifier()
+        val codeChallenge = createCodeChallenge(codeVerifier)
+        saveCodeVerifier(codeVerifier)
+
         platform.log("Redirecting to URL for login")
         val authorizationUrlQuery = parameters {
             append("client_id", platform.authClientId)
@@ -78,6 +108,8 @@ class AuthServiceImpl(
             append("response_type", "code")
             append("redirect_uri", platform.authRedirectUri)
             append("access_type", "offline")
+            append("code_challenge_method", "S256")
+            append("code_challenge", codeChallenge)
         }.formUrlEncode()
 
         platform.openWebpage("${platform.authLogInEndpoint}?$authorizationUrlQuery")
@@ -110,8 +142,9 @@ class AuthServiceImpl(
                     append("grant_type", "refresh_token")
                     append("client_id", platform.authClientId)
                     append("refresh_token", oldTokens?.refreshToken ?: "")
+                    append("code_verifier", getCodeVerifier())
                 }
-            ){ markAsRefreshTokenRequest() }.body()
+            ) { markAsRefreshTokenRequest() }.body()
 
             val bearerToken = BearerTokens(refreshTokenInfo.accessToken, refreshTokenInfo.refreshToken)
             saveBearerToken(bearerToken)
@@ -123,9 +156,9 @@ class AuthServiceImpl(
     }
 
     override suspend fun getAuthToken(
-        authorizationCode: String?,
+        authorizationCode: String,
     ) {
-        if(authorizationCode != null) {
+        try {
             println("Getting new auth token from authorization code")
             val tokenInfo: TokenInfo = platform.httpClient.submitForm(
                 url = platform.authTokenEndpoint,
@@ -134,11 +167,14 @@ class AuthServiceImpl(
                     append("code", authorizationCode)
                     append("client_id", platform.authClientId)
                     append("redirect_uri", platform.authRedirectUri)
+                    append("code_verifier", getCodeVerifier())
                 }
             ).body()
 
             val bearerToken = BearerTokens(tokenInfo.accessToken, tokenInfo.refreshToken!!)
             saveBearerToken(bearerToken)
+        } catch (e: Exception) {
+
         }
     }
 }
