@@ -67,7 +67,6 @@ class AuthorizationRoutePluginConfiguration {
 
 data class AuthorizationRequest(
     val userId: String,
-    val roles: List<String>,
     val routeResource: String,
     val routeResourceId: String,
     val resourceAction: String,
@@ -99,18 +98,8 @@ val AuthorizationRoute = createRouteScopedPlugin(
             return@on
         }
 
-        val roles = authorizationProvider.roles(call)
-        if (roles == null) {
-            call.respondText(
-                "Unable to determine roles from request call",
-                status = HttpStatusCode.InternalServerError
-            )
-            return@on
-        }
-
         val request = AuthorizationRequest(
             userId = userId,
-            roles = roles,
             routeResource = pluginConfig.resource(call),
             routeResourceId = pluginConfig.resourceId(call),
             resourceAction = pluginConfig.action(call),
@@ -128,7 +117,7 @@ val AuthorizationRoute = createRouteScopedPlugin(
 
         if (!isAuthorized) {
             call.application.log.info("access denied: $logContext")
-            call.respondText("Unauthorized", status = HttpStatusCode.Unauthorized)
+            call.respondText("Forbidden", status = HttpStatusCode.Forbidden)
             return@on
         }
 

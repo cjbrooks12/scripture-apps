@@ -33,11 +33,12 @@ class OpenFgaAuthorizationService(
 // Check (https://openfga.dev/api/service#/Relationship%20Queries/Check)
 // ---------------------------------------------------------------------------------------------------------------------
 
-    override suspend fun canAccess(
+    suspend fun canAccess(
         user: String,
         relation: String,
         objectType: String,
         objectId: String,
+        contextualTuples: List<TupleKey>
     ): Result<Boolean> {
         return openFgaRequest<OpenFgaCheckRequest, OpenFgaCheckResponse>("/check") {
             OpenFgaCheckRequest(
@@ -46,11 +47,23 @@ class OpenFgaAuthorizationService(
                     relation = relation,
                     _object = "$objectType:$objectId",
                 ),
-                authorizationModelId = authorizationModelId
+                authorizationModelId = authorizationModelId,
+                contextualTuples = contextualTuples
+                    .takeIf { it.isNotEmpty() }
+                    ?.let { TupleKeys(it) }
             )
         }.map { response ->
             response.allowed
         }
+    }
+
+    override suspend fun canAccess(
+        user: String,
+        relation: String,
+        objectType: String,
+        objectId: String,
+    ): Result<Boolean> {
+        return canAccess(user, relation, objectType, objectId, emptyList())
     }
 
 // Write (https://openfga.dev/api/service#/Relationship%20Tuples/Write)
@@ -160,7 +173,7 @@ class OpenFgaAuthorizationService(
 // ---------------------------------------------------------------------------------------------------------------------
 
     @Serializable
-    private data class TupleKey(
+    public data class TupleKey(
         val user: String,
         val relation: String,
         @SerialName("object") val _object: String,
@@ -200,6 +213,7 @@ class OpenFgaAuthorizationService(
     private data class OpenFgaCheckRequest(
         @SerialName("tuple_key") val tupleKey: TupleKey,
         @SerialName("authorization_model_id") val authorizationModelId: String,
+        @SerialName("contextual_tuples") val contextualTuples: TupleKeys?,
     )
 
     @Serializable

@@ -4,90 +4,31 @@ model_file: ./model.fga
 tuple_file: ./initial-data.yaml
 
 tests: # required
-  - name: person-relationships
-    description: Testing person relationships to other persons
+  - name: api-access
+    description: Testing coarse-grained API access
     tuple_file: ./test-data.yaml
     check:
-      - user: user:1
-        object: tenant:1
+      - user: user:regularUser
+        object: service:api
         assertions:
-          can_view_all: false
-          can_create: false
-          can_manage_access: false
-      - user: user:1
-        object: course:1
+          can_access_protected: true
+          can_access_secure: true
+          can_access_admin: false
+      - user: user:adminUser
+        object: service:api
         assertions:
-          can_view: true
-          can_update: true
-          can_delete: true
-          can_manage_access: true
-      - user: user:1
-        object: course:2
+          can_access_protected: true
+          can_access_secure: true
+          can_access_admin: true
+      - user: user:regularBlockedUser
+        object: service:api
         assertions:
-          can_view: true
-          can_update: false
-          can_delete: false
-          can_manage_access: false
-
-      - user: user:2
-        object: tenant:1
+          can_access_protected: false
+          can_access_secure: false
+          can_access_admin: false
+      - user: user:adminBlockedUser
+        object: service:api
         assertions:
-          can_view_all: false
-          can_create: false
-          can_manage_access: false
-      - user: user:2
-        object: course:1
-        assertions:
-          can_view: false
-          can_update: false
-          can_delete: false
-          can_manage_access: false
-      - user: user:2
-        object: course:2
-        assertions:
-          can_view: true
-          can_update: true
-          can_delete: true
-          can_manage_access: true
-
-      - user: user:3
-        object: tenant:1
-        assertions:
-          can_view_all: true
-          can_create: true
-          can_manage_access: true
-      - user: user:3
-        object: course:1
-        assertions:
-          can_view: true
-          can_update: false
-          can_delete: false
-          can_manage_access: true
-      - user: user:3
-        object: course:2
-        assertions:
-          can_view: true
-          can_update: false
-          can_delete: false
-          can_manage_access: true
-
-      - user: user:4
-        object: tenant:1
-        assertions:
-          can_view_all: true
-          can_create: false
-          can_manage_access: false
-      - user: user:4
-        object: course:1
-        assertions:
-          can_view: true
-          can_update: false
-          can_delete: false
-          can_manage_access: false
-      - user: user:4
-        object: course:2
-        assertions:
-          can_view: true
-          can_update: false
-          can_delete: false
-          can_manage_access: false
+          can_access_protected: false
+          can_access_secure: false
+          can_access_admin: false

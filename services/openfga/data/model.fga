@@ -3,20 +3,15 @@ model
 
 type user
 
-type tenant
+type role
   relations
-    define admin: [user]
-    define auditor: [user]
-    define can_view_all: admin or auditor
-    define can_create: admin
-    define can_manage_access: admin
+    define member: [user]
 
-type course
+type service
   relations
-    define tenant: [tenant]
-    define creator: [user]
-    define viewer: [user]
-    define can_view: creator or viewer or (can_view_all from tenant)
-    define can_update: creator
-    define can_delete: creator
-    define can_manage_access: creator or (can_manage_access from tenant)
+    define member: [user, role#member]
+    define admin: [user, role#member]
+    define blocked: [user, role#member]
+    define can_access_protected: (member or admin) but not blocked
+    define can_access_secure: (member or admin) but not blocked
+    define can_access_admin: admin but not blocked

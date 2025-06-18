@@ -1,0 +1,5 @@
+
+# Associate roles to coarse-grained access of the API service
+- { user: role:member#member, relation: member, object: service:api }
+- { user: role:admin#member, relation: admin, object: service:api }
+- { user: role:blocked#member, relation: blocked, object: service:api }

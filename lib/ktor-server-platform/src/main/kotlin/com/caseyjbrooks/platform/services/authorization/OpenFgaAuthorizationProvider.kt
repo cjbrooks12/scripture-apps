@@ -1,12 +1,12 @@
 package com.caseyjbrooks.platform.services.authorization
 
-import com.caseyjbrooks.platform.services.AuthorizationService
+import com.caseyjbrooks.platform.services.authorization.OpenFgaAuthorizationService.TupleKey
 import io.ktor.server.application.ApplicationCall
 
 class OpenFgaAuthorizationProvider(
-    private val service: AuthorizationService,
+    private val service: OpenFgaAuthorizationService,
     override val userId: ApplicationCall.() -> String?,
-    override val roles: ApplicationCall.() -> List<String>?,
+    private val defaultContextualTuples: (String) -> List<TupleKey>,
 ) : AuthorizationProvider {
 
     override suspend fun checkAuthorization(
@@ -17,6 +17,7 @@ class OpenFgaAuthorizationProvider(
             relation = request.resourceAction,
             objectType = request.routeResource,
             objectId = request.routeResourceId,
+            contextualTuples = defaultContextualTuples(request.userId)
         )
 
         return canAccess
@@ -24,13 +25,13 @@ class OpenFgaAuthorizationProvider(
 }
 
 fun AuthorizationConfig.openFga(
-    service: AuthorizationService,
+    service: OpenFgaAuthorizationService = OpenFgaAuthorizationService(),
     userId: ApplicationCall.() -> String?,
-    roles: ApplicationCall.() -> List<String>?,
+    defaultContextualTuples: (String) -> List<TupleKey>,
 ) {
     provider = OpenFgaAuthorizationProvider(
         service = service,
         userId = userId,
-        roles = roles,
+        defaultContextualTuples = defaultContextualTuples,
     )
 }

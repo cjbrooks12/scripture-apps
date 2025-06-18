@@ -1,5 +1,6 @@
 package com.caseyjbrooks.platform.configuration
 
+import com.caseyjbrooks.platform.services.authorization.authorize
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
@@ -40,20 +41,37 @@ fun Application.configureRouting(
 
         route("/api/v$apiVersion/protected") {
             authenticateRoutes(name = "protected", required = true) {
-                protectedRoutes()
+                authorize("can_access_protected") {
+                    protectedRoutes()
+                }
             }
         }
 
         route("/api/v$apiVersion/secure") {
             authenticateRoutes(name = "secure", required = true) {
-                secureRoutes()
+                authorize("can_access_secure") {
+                    secureRoutes()
+                }
             }
         }
 
         route("/api/v$apiVersion/admin") {
             authenticateRoutes(name = "admin", required = true) {
-                adminRoutes()
+                authorize("can_access_admin") {
+                    adminRoutes()
+                }
             }
         }
     }
+}
+
+private fun Route.authorize(
+    action: String,
+    build: Route.() -> Unit
+) {
+    authorize({
+        this.action = { action }
+        this.resource = { "service" }
+        this.resourceId = { "api" }
+    }, build)
 }

@@ -32,7 +32,15 @@ fun Application.configureSecurity(koinApplication: KoinApplication) {
         openFga(
             service = OpenFgaAuthorizationService(),
             userId = { principal<JWTPrincipal>()?.subject },
-            roles = { emptyList() },
+            defaultContextualTuples = { userId ->
+                buildList {
+                    this += OpenFgaAuthorizationService.TupleKey(
+                        user = "user:$userId",
+                        relation = "member",
+                        _object = "role:member",
+                    )
+                }
+            }
         )
     }
 }
