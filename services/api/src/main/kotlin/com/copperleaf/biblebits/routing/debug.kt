@@ -1,6 +1,6 @@
 package com.copperleaf.biblebits.routing
 
-import com.caseyjbrooks.platform.util.GET
+import com.copperleaf.biblebits.platform.util.GET
 import com.copperleaf.biblebits.controller.DebugController
 import io.ktor.server.routing.Route
 

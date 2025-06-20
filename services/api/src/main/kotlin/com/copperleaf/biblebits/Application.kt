@@ -1,6 +1,6 @@
 package com.copperleaf.biblebits
 
-import com.caseyjbrooks.platform.applicationModuleLayout
+import com.copperleaf.biblebits.platform.applicationModuleLayout
 import com.copperleaf.biblebits.controller.controllersKoinModule
 import com.copperleaf.biblebits.queues.main.mainServerQueue
 import com.copperleaf.biblebits.queues.queuesKoinModule

@@ -7,9 +7,9 @@ import com.caseyjbrooks.dto.InviteAccessResponseDto
 import com.caseyjbrooks.dto.ListMembersRequestDto
 import com.caseyjbrooks.dto.ListMembersResponseDto
 import com.caseyjbrooks.dto.RevokeAccessRequestDto
-import com.caseyjbrooks.platform.services.AuthorizationService
-import com.caseyjbrooks.platform.util.AppResponse
-import com.caseyjbrooks.platform.util.ok
+import com.copperleaf.biblebits.platform.services.AuthorizationService
+import com.copperleaf.biblebits.platform.util.AppResponse
+import com.copperleaf.biblebits.platform.util.ok
 import io.ktor.server.application.ApplicationCall
 import org.koin.core.parameter.parametersOf
 import org.koin.ktor.plugin.scope

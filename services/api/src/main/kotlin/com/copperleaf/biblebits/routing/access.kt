@@ -5,11 +5,11 @@ import com.caseyjbrooks.dto.InviteAccessRequestDto
 import com.caseyjbrooks.dto.ListMembersRequestDto
 import com.caseyjbrooks.dto.RevokeAccessRequestDto
 import com.copperleaf.biblebits.controller.AccessController
-import com.caseyjbrooks.platform.services.authorization.authorize
-import com.caseyjbrooks.platform.util.GET
-import com.caseyjbrooks.platform.util.POST
-import com.caseyjbrooks.platform.util.routing.extractPath
-import com.caseyjbrooks.platform.util.routing.extractQuery
+import com.copperleaf.biblebits.platform.services.authorization.openfga.authorizeOpenFga
+import com.copperleaf.biblebits.platform.util.GET
+import com.copperleaf.biblebits.platform.util.POST
+import com.copperleaf.biblebits.platform.util.routing.extractPath
+import com.copperleaf.biblebits.platform.util.routing.extractQuery
 import io.ktor.server.request.receive
 import io.ktor.server.routing.Route
 
@@ -17,7 +17,9 @@ private fun Route.authorize(
     action: String,
     build: Route.() -> Unit
 ) {
-    authorize({
+    authorizeOpenFga(
+        routePluginName = action,
+        {
         this.action = { action }
         this.resource = {
             extractPath<AccessPath>().objectType.openfgaObjectName

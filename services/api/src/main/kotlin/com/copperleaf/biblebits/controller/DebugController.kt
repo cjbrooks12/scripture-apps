@@ -1,8 +1,8 @@
 package com.copperleaf.biblebits.controller
 
-import com.caseyjbrooks.platform.services.CacheService
-import com.caseyjbrooks.platform.util.AppResponse
-import com.caseyjbrooks.platform.util.ok
+import com.copperleaf.biblebits.platform.services.CacheService
+import com.copperleaf.biblebits.platform.util.AppResponse
+import com.copperleaf.biblebits.platform.util.ok
 import io.ktor.http.Headers
 import io.ktor.server.application.ApplicationCall
 import kotlinx.serialization.SerialName
